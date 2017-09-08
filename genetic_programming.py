@@ -12,6 +12,13 @@ def div(a,b):
         return 1
 
 
+op_dict = {
+operator.add : '+',
+operator.sub : '-',
+operator.mul : 'x',
+div : '/'
+}
+
 
 
 class Node(object):
@@ -45,6 +52,27 @@ class Function_Node(Node):
 
 
 
+class Tree(object):
+
+    def __init__(self, tree):
+        self.root = tree
+
+
+    def eval(self, data_input):
+        length = data_input.shape[0]
+
+        f = lambda data : (self.root.eval({'X': x for x in data[:-1]}) - data[-1])**2
+
+        self.error = math.sqrt(sum(map(f, data_input))/length)
+
+        return self.error
+
+
+
+def evaluate_population(population, data):
+    for individual in population:
+        individual.eval(data)
+
 
 
 def gen_rnd_expr(func_set, term_set, max_depth, full = False):
@@ -72,9 +100,27 @@ def gen_rnd_expr(func_set, term_set, max_depth, full = False):
 
 
 
+def initialize_population(population_size, max_depth, nodes_func, nodes_term):
 
-def get_fitness(var_map, data_input):
-    return math.sqrt(sum((tree.eval(var_map) - output)**2) / len(data_input))
+    return np.array([Tree(gen_rnd_expr(operators, terminals, max_depth)) for i in range(population_size)])
+
+
+def get_best_solution(population):
+    return min(population, key=(lambda individual : individual.error))
+
+
+
+def evaluate_fitness(tree, data_input):
+    length = data_input.shape[0]
+    # print 'length',length
+    # s = 0
+    # for data_line in data_input:
+    #     d = {'X': x for x in data_line[:-1]}
+    #     s +=  (tree.eval(d) - data_line[-1])**2
+
+    f = lambda data : (tree.eval({'X': x for x in data[:-1]}) - data[-1])**2
+
+    return math.sqrt(sum(map(f, data_input))/length)
 
 
 
@@ -86,6 +132,22 @@ def level_traverse(queue):
             queue.append(queue[0].right)
 
         queue = queue[1:]
+
+
+def in_traverse(node, level = 0):
+    if node is None:
+        return
+    n = str(node) if node.content not in op_dict else op_dict[node.content]
+    # print '  ' * level + n
+    print '(',n ,
+    if node.left is not None:
+        in_traverse(node.left, level +1)
+
+    if node.right is not None:
+        print ',',
+        in_traverse(node.right, level +1)
+
+    print ')',
 
 
 
@@ -127,15 +189,37 @@ def genetic_programmin(population_size, nodes_func, nodes_term,
     return s_best
 
 
+
+
 if __name__ == '__main__':
 
-    random.seed(2)
+    random.seed(1)
 
     data = np.loadtxt('./datasets/keijzer-7-train.csv', delimiter = ',')
 
     operators = [operator.add, operator.sub, operator.mul]
 
     terminals = ['X', 'R']
-    p = gen_rnd_expr(operators, terminals, 3, full=False)
+    tree = gen_rnd_expr(operators, terminals, 8)
 
-    level_traverse([p])
+    in_traverse(tree)
+    print
+
+    # print evaluate_fitness(tree,data)
+
+    population = initialize_population(10, 7, operators, terminals)
+
+    # for i in population:
+    #     in_traverse(i.root)
+    #     print
+    #     print evaluate_fitness(i.root, data)
+    #     print
+
+    evaluate_population(population, data)
+
+    for i in population:
+        # in_traverse(i.root)
+        print i.error
+
+    s_best = get_best_solution(population)
+    print s_best.error
