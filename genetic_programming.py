@@ -288,35 +288,38 @@ def mutation(parent1, func_set, term_set, max_depth):
 
 
 
-def genetic_programmin(data, population_size, individual_depth, nodes_func, nodes_term, p_crossover, p_mutation, p_reproduction, p_alteration):
+def genetic_programmin(data, population_size, individual_depth, nodes_func, nodes_term, p_crossover, p_mutation, p_reproduction, p_alteration, elitism = 0):
 
     population = initialize_population(population_size, individual_depth, nodes_func, nodes_term)
     evaluate_population(population, data)
     s_best = get_best_solution(population)
 
     while not stop_condition():
-
         children = []
+
+        if elitism:
+            children = list(sorted(population, key = lambda x : x.error)[:elitism])
+
 
         while len(children) < population_size:
             operator = select_genetic_operator(p_crossover, p_mutation, p_reproduction, p_alteration)
+            parent1 = tournament_selection(population, tournament_size)
             if operator == crossover_operator:
-                parent1, parent2 = select_parents(population, population_size)
+                parent2 = tournament_selection(population, tournament_size)
                 child1, child2 = crossover(parent1, parent2)
                 children.append(child1)
                 children.append(child2)
             elif operator == mutation_operator:
-                parent1, = select_parents(population, population_size)
-                child1 = mutate(parent1)
-                children = child1
-            elif operator == reproduction_operator:
-                parent1, = select_parents(population, population_size)
-                child1 = reproduce(parent1)
+                child1 = mutation(parent1, operators, terminals, max_depth)
                 children.append(child1)
-            elif operator == alteration_operator:
-                parent1, = select_parents(population, population_size)
-                child1 = alter_architecture(parent1)
-                children.append(child1)
+            # elif operator == reproduction_operator:
+            #     parent1, = select_parents(population, population_size)
+            #     child1 = reproduce(parent1)
+            #     children.append(child1)
+            # elif operator == alteration_operator:
+            #     parent1, = select_parents(population, population_size)
+            #     child1 = alter_architecture(parent1)
+            #     children.append(child1)
 
         evaluate_population(children)
         s_best = get_best_solution(children, s_best)
@@ -339,7 +342,7 @@ if __name__ == '__main__':
 
     terminals = ['X', 'R']
 
-    population = initialize_population(20, max_depth, operators, terminals, full = True)
+    population = initialize_population(10, max_depth, operators, terminals, full = True)
 
     # for i in population:
     #     in_traverse(i.root)
@@ -363,6 +366,14 @@ if __name__ == '__main__':
     print 'child1',
     child1.print_tree()
 
+    for i in population:
+        i.print_tree()
+
+
+    population1 = sorted(population, key = lambda x : x.error)
+
+    for i,j in zip(population, population1):
+        print i.error, j.error
     # print 'parent2',
     # parent2.print_tree()
 
