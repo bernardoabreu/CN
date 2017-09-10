@@ -6,18 +6,25 @@ import copy
 
 
 def div(a, b):
+    return 1 if b == 0 else a / b
+
+
+def log(x):
     try:
-        return a / b
-    except ZeroDivisionError:
-        return 1
+        return math.log(x)
+    except ValueError:
+        return 0
 
 
 op_dict = {
     operator.add: '+',
     operator.sub: '-',
     operator.mul: 'x',
-    div: '/'
+    div: '/',
+    log: 'log'
 }
+
+unary = [log]
 
 
 class Node(object):
@@ -62,7 +69,10 @@ class Function_Node(Node):
 
     def eval(self, var_map):
         # return op_dict[self.content](self.left.eval(),self.right.eval())
-        return self.content(self.left.eval(var_map), self.right.eval(var_map))
+        left_eval = self.left.eval(var_map)
+
+        return self.content(left_eval) if self.right is None else \
+            self.content(left_eval, self.right.eval(var_map))
 
 
 class Tree(object):
@@ -71,7 +81,8 @@ class Tree(object):
         self.error = None
 
     def __eval(self, data):
-        return (self.root.eval({'X': x for x in data[:-1]}) - (data[-1]))**2
+        return (self.root.eval({('X' + str(i)): x
+                for i, x in enumerate(data[:-1])}) - (data[-1]))**2
 
     def eval(self, data_input):
         length = data_input.shape[0]
@@ -99,11 +110,11 @@ class Tree(object):
 
         print ')',
 
-    def get_size(self, node):
-        if node is None:
-            return 0
+    # def get_size(self, node):
+    #     if node is None:
+    #         return 0
 
-        return 1 + self.get_size(node.left) + self.get_size(node.right)
+    #     return 1 + self.get_size(node.left) + self.get_size(node.right)
 
     def replace_node(self, old_node, new_node):
         if self.root == old_node:
@@ -153,26 +164,37 @@ def evaluate_population(population, data):
         individual.eval(data)
 
 
+def gen_rnd_function(func, func_set, term_set, max_depth):
+    child_left = gen_rnd_expr(func_set, term_set, max_depth - 1)
+    child_right = None if func in unary else \
+        gen_rnd_expr(func_set, term_set, max_depth - 1)
+
+    return Function_Node(func, child_left, child_right)
+
+
 def gen_rnd_expr(func_set, term_set, max_depth, full=False):
     node = None
     length = len(term_set) + len(func_set)
     rand = random.randrange(length)
     # print('rand', rand)
     if max_depth == 0 or ((not full) and rand < len(term_set)):
-        element = random.choice(term_set)
+        term = random.choice(term_set)
+        # term = term_set[rand]
         # print('term', element)
 
-        if element == 'R':
-            element = random.randrange(-9, 9)
+        if term == 'R':
+            term = random.randrange(-9, 9)
 
-        node = Node(element)
+        node = Node(term)
     else:
-        func = random.choice(func_set)
+        # func = random.choice(func_set)
+        func = func_set[rand - len(term_set)]
         # print 'func', func
-        child_left = gen_rnd_expr(func_set, term_set, max_depth - 1, full)
-        child_right = gen_rnd_expr(func_set, term_set, max_depth - 1, full)
+        # child_left = gen_rnd_expr(func_set, term_set, max_depth - 1, full)
+        # child_right = gen_rnd_expr(func_set, term_set, max_depth - 1, full)
 
-        node = Function_Node(func, child_left, child_right)
+        # node = Function_Node(func, child_left, child_right)
+        node = gen_rnd_function(func, func_set, term_set, max_depth)
 
     return node
 
@@ -192,9 +214,9 @@ def tournament_selection(population, tournament_size):
     return copy.deepcopy(get_best_solution(sample))
 
 
-def select_genetic_operator(p_crossover, p_mutation):
-    return np.random.choice(['crossover', 'mutation'],
-                            p=[p_crossover, p_mutation])
+def select_genetic_operator(p_crossover, p_mutation, p_reproduction):
+    return np.random.choice(['crossover', 'mutation', 'reproduction'],
+                            p=[p_crossover, p_mutation, p_reproduction])
 
 
 def crossover(parent1, parent2):
@@ -236,7 +258,7 @@ def mutation(parent1, func_set, term_set, max_depth):
         term = term_set[rand]
 
         if term == 'R':
-            term = random.randrange(-9, 9)
+            term = random.randrange(-5, 5)
 
         # print('term', term)
         if is_function:
@@ -253,12 +275,19 @@ def mutation(parent1, func_set, term_set, max_depth):
 
         if is_function:
             # print 'Replace terminal'
+            if func in unary:
+                if element1.right is not None:
+                    element1.right = None
+            elif element1.right is None:
+                element1.right = gen_rnd_function(func, func_set, term_set,
+                                                  max_depth)
             element1.content = func
         else:
             # print 'Replace terminal with function'
-            child_left = gen_rnd_expr(func_set, term_set, max_depth - 1)
-            child_right = gen_rnd_expr(func_set, term_set, max_depth - 1)
-            node = Function_Node(func, child_left, child_right)
+            # child_left = gen_rnd_expr(func_set, term_set, max_depth - 1)
+            # child_right = gen_rnd_expr(func_set, term_set, max_depth - 1)
+            # node = Function_Node(func, child_left, child_right)
+            node = gen_rnd_function(func, func_set, term_set, max_depth)
             parent1.replace_node(element1, node)
 
     # print 'parent1',
@@ -268,16 +297,19 @@ def mutation(parent1, func_set, term_set, max_depth):
 
 def genetic_programming(data, population_size, individual_depth, generations,
                         tournament_size, nodes_func, nodes_term,
-                        p_crossover, p_mutation, elitism=0):
+                        p_crossover, p_mutation, p_reproduction, elitism=0):
 
     population = initialize_population(
         population_size, individual_depth, nodes_func, nodes_term)
     evaluate_population(population, data)
     population.sort(key=lambda x: x.error)
-    s_best = get_best_solution(population)
+    # s_best = get_best_solution(population)
+    s_best = population[0]
+    # for p in population:
+    #     p.print_tree()
 
-    print 'initial population:'
-    print map(lambda x: x.error, population)
+    # print 'initial population:'
+    # print map(lambda x: x.error, population)
 
     current_generation = 0
 
@@ -290,7 +322,8 @@ def genetic_programming(data, population_size, individual_depth, generations,
             children = population[:elitism]
 
         while len(children) < population_size:
-            operator = select_genetic_operator(p_crossover, p_mutation)
+            operator = select_genetic_operator(p_crossover, p_mutation,
+                                               p_reproduction)
             # print operator
             parent1 = tournament_selection(population, tournament_size)
             if operator == 'crossover':
@@ -302,10 +335,8 @@ def genetic_programming(data, population_size, individual_depth, generations,
                 # print 'mutation'
                 child1 = mutation(parent1, nodes_func, nodes_term, max_depth)
                 children.append(child1)
-            # elif operator == reproduction_operator:
-            #     parent1, = select_parents(population, population_size)
-            #     child1 = reproduce(parent1)
-            #     children.append(child1)
+            elif operator == 'reproduction':
+                children.append(parent1)
             # elif operator == alteration_operator:
             #     parent1, = select_parents(population, population_size)
             #     child1 = alter_architecture(parent1)
@@ -313,11 +344,21 @@ def genetic_programming(data, population_size, individual_depth, generations,
 
         evaluate_population(children, data)
         population = sorted(children, key=lambda x: x.error)[:population_size]
-        s_best = get_best_solution(population)
+        # s_best = get_best_solution(population)
+        s_best = population[0]
 
         current_generation += 1
 
     return s_best
+
+
+def eeval(data_input):
+    length = data_input.shape[0]
+
+    def e(data):
+        return (log(data[0]) - (data[-1]))**2
+
+    return math.sqrt(sum(map(e, data_input)) / length)
 
 
 if __name__ == '__main__':
@@ -326,22 +367,24 @@ if __name__ == '__main__':
     np.random.seed(seed)
     max_depth = 3
 
-    data = np.loadtxt('./datasets/keijzer-7-train.csv', delimiter=',')
+    data = np.loadtxt('./datasets/keijzer-7-test.csv', delimiter=',')
 
-    population_size = 100
-    individual_depth = 7
-    generations = 100
-    tournament_size = 10
-    nodes_func = [operator.add, operator.sub, operator.mul]
-    nodes_term = ['X', 'R']
-    p_crossover = 0.7
-    p_mutation = 0.3
-    # p_reproduction
-    elitism = 5
+    population_size = 50
+    individual_depth = 3
+    generations = 50
+    tournament_size = 5
+    nodes_func = [operator.add, operator.sub, operator.mul, div, log]
+    nodes_term = ['R'] + ['X' + str(i) for i in range(data.shape[1] - 1)]
+    p_crossover = 0.9
+    p_mutation = 0.1
+    p_reproduction = 0.0
+    elitism = 1
 
+    # print log in unary
     best = genetic_programming(data, population_size, individual_depth,
                                generations, tournament_size, nodes_func,
-                               nodes_term, p_crossover, p_mutation, elitism)
+                               nodes_term, p_crossover, p_mutation,
+                               p_reproduction, elitism)
 
     print best.error
     best.print_tree()
