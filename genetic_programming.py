@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import random
 import operator
 import math
@@ -348,7 +350,8 @@ class Genetic_Programming(object):
         while current_generation < generations and s_best.get_error() > 0.0:
             children = []
             print('generation: ' + str(current_generation) + ' best:' +
-                  str(s_best.get_error()))
+                  str(s_best.get_error()) + ' mean:' +
+                  str(np.mean(map(lambda x: x.get_error(), population))))
             # print map(lambda x: x.error, population),
 
             if elitism:
@@ -381,33 +384,24 @@ class Genetic_Programming(object):
         return s_best
 
 
-def eeval(data_input):
-    length = data_input.shape[0]
-
-    def e(data):
-        return (log(data[0]) - (data[-1]))**2
-
-    return math.sqrt(sum(map(e, data_input)) / length)
-
-
 if __name__ == '__main__':
     seed = None
     random.seed(seed)
     np.random.seed(seed)
 
-    train_data = np.loadtxt('./datasets/keijzer-7-train.csv', delimiter=',')
+    # train_data = np.loadtxt('./datasets/keijzer-7-train.csv', delimiter=',')
+    train_data = np.loadtxt('./datasets/house-train.csv', delimiter=',')
 
     population_size = 100
-    max_depth = 7
-    generations = 100
+    max_depth = 3
+    generations = 50
     tournament_size = 10
-    functions = [operator.add, operator.sub, operator.mul, div, math.sin,
-                 math.cos, log]
+    functions = [operator.add, operator.sub, operator.mul, div, log, math.sin,
+                 math.cos]
     terminals = ['R'] + ['X' + str(i) for i in range(train_data.shape[1] - 1)]
-    print terminals
     p_crossover = 0.9
-    p_mutation = 0.1
-    p_reproduction = 0.0
+    p_mutation = 0.05
+    p_reproduction = 0.05
     elitism = 5
 
     gp = Genetic_Programming(max_depth, functions, terminals, p_crossover,
@@ -417,10 +411,11 @@ if __name__ == '__main__':
 
     best = gp.run(train_data, population_size, generations, elitism)
 
-    print best.get_error()
+    print 'Best', best.get_error()
     best.print_tree()
 
-    test_data = np.loadtxt('./datasets/keijzer-7-test.csv', delimiter=',')
+    # test_data = np.loadtxt('./datasets/keijzer-7-test.csv', delimiter=',')
+    test_data = np.loadtxt('./datasets/house-test.csv', delimiter=',')
 
     best.eval(test_data)
     print best.get_error()
