@@ -3,7 +3,7 @@
 import random
 import operator
 import math
-import numpy as np
+# import numpy as np
 import copy
 
 
@@ -20,6 +20,21 @@ def log(x):
     except ValueError:
         return 0
 
+def sqrt(x):
+    return 1 if x < 0 else math.sqrt(x)
+
+def power(x):
+    return x**2
+
+
+def mean(x):
+    return sum(x)/len(x)
+
+
+def loadtxt(file, delimiter = ','):
+    with open(file, 'r') as f:
+        return [map(float,line[:-1].split(delimiter)) for line in f]
+
 
 op_dict = {
     operator.add: '+',
@@ -28,10 +43,12 @@ op_dict = {
     div: '/',
     log: 'log',
     math.sin: 'sin',
-    math.cos: 'cos'
+    math.cos: 'cos',
+    sqrt: 'sqrt',
+    power: 'pow'
 }
 
-unary = [log, math.cos, math.sin]
+unary = [log, math.cos, math.sin, sqrt, power]
 
 
 class Node(object):
@@ -104,7 +121,7 @@ class Tree(object):
                 for i, x in enumerate(data[:-1])}) - (data[-1]))**2
 
     def eval(self, data_input):
-        length = data_input.shape[0]
+        length = len(data_input)
         size = self.root.get_size()
         self.error = math.sqrt(sum(map(self.__eval, data_input)) / length)
 
@@ -257,8 +274,7 @@ class Genetic_Programming(object):
             # print('term', element)
 
             if term == 'R':
-                term = random.choice(
-                    [n for n in range(-5, 6) if n])
+                term = random.randint(-5, 5)
 
             node = Node(term)
         else:
@@ -271,9 +287,16 @@ class Genetic_Programming(object):
         return node
 
     def __select_genetic_operator(self):
-        return np.random.choice(['crossover', 'mutation', 'reproduction'],
-                                p=[self.p_crossover, self.p_mutation,
-                                   self.p_reproduction])
+        operator = random.random()
+
+        if operator > self.p_crossover + self.p_mutation:
+            return 'reproduction'
+        else:
+            return 'mutation' if operator > self.p_crossover else 'crossover'
+
+        # return np.random.choice(['crossover', 'mutation', 'reproduction'],
+        #                         p=[self.p_crossover, self.p_mutation,
+        #                            self.p_reproduction])
 
     def evaluate_population(self, population, data):
         for individual in population:
@@ -311,7 +334,7 @@ class Genetic_Programming(object):
 
             if term == 'R':
                 term = random.choice(
-                    [n for n in range(-5, 6) if n != element.content and n])
+                    [n for n in range(-5, 6) if n != element.content])
 
             # print('term', term)
             if is_function:
@@ -371,7 +394,7 @@ class Genetic_Programming(object):
             children = []
             print('generation: ' + str(current_generation) + ' best:' +
                   str(s_best.get_error()) + ' mean:' +
-                  str(np.mean(map(lambda x: x.get_error(), population))))
+                  str(mean(map(lambda x: x.get_error(), population))))
             # print map(lambda x: x.error, population),
 
             if elitism:
@@ -407,21 +430,21 @@ class Genetic_Programming(object):
 if __name__ == '__main__':
     seed = None
     random.seed(seed)
-    np.random.seed(seed)
 
-    # train_data = np.loadtxt('./datasets/keijzer-10-train.csv', delimiter=',')
-    train_data = np.loadtxt('./datasets/house-train.csv', delimiter=',')
+    # train_data = loadtxt('./datasets/keijzer-7-train.csv', delimiter=',')
+    train_data = loadtxt('./datasets/house-train.csv', delimiter=',')
+    # train_data = np.loadtxt('./datasets/house-train.csv', delimiter=',')
 
     population_size = 100
     max_depth = 3
     generations = 50
     tournament_size = 7
-    functions = [operator.add, operator.sub, operator.mul, div, math.sin,
-                 math.cos]
-    terminals = ['R'] + ['X' + str(i) for i in range(train_data.shape[1] - 1)]
+    functions = [operator.add, operator.sub, operator.mul, div, log, math.sin,
+                 math.cos, sqrt, power]
+    terminals = ['R'] + ['X' + str(i) for i in range(len(train_data[0]) - 1)]
     p_crossover = 0.9
-    p_mutation = 0.05
-    p_reproduction = 0.05
+    p_mutation = 0.1
+    p_reproduction = 0.0
     elitism = 5
 
     gp = Genetic_Programming(max_depth, functions, terminals, p_crossover,
@@ -434,8 +457,9 @@ if __name__ == '__main__':
     print 'Best', best.get_error()
     best.print_tree()
 
-    # test_data = np.loadtxt('./datasets/keijzer-10-test.csv', delimiter=',')
-    test_data = np.loadtxt('./datasets/house-test.csv', delimiter=',')
+    # test_data = loadtxt('./datasets/keijzer-7-test.csv', delimiter=',')
+    test_data = loadtxt('./datasets/house-test.csv', delimiter=',')
+    # test_data = np.loadtxt('./datasets/house-test.csv', delimiter=',')
 
     best.eval(test_data)
     print best.get_error()
