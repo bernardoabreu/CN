@@ -7,6 +7,9 @@ import numpy as np
 import copy
 
 
+THRESHOLD_SIZE = 200
+
+
 def div(a, b):
     return 1 if b == 0 else a / b
 
@@ -44,6 +47,11 @@ class Node(object):
     def __str__(self):
         return str(self.content)
 
+    def get_size(self):
+        left_size = 0 if self.left is None else self.left.get_size()
+        right_size = 0 if self.right is None else self.right.get_size()
+        return 1 + left_size + right_size
+
     def print_tree(self):
         self.__print(self)
         print
@@ -54,16 +62,20 @@ class Node(object):
         n = str(node) if node.content not in op_dict else op_dict[node.content]
         # print '  ' * level + n
 
-        print '(', n,
+        if node.right is None:
+            print n,
 
         if node.left is not None:
+            print '(',
             self.__print(node.left, level + 1)
+            if node.right is None:
+                print ')',
 
         if node.right is not None:
-            print ',',
+            print n,
             self.__print(node.right, level + 1)
 
-        print ')',
+            print ')',
 
 
 class Function_Node(Node):
@@ -93,9 +105,11 @@ class Tree(object):
 
     def eval(self, data_input):
         length = data_input.shape[0]
-
+        size = self.root.get_size()
         self.error = math.sqrt(sum(map(self.__eval, data_input)) / length)
 
+        if size > THRESHOLD_SIZE:
+            self.error = float('inf')
         return self.error
 
     def __replace_node(self, node, old_node, new_node):
@@ -141,23 +155,24 @@ class Tree(object):
         return (node_list, p_list) if p else node_list
 
     def print_tree(self):
-        self.__print(self.root)
-        print
+        # self.__print(self.root)
+        self.root.print_tree()
 
-    def __print(self, node, level=0):
-        if node is None:
-            return
-        n = str(node) if node.content not in op_dict else op_dict[node.content]
-        # print '  ' * level + n
-        print '(', n,
-        if node.left is not None:
-            self.__print(node.left, level + 1)
+    # def __print(self, node, level=0):
+    #     if node is None:
+    #         return
+    #     n = str(node) if node.content not in op_dict \
+    #         else op_dict[node.content]
+    #     # print '  ' * level + n
+    #     print '(', n,
+    #     if node.left is not None:
+    #         self.__print(node.left, level + 1)
 
-        if node.right is not None:
-            print ',',
-            self.__print(node.right, level + 1)
+    #     if node.right is not None:
+    #         print ',',
+    #         self.__print(node.right, level + 1)
 
-        print ')',
+    #     print ')',
 
 
 class Genetic_Programming(object):
@@ -242,7 +257,8 @@ class Genetic_Programming(object):
             # print('term', element)
 
             if term == 'R':
-                term = random.randrange(-9, 9)
+                term = random.choice(
+                    [n for n in range(-5, 6) if n])
 
             node = Node(term)
         else:
@@ -284,15 +300,18 @@ class Genetic_Programming(object):
         element = random.choice(mutant_list)
 
         is_function = isinstance(element, Function_Node)
+        terminals = [i for i in self.terminals if i != element.content]
+        functions = [i for i in self.functions if i != element.content]
 
-        length = len(self.terminals) + len(self.functions)
+        length = len(terminals) + len(functions)
         rand = random.randrange(length)
 
-        if rand < len(self.terminals):
-            term = self.terminals[rand]
+        if rand < len(terminals):
+            term = terminals[rand]
 
             if term == 'R':
-                term = random.randrange(-5, 5)
+                term = random.choice(
+                    [n for n in range(-5, 6) if n != element.content and n])
 
             # print('term', term)
             if is_function:
@@ -303,10 +322,11 @@ class Genetic_Programming(object):
                 # print 'Replace terminal'
                 element.content = term
         else:
-            func = self.functions[rand - len(self.terminals)]
+            func = functions[rand - len(terminals)]
             # print 'func', func
 
-            depth = max(2, self.max_depth / 2)
+            # depth = max(2, self.max_depth / 2)
+            depth = 2
 
             if is_function:
                 # print 'Replace terminal'
@@ -389,14 +409,14 @@ if __name__ == '__main__':
     random.seed(seed)
     np.random.seed(seed)
 
-    # train_data = np.loadtxt('./datasets/keijzer-7-train.csv', delimiter=',')
+    # train_data = np.loadtxt('./datasets/keijzer-10-train.csv', delimiter=',')
     train_data = np.loadtxt('./datasets/house-train.csv', delimiter=',')
 
     population_size = 100
     max_depth = 3
     generations = 50
-    tournament_size = 10
-    functions = [operator.add, operator.sub, operator.mul, div, log, math.sin,
+    tournament_size = 7
+    functions = [operator.add, operator.sub, operator.mul, div, math.sin,
                  math.cos]
     terminals = ['R'] + ['X' + str(i) for i in range(train_data.shape[1] - 1)]
     p_crossover = 0.9
@@ -414,7 +434,7 @@ if __name__ == '__main__':
     print 'Best', best.get_error()
     best.print_tree()
 
-    # test_data = np.loadtxt('./datasets/keijzer-7-test.csv', delimiter=',')
+    # test_data = np.loadtxt('./datasets/keijzer-10-test.csv', delimiter=',')
     test_data = np.loadtxt('./datasets/house-test.csv', delimiter=',')
 
     best.eval(test_data)
