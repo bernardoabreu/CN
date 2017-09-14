@@ -20,20 +20,22 @@ def log(x):
     except ValueError:
         return 0
 
+
 def sqrt(x):
     return 1 if x < 0 else math.sqrt(x)
+
 
 def power(x):
     return x**2
 
 
 def mean(x):
-    return sum(x)/len(x)
+    return sum(x) / len(x)
 
 
-def loadtxt(file, delimiter = ','):
+def loadtxt(file, delimiter=','):
     with open(file, 'r') as f:
-        return [map(float,line[:-1].split(delimiter)) for line in f]
+        return [map(float, line[:-1].split(delimiter)) for line in f]
 
 
 op_dict = {
@@ -56,6 +58,7 @@ class Node(object):
         self.left = left
         self.right = right
         self.content = content
+        # self.size = 0
 
     def eval(self, var_map):
         return self.content if self.content not in var_map \
@@ -77,7 +80,6 @@ class Node(object):
         if node is None:
             return
         n = str(node) if node.content not in op_dict else op_dict[node.content]
-        # print '  ' * level + n
 
         if node.right is None:
             print n,
@@ -95,10 +97,22 @@ class Node(object):
             print ')',
 
 
+class Terminal_Node(Node):
+    def __init__(self, terminal):
+        super(Terminal_Node, self).__init__(terminal)
+        # self.size = 1
+
+    def eval(self, var_map):
+        return self.content if self.content not in var_map \
+            else var_map[self.content]
+
+
 class Function_Node(Node):
 
     def __init__(self, terminal, left, right):
         super(Function_Node, self).__init__(terminal, left, right)
+        # self.size += 0 if self.left is None else self.left.get_size()
+        # self.size += 0 if self.right is None else self.right.get_size()
 
     def eval(self, var_map):
         # return op_dict[self.content](self.left.eval(),self.right.eval())
@@ -431,8 +445,8 @@ if __name__ == '__main__':
     seed = None
     random.seed(seed)
 
-    # train_data = loadtxt('./datasets/keijzer-7-train.csv', delimiter=',')
-    train_data = loadtxt('./datasets/house-train.csv', delimiter=',')
+    train_data = loadtxt('./datasets/keijzer-7-train.csv', delimiter=',')
+    # train_data = loadtxt('./datasets/house-train.csv', delimiter=',')
     # train_data = np.loadtxt('./datasets/house-train.csv', delimiter=',')
 
     population_size = 100
@@ -457,9 +471,9 @@ if __name__ == '__main__':
     print 'Best', best.get_error()
     best.print_tree()
 
-    # test_data = loadtxt('./datasets/keijzer-7-test.csv', delimiter=',')
-    test_data = loadtxt('./datasets/house-test.csv', delimiter=',')
+    test_data = loadtxt('./datasets/keijzer-7-test.csv', delimiter=',')
+    # test_data = loadtxt('./datasets/house-test.csv', delimiter=',')
     # test_data = np.loadtxt('./datasets/house-test.csv', delimiter=',')
 
     best.eval(test_data)
-    print best.get_error()
+    print(best.get_error())
