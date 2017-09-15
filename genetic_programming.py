@@ -1,209 +1,17 @@
 #!/usr/bin/env python
 
 import random
-import operator
-import math
-# import numpy as np
 import copy
+from individual import Individual
 
+from functions import UNARY
 
-THRESHOLD_SIZE = 200
-
-
-def div(a, b):
-    return 1 if b == 0 else a / b
-
-
-def log(x):
-    try:
-        return math.log(x)
-    except ValueError:
-        return 0
-
-
-def sqrt(x):
-    return 1 if x < 0 else math.sqrt(x)
-
-
-def power(x):
-    return x**2
+from node import Function_Node
+from node import Terminal_Node
 
 
 def mean(x):
     return sum(x) / len(x)
-
-
-def loadtxt(file, delimiter=','):
-    with open(file, 'r') as f:
-        return [map(float, line[:-1].split(delimiter)) for line in f]
-
-
-op_dict = {
-    operator.add: '+',
-    operator.sub: '-',
-    operator.mul: 'x',
-    div: '/',
-    log: 'log',
-    math.sin: 'sin',
-    math.cos: 'cos',
-    sqrt: 'sqrt',
-    power: 'pow'
-}
-
-unary = [log, math.cos, math.sin, sqrt, power]
-
-
-class Node(object):
-    def __init__(self, content, left=None, right=None):
-        self.left = left
-        self.right = right
-        self.content = content
-        # self.size = 0
-
-    def eval(self, var_map):
-        return self.content if self.content not in var_map \
-            else var_map[self.content]
-
-    def __str__(self):
-        return str(self.content)
-
-    def get_size(self):
-        left_size = 0 if self.left is None else self.left.get_size()
-        right_size = 0 if self.right is None else self.right.get_size()
-        return 1 + left_size + right_size
-
-    def print_tree(self):
-        self.__print(self)
-        print
-
-    def __print(self, node, level=0):
-        if node is None:
-            return
-        n = str(node) if node.content not in op_dict else op_dict[node.content]
-
-        if node.right is None:
-            print n,
-
-        if node.left is not None:
-            print '(',
-            self.__print(node.left, level + 1)
-            if node.right is None:
-                print ')',
-
-        if node.right is not None:
-            print n,
-            self.__print(node.right, level + 1)
-
-            print ')',
-
-
-class Terminal_Node(Node):
-    def __init__(self, terminal):
-        super(Terminal_Node, self).__init__(terminal)
-        # self.size = 1
-
-    def eval(self, var_map):
-        return self.content if self.content not in var_map \
-            else var_map[self.content]
-
-
-class Function_Node(Node):
-
-    def __init__(self, terminal, left, right):
-        super(Function_Node, self).__init__(terminal, left, right)
-        # self.size += 0 if self.left is None else self.left.get_size()
-        # self.size += 0 if self.right is None else self.right.get_size()
-
-    def eval(self, var_map):
-        # return op_dict[self.content](self.left.eval(),self.right.eval())
-        left_eval = self.left.eval(var_map)
-
-        return self.content(left_eval) if self.right is None else \
-            self.content(left_eval, self.right.eval(var_map))
-
-
-class Tree(object):
-    def __init__(self, tree):
-        self.root = tree
-        self.error = None
-
-    def get_error(self):
-        return self.error
-
-    def __eval(self, data):
-        return (self.root.eval({('X' + str(i)): x
-                for i, x in enumerate(data[:-1])}) - (data[-1]))**2
-
-    def eval(self, data_input):
-        length = len(data_input)
-        size = self.root.get_size()
-        self.error = math.sqrt(sum(map(self.__eval, data_input)) / length)
-
-        if size > THRESHOLD_SIZE:
-            self.error = float('inf')
-        return self.error
-
-    def __replace_node(self, node, old_node, new_node):
-        if node is None:
-            return False
-
-        if node.left == old_node:
-            node.left = new_node
-            return True
-
-        if node.right == old_node:
-            node.right = new_node
-            return True
-
-        return self.__replace_node(node.left, old_node, new_node) or \
-            self.__replace_node(node.right, old_node, new_node)
-
-    def replace_node(self, old_node, new_node):
-        if self.root == old_node:
-            self.root = new_node
-            return True
-        else:
-            return self.__replace_node(self.root, old_node, new_node)
-
-    def __get_list(self, node, node_list, p_list, p):
-        if node is None:
-            return
-
-        node_list.append(node)
-
-        if p:
-            p_list.append(True if isinstance(node, Function_Node) else False)
-
-        self.__get_list(node.left, node_list, p_list, p)
-        self.__get_list(node.right, node_list, p_list, p)
-
-    def get_list(self, p=False):
-        node_list = []
-        p_list = []
-
-        self.__get_list(self.root, node_list, p_list, p)
-
-        return (node_list, p_list) if p else node_list
-
-    def print_tree(self):
-        # self.__print(self.root)
-        self.root.print_tree()
-
-    # def __print(self, node, level=0):
-    #     if node is None:
-    #         return
-    #     n = str(node) if node.content not in op_dict \
-    #         else op_dict[node.content]
-    #     # print '  ' * level + n
-    #     print '(', n,
-    #     if node.left is not None:
-    #         self.__print(node.left, level + 1)
-
-    #     if node.right is not None:
-    #         print ',',
-    #         self.__print(node.right, level + 1)
-
-    #     print ')',
 
 
 class Genetic_Programming(object):
@@ -221,6 +29,9 @@ class Genetic_Programming(object):
 
         self.__full = True
         self.tournament_size = 3
+
+    def set_random_seed(self, seed):
+        random.seed(seed)
 
     def set_tournament_size(self, tournament_size):
         self.tournament_size = tournament_size
@@ -247,17 +58,18 @@ class Genetic_Programming(object):
 
         for i in range(2, max_depth + 1):
             for j in range(group):
-                pop.append(Tree(self.__gen_rnd_expr(funcs, terms, i, full)))
+                pop.append(Individual(self.__gen_rnd_expr(funcs,
+                                                          terms, i, full)))
                 full = not full
 
         if pop < population_size:
-            pop.append(Tree(self.__gen_rnd_expr(funcs, terms, i, full)))
+            pop.append(Individual(self.__gen_rnd_expr(funcs, terms, i, full)))
 
         return pop
 
     def __simple_initialization(self, pop_size, max_depth, funcs, terms):
-        return [Tree(self.__gen_rnd_expr(funcs, terms, max_depth, self.__full))
-                for i in range(pop_size)]
+        return [Individual(self.__gen_rnd_expr(funcs, terms, max_depth,
+                self.__full)) for i in range(pop_size)]
 
     def set_selection(self, selection_type):
         if selection_type == 'tournament':
@@ -272,7 +84,7 @@ class Genetic_Programming(object):
 
     def __gen_rnd_function(self, func, func_set, term_set, max_depth):
         child_left = self.__gen_rnd_expr(func_set, term_set, max_depth - 1)
-        child_right = None if func in unary else \
+        child_right = None if func in UNARY else \
             self.__gen_rnd_expr(func_set, term_set, max_depth - 1)
 
         return Function_Node(func, child_left, child_right)
@@ -288,9 +100,10 @@ class Genetic_Programming(object):
             # print('term', element)
 
             if term == 'R':
-                term = random.randint(-5, 5)
+                term = random.choice(
+                    [n for n in range(-5, 6) if n])
 
-            node = Node(term)
+            node = Terminal_Node(term)
         else:
             func = random.choice(func_set)
             # func = func_set[rand - len(term_set)]
@@ -301,20 +114,16 @@ class Genetic_Programming(object):
         return node
 
     def __select_genetic_operator(self):
-        operator = random.random()
+        p = random.random()
 
-        if operator > self.p_crossover + self.p_mutation:
+        if p > (self.p_crossover + self.p_mutation):
             return 'reproduction'
         else:
-            return 'mutation' if operator > self.p_crossover else 'crossover'
-
-        # return np.random.choice(['crossover', 'mutation', 'reproduction'],
-        #                         p=[self.p_crossover, self.p_mutation,
-        #                            self.p_reproduction])
+            return 'mutation' if p > self.p_crossover else 'crossover'
 
     def evaluate_population(self, population, data):
         for individual in population:
-            individual.eval(data)
+            individual.eval(data, self.max_depth)
 
     def crossover(self, parent1, parent2):
         child1 = copy.deepcopy(parent1)
@@ -335,10 +144,12 @@ class Genetic_Programming(object):
         mutant_list = mutant.get_list()
 
         element = random.choice(mutant_list)
+        content = element.get_content()
+        element_right = element.get_right_child()
 
         is_function = isinstance(element, Function_Node)
-        terminals = [i for i in self.terminals if i != element.content]
-        functions = [i for i in self.functions if i != element.content]
+        terminals = [i for i in self.terminals if i != content]
+        functions = [i for i in self.functions if i != content]
 
         length = len(terminals) + len(functions)
         rand = random.randrange(length)
@@ -348,34 +159,33 @@ class Genetic_Programming(object):
 
             if term == 'R':
                 term = random.choice(
-                    [n for n in range(-5, 6) if n != element.content])
+                    [n for n in range(-5, 6) if n != content])
 
             # print('term', term)
             if is_function:
                 # print 'Replace function with terminal'
-                node = Node(term)
+                node = Terminal_Node(term)
                 mutant.replace_node(element, node)
             else:
                 # print 'Replace terminal'
-                element.content = term
+                element.set_content(term)
         else:
             func = functions[rand - len(terminals)]
             # print 'func', func
 
             # depth = max(2, self.max_depth / 2)
-            depth = 2
+            depth = 1
 
             if is_function:
                 # print 'Replace terminal'
-                if func in unary:
-                    if element.right is not None:
-                        element.right = None
-                elif element.right is None:
-                    element.right = self.__gen_rnd_function(func,
-                                                            self.functions,
-                                                            self.terminals,
-                                                            depth)
-                element.content = func
+                if func in UNARY:
+                    if element_right is not None:
+                        element.set_right_child(None)
+                elif element_right is None:
+                    element.set_right_child(self.__gen_rnd_function(func,
+                                            self.functions, self.terminals,
+                                            depth))
+                element.set_content(func)
             else:
                 # print 'Replace terminal with function'
                 node = self.__gen_rnd_function(func, self.functions,
@@ -406,8 +216,8 @@ class Genetic_Programming(object):
 
         while current_generation < generations and s_best.get_error() > 0.0:
             children = []
-            print('generation: ' + str(current_generation) + ' best:' +
-                  str(s_best.get_error()) + ' mean:' +
+            print('Generation: ' + str(current_generation) + ' Best:' +
+                  str(s_best.get_error()) + ' Mean:' +
                   str(mean(map(lambda x: x.get_error(), population))))
             # print map(lambda x: x.error, population),
 
@@ -433,47 +243,13 @@ class Genetic_Programming(object):
             self.evaluate_population(children, data)
             population = sorted(children,
                                 key=lambda x: x.error)[:population_size]
-            # s_best = get_best_solution(population)
+
             s_best = population[0]
 
             current_generation += 1
 
+        print('Generation: ' + str(current_generation) + ' Best:' +
+              str(s_best.get_error()) + ' Mean:' +
+              str(mean(map(lambda x: x.get_error(), population))))
+
         return s_best
-
-
-if __name__ == '__main__':
-    seed = None
-    random.seed(seed)
-
-    train_data = loadtxt('./datasets/keijzer-7-train.csv', delimiter=',')
-    # train_data = loadtxt('./datasets/house-train.csv', delimiter=',')
-    # train_data = np.loadtxt('./datasets/house-train.csv', delimiter=',')
-
-    population_size = 100
-    max_depth = 3
-    generations = 50
-    tournament_size = 7
-    functions = [operator.add, operator.sub, operator.mul, div, log, math.sin,
-                 math.cos, sqrt, power]
-    terminals = ['R'] + ['X' + str(i) for i in range(len(train_data[0]) - 1)]
-    p_crossover = 0.9
-    p_mutation = 0.1
-    p_reproduction = 0.0
-    elitism = 5
-
-    gp = Genetic_Programming(max_depth, functions, terminals, p_crossover,
-                             p_mutation, p_reproduction)
-
-    gp.set_tournament_size(tournament_size)
-
-    best = gp.run(train_data, population_size, generations, elitism)
-
-    print 'Best', best.get_error()
-    best.print_tree()
-
-    test_data = loadtxt('./datasets/keijzer-7-test.csv', delimiter=',')
-    # test_data = loadtxt('./datasets/house-test.csv', delimiter=',')
-    # test_data = np.loadtxt('./datasets/house-test.csv', delimiter=',')
-
-    best.eval(test_data)
-    print(best.get_error())
