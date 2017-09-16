@@ -12,9 +12,9 @@ class Node(object):
         return str(self.__content)
 
     def update_height(self):
-        left_height = -1 if self.__left is None else self.__left.get_height()
-        right_height = -1 if self.__right is None else self.__right.get_height()
-        self.__height = max(left_height, right_height) + 1
+        l_height = -1 if self.__left is None else self.__left.get_height()
+        r_height = -1 if self.__right is None else self.__right.get_height()
+        self.__height = max(l_height, r_height) + 1
 
     def get_height(self):
         return self.__height
