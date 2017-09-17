@@ -6,23 +6,28 @@ from individual import Individual
 
 from functions import UNARY
 
-from node import Function_Node
-from node import Terminal_Node
+from node import FunctionNode
+from node import TerminalNode
+from stats import Stats
 
 
 def mean(x):
-    return sum(x) / len(x)
+    size = 0
+    total_sum = 0
+    for n in x:
+        total_sum += n
+        size += 1
+
+    return total_sum / size
 
 
-class Genetic_Programming(object):
-    def __init__(self, max_depth, nodes_func, nodes_term, p_crossover,
-                 p_mutation, p_reproduction):
+class GeneticProgramming(object):
+    def __init__(self, max_depth, functions, terms, p_crossover, p_mutation):
         self.max_depth = max_depth
-        self.functions = nodes_func
-        self.terminals = nodes_term
+        self.functions = functions
+        self.terminals = terms
         self.p_crossover = p_crossover
         self.p_mutation = p_mutation
-        self.p_reproduction = p_reproduction
 
         self.initialize_population = self.__ramped_half_and_half
         self.selection = self.__tournament_selection
@@ -30,16 +35,17 @@ class Genetic_Programming(object):
         self.__full = True
         self.tournament_size = 3
 
+        self.stats = Stats()
+
     def set_random_seed(self, seed):
         random.seed(seed)
 
     def set_tournament_size(self, tournament_size):
         self.tournament_size = tournament_size
 
-    def set_probabilities(self, p_crossover, p_mutation, p_reproduction):
+    def set_probabilities(self, p_crossover, p_mutation):
         self.p_crossover = p_crossover
         self.p_mutation = p_mutation
-        self.p_reproduction = p_reproduction
 
     def set_initialization(self, init_type):
         if init_type == 'half and half':
@@ -57,13 +63,14 @@ class Genetic_Programming(object):
         full = True
 
         for i in range(2, max_depth + 1):
-            for j in range(group):
+            for j in range(int(group)):
                 pop.append(Individual(self.__gen_rnd_expr(funcs,
                                                           terms, i, full)))
                 full = not full
 
-        if pop < population_size:
-            pop.append(Individual(self.__gen_rnd_expr(funcs, terms, i, full)))
+        for i in range(population_size % (max_depth - 1)):
+            pop.append(Individual(self.__gen_rnd_expr(funcs, terms, max_depth,
+                                  full)))
 
         return pop
 
@@ -87,7 +94,7 @@ class Genetic_Programming(object):
         child_right = None if func in UNARY else \
             self.__gen_rnd_expr(func_set, term_set, max_depth - 1)
 
-        return Function_Node(func, child_left, child_right)
+        return FunctionNode(func, child_left, child_right)
 
     def __gen_rnd_expr(self, func_set, term_set, max_depth, full=False):
         node = None
@@ -100,10 +107,9 @@ class Genetic_Programming(object):
             # print('term', element)
 
             if term == 'R':
-                term = random.choice(
-                    [n for n in range(-5, 6) if n])
+                term = random.randint(-5, 5)
 
-            node = Terminal_Node(term)
+            node = TerminalNode(term)
         else:
             func = random.choice(func_set)
             # func = func_set[rand - len(term_set)]
@@ -147,7 +153,7 @@ class Genetic_Programming(object):
         content = element.get_content()
         element_right = element.get_right_child()
 
-        is_function = isinstance(element, Function_Node)
+        is_function = isinstance(element, FunctionNode)
         terminals = [i for i in self.terminals if i != content]
         functions = [i for i in self.functions if i != content]
 
@@ -164,7 +170,7 @@ class Genetic_Programming(object):
             # print('term', term)
             if is_function:
                 # print 'Replace function with terminal'
-                node = Terminal_Node(term)
+                node = TerminalNode(term)
                 mutant.replace_node(element, node)
             else:
                 # print 'Replace terminal'
@@ -197,59 +203,70 @@ class Genetic_Programming(object):
     def reproduction(self, parent):
         return copy.deepcopy(parent)
 
-    def run(self, data, population_size, generations, elitism=0):
+    def run(self, data, pop_size, generations, elitism=0):
 
-        population = self.initialize_population(population_size,
-                                                self.max_depth,
+        population = self.initialize_population(pop_size, self.max_depth,
                                                 self.functions, self.terminals)
+        print('Population size: ' + str(len(population)) + '\n')
         self.evaluate_population(population, data)
         population.sort(key=lambda x: x.error)
         # s_best = get_best_solution(population)
         s_best = population[0]
-        for p in population:
-            p.print_tree()
 
-        # print 'initial population:'
+        print('Initial population:')
+        for p in population:
+            print(p)
+            self.stats.add_child(p)
+
+        print('\n')
+
         # print map(lambda x: x.error, population)
 
         current_generation = 0
 
         while current_generation < generations and s_best.get_error() > 0.0:
+            print('Generation ' + str(current_generation) + ':')
+            self.stats.print_stats()
+            print('\n')
+            self.stats.reset()
+
             children = []
-            print('Generation: ' + str(current_generation) + ' Best:' +
-                  str(s_best.get_error()) + ' Mean:' +
-                  str(mean(map(lambda x: x.get_error(), population))))
-            # print map(lambda x: x.error, population),
 
             if elitism:
                 children = population[:elitism]
 
-            while len(children) < population_size:
+            while len(children) < pop_size:
                 operator = self.__select_genetic_operator()
                 # print operator
                 parent1 = self.selection(population)
                 if operator == 'crossover':
                     parent2 = self.selection(population)
                     child1, child2 = self.crossover(parent1, parent2)
+                    child1.eval(data, self.max_depth)
+                    child2.eval(data, self.max_depth)
+                    self.stats.add_child(child1, crossover=True)
+                    self.stats.add_child(child2, crossover=True)
                     children.append(child1)
                     children.append(child2)
                 elif operator == 'mutation':
                     child1 = self.mutation(parent1)
+                    child1.eval(data, self.max_depth)
+                    self.stats.add_child(child1)
                     children.append(child1)
                 elif operator == 'reproduction':
                     child1 = self.reproduction(parent1)
+                    self.stats.add_child(child1)
                     children.append(child1)
 
-            self.evaluate_population(children, data)
-            population = sorted(children,
-                                key=lambda x: x.error)[:population_size]
+            # self.evaluate_population(children, data)
+            population = sorted(children, key=lambda x: x.error)[:pop_size]
 
             s_best = population[0]
 
             current_generation += 1
 
-        print('Generation: ' + str(current_generation) + ' Best:' +
-              str(s_best.get_error()) + ' Mean:' +
-              str(mean(map(lambda x: x.get_error(), population))))
+        print('Generation ' + str(current_generation) + ':')
+
+        self.stats.print_stats()
 
         return s_best

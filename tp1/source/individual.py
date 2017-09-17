@@ -32,20 +32,18 @@ class Individual(object):
 
         if node_left == old_node:
             node.set_left_child(new_node)
-            node.update_height()
             return True
 
         if node_right == old_node:
             node.set_right_child(new_node)
-            node.update_height()
             return True
 
         if self.__replace_node(node_left, old_node, new_node):
-            node.update_height()
+            node.update()
             return True
         else:
             right_result = self.__replace_node(node_right, old_node, new_node)
-            node.update_height()
+            node.update()
             return right_result
 
     def replace_node(self, old_node, new_node):
@@ -54,7 +52,7 @@ class Individual(object):
             return True
         else:
             result = self.__replace_node(self.root, old_node, new_node)
-            self.root.update_height()
+            self.root.update()
             return result
 
     def __get_list(self, node, node_list):
@@ -74,5 +72,5 @@ class Individual(object):
 
         return node_list
 
-    def print_tree(self):
-        self.root.print_tree()
+    def __str__(self):
+        return str(self.root)

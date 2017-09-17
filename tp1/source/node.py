@@ -6,12 +6,16 @@ class Node(object):
         self.__left = left
         self.__right = right
         self.__content = content
-        self.update_height()
+        self.update()
 
     def __str__(self):
-        return str(self.__content)
+        return self._string
 
-    def update_height(self):
+    def update(self):
+        self._update_height()
+        self._update_string()
+
+    def _update_height(self):
         l_height = -1 if self.__left is None else self.__left.get_height()
         r_height = -1 if self.__right is None else self.__right.get_height()
         self.__height = max(l_height, r_height) + 1
@@ -27,11 +31,11 @@ class Node(object):
 
     def set_left_child(self, left_child):
         self.__left = left_child
-        self.update_height()
+        self.update()
 
     def set_right_child(self, right_child):
         self.__right = right_child
-        self.update_height()
+        self.update()
 
     def get_left_child(self):
         return self.__left
@@ -39,50 +43,23 @@ class Node(object):
     def get_right_child(self):
         return self.__right
 
-    def print_tree(self):
-        self.__print(self)
-        print
 
-    def __print(self, node, level=0):
-        if node is None:
-            return
-
-        left_child = node.get_left_child()
-        right_child = node.get_right_child()
-        content = node.get_content()
-
-        n = str(node) if content not in OP_DICT else OP_DICT[content]
-
-        # print ' ' * level, n + '[' + str(node.get_height()) + ']'
-        if right_child is None:
-            print n,  # + '[' + str(node.get_height()) + ']',
-
-        if left_child is not None:
-            print '(',
-            self.__print(left_child, level + 1)
-            if right_child is None:
-                print ')',
-
-        if right_child is not None:
-            print n,  # + '[' + str(node.get_height()) + ']',
-            self.__print(right_child, level + 1)
-
-            print ')',
-
-
-class Terminal_Node(Node):
+class TerminalNode(Node):
     def __init__(self, terminal):
-        super(Terminal_Node, self).__init__(terminal)
+        super(TerminalNode, self).__init__(terminal)
 
     def eval(self, var_map):
         content = self.get_content()
         return content if content not in var_map else var_map[content]
 
+    def _update_string(self):
+        self._string = str(self.get_content())
 
-class Function_Node(Node):
+
+class FunctionNode(Node):
 
     def __init__(self, terminal, left, right):
-        super(Function_Node, self).__init__(terminal, left, right)
+        super(FunctionNode, self).__init__(terminal, left, right)
 
     def eval(self, var_map):
         left_child = self.get_left_child()
@@ -95,3 +72,18 @@ class Function_Node(Node):
             return content(left_eval)
         else:
             return content(left_eval, right_child.eval(var_map))
+
+    def _update_string(self):
+        left_child = self.get_left_child()
+        right_child = self.get_right_child()
+        content = self.get_content()
+
+        n = str(content) if content not in OP_DICT else OP_DICT[content]
+        s = ''
+
+        if right_child is None:
+            s = n + ' ' + str(left_child)
+        else:
+            s = str(left_child) + ' ' + n + ' ' + str(right_child)
+
+        self._string = '(' + s + ')'
