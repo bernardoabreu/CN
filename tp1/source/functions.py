@@ -1,5 +1,16 @@
 import math
-import operator
+
+
+def add(a, b):
+    return a + b
+
+
+def sub(a, b):
+    return a - b
+
+
+def mul(a, b):
+    return a * b
 
 
 def div(a, b):
@@ -25,9 +36,9 @@ UNARY = (log, math.cos, math.sin, sqrt, power)
 
 
 OP_DICT = {
-    operator.add: '+',
-    operator.sub: '-',
-    operator.mul: 'x',
+    add: '+',
+    sub: '-',
+    mul: '*',
     div: '/',
     log: 'log',
     math.sin: 'sin',
