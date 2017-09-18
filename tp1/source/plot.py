@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 from pandas import DataFrame
+from sys import argv
+
 
 def loadtxt(file, delimiter=','):
     with open(file, 'r') as f:
@@ -43,9 +45,9 @@ def read_csv(outfile):
     print stds
     print max_min
 
-    # df = DataFrame(means)
-    # plt.figure()
-    # df.boxplot()
+    df = DataFrame(means)
+    plt.figure()
+    df.boxplot()
 
     # create stacked errorbars:
     # plt.errorbar(np.arange(8), means, [means - mins, maxes - means],
@@ -63,15 +65,12 @@ def read_csv(outfile):
     # print n[:,0]
     # print n[:,3]
     # plt.plot(np.arange(len(a_means)), a_means)
-    # plt.xlabel('Generations')
+    plt.xlabel('generations')
     # plt.ylabel('Means')
     # # plt.title(names[3] + ' x ' + names[0])
     # plt.grid(True)
     # plt.savefig("test.png")
     plt.show()
-
-
-from sys import argv
 
 
 read_csv(argv[1])

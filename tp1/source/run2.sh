@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PA='/home/bernardoabreu/CN/tp1'
+PA=$HOME'/CN/tp1'
 TEST_VERSION=1
 
 for p in 500;

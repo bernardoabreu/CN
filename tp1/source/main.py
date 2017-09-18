@@ -69,7 +69,7 @@ if __name__ == '__main__':
                         help='Number of individuals to be used in tournament')
     parser.add_argument('--seed', type=int, default=None,
                         help='Seed for random number generator')
-    parser.add_argument('--stats', required=True,
+    parser.add_argument('--stats',
                         help='File to sava statistics.')
 
     args = parser.parse_args()
