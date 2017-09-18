@@ -203,6 +203,9 @@ class GeneticProgramming(object):
     def reproduction(self, parent):
         return copy.deepcopy(parent)
 
+    def save_stats(self, out_file):
+        self.stats.dump_to_file(out_file)
+
     def run(self, data, pop_size, generations, elitism=0):
 
         population = self.initialize_population(pop_size, self.max_depth,
@@ -210,7 +213,7 @@ class GeneticProgramming(object):
         print('Population size: ' + str(len(population)) + '\n')
         self.evaluate_population(population, data)
         population.sort(key=lambda x: x.error)
-        # s_best = get_best_solution(population)
+        # s_best = self.get_best_solution(population)
         s_best = population[0]
 
         print('Initial population:')
@@ -226,8 +229,10 @@ class GeneticProgramming(object):
 
         while current_generation < generations and s_best.get_error() > 0.0:
             print('Generation ' + str(current_generation) + ':')
+            self.stats.mean()
             self.stats.print_stats()
             print('\n')
+            self.stats.record_data()
             self.stats.reset()
 
             children = []
@@ -259,6 +264,7 @@ class GeneticProgramming(object):
                     children.append(child1)
 
             # self.evaluate_population(children, data)
+
             population = sorted(children, key=lambda x: x.error)[:pop_size]
 
             s_best = population[0]
@@ -266,7 +272,8 @@ class GeneticProgramming(object):
             current_generation += 1
 
         print('Generation ' + str(current_generation) + ':')
-
+        self.stats.mean()
         self.stats.print_stats()
+        self.stats.record_data()
 
         return s_best

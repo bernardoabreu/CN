@@ -1,4 +1,5 @@
 import math
+import sys
 
 
 class Individual(object):
@@ -16,7 +17,7 @@ class Individual(object):
     def eval(self, data_input, max_height=None):
 
         if max_height is not None and self.root.get_height() > max_height:
-            self.error = float('inf')
+            self.error = sys.maxint
         else:
             length = len(data_input)
             self.error = math.sqrt(sum(map(self.__eval, data_input)) / length)

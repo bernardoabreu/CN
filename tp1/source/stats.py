@@ -1,9 +1,30 @@
 
+
 class Stats(object):
     def __init__(self):
         self.__mean = float('inf')
         self.used = set()
+
+        self.clear_data()
         self.reset()
+
+    def record_data(self):
+        self.mean_list.append(self.__mean)
+        self.cross_worse_list.append(self.__cross_worse)
+        self.cross_equal_list.append(self.__cross_equal)
+        self.cross_better_list.append(self.__cross_better)
+        self.best_list.append(self.__best)
+        self.worst_list.append(self.__worst)
+        self.repeated_list.append(self.__repeated)
+
+    def clear_data(self):
+        self.mean_list = []
+        self.cross_worse_list = []
+        self.cross_equal_list = []
+        self.cross_better_list = []
+        self.best_list = []
+        self.worst_list = []
+        self.repeated_list = []
 
     def reset(self):
         self.__sum = 0
@@ -70,3 +91,27 @@ class Stats(object):
               str(self.__cross_better))
         print('Crossover children worse than parent\'s mean: ' +
               str(self.__cross_worse))
+
+    def dump_to_file(self, out_file):
+        with open(out_file + '_mean.csv', 'a') as f:
+            f.write(','.join(map(str, self.mean_list)) + '\n')
+        with open(out_file + '_best.csv', 'a') as f:
+            f.write(','.join(map(str, self.best_list)) + '\n')
+        with open(out_file + '__worst.csv', 'a') as f:
+            f.write(','.join(map(str, self.worst_list)) + '\n')
+        with open(out_file + '__cross_worse.csv', 'a') as f:
+            f.write(','.join(map(str, self.cross_worse_list)) + '\n')
+        with open(out_file + '__cross_better.csv', 'a') as f:
+            f.write(','.join(map(str, self.cross_better_list)) + '\n')
+        with open(out_file + '__repeated.csv', 'a') as f:
+            f.write(','.join(map(str, self.repeated_list)) + '\n')
+            # f.write('Generation,Mean,Best Fitness,Worst Fitness,' +
+            #         'Crossover children worse than parent,' +
+            #         'Crossover children better than parent,' +
+            #         'Repeated elements\n')
+            # for i, line in enumerate(zip(self.mean_list, self.best_list,
+            #                          self.worst_list, self.cross_worse_list,
+            #                          self.cross_better_list,
+            #                          self.repeated_list)):
+            #     print line
+            #     f.write(str(i) + ',' + ','.join(map(str, line)) + '\n')

@@ -34,6 +34,9 @@ def main(args):
 
     best = gp.run(train_data, population_size, generations, elitism)
 
+    if args.stats:
+        gp.save_stats(args.stats)
+
     print('\nTrain data: ' + train_file)
     print('Best error: ' + str(best.get_error()))
     print('Individual:\n' + str(best))
@@ -62,10 +65,13 @@ if __name__ == '__main__':
                         help='Size of the population')
     parser.add_argument('--gen', type=int, default=50,
                         help='Number of generations')
-    parser.add_argument('--tournament', type=int, default=5,
+    parser.add_argument('--tournament', type=int, default=2,
                         help='Number of individuals to be used in tournament')
     parser.add_argument('--seed', type=int, default=None,
                         help='Seed for random number generator')
+    parser.add_argument('--stats', required=True,
+                        help='File to sava statistics.')
+
     args = parser.parse_args()
 
     # train_data = '../datasets/keijzer-7-train.csv'
