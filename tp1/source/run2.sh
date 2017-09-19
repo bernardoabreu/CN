@@ -1,11 +1,21 @@
 #!/bin/bash
 
 PA=$HOME'/CN/tp1'
-TEST_VERSION=1
+TEST_VERSION=2
 
-for p in 500;
-do
-    for i in {20..30}; do
-        $PA/source/main.py --seed $i --pop_size $p --train $PA/datasets/house-train.csv --test $PA/datasets/house-test.csv --stats $PA/tests/house/$TEST_VERSION/$p/out_house >  $PA/tests/house/$TEST_VERSION/$p/out_house_$i
-    done
+DATA=house
+
+START="$1"
+
+END="$2"
+
+POP="$3"
+
+OUTFILE="${DATA}_${START}_${END}"
+
+mkdir $PA/tests/$DATA/$TEST_VERSION
+mkdir $PA/tests/$DATA/$TEST_VERSION/$POP
+for i in $(seq $START $END); do
+    echo $i;
+    $PA/source/main.py --crossover 0.9 --mutation 0.05 --seed $i --pop_size $POP --train $PA/datasets/$DATA-train.csv --test $PA/datasets/$DATA-test.csv --stats $PA/tests/$DATA/$TEST_VERSION/$POP/out_$OUTFILE >  $PA/tests/$DATA/$TEST_VERSION/$POP/out_"${DATA}_${i}"
 done

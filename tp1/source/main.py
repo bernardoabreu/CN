@@ -73,7 +73,7 @@ if __name__ == '__main__':
                         help='File to sava statistics.')
 
     args = parser.parse_args()
-
+    print args.stats
     # train_data = '../datasets/keijzer-7-train.csv'
     # test_data = '../datasets/keijzer-7-test.csv'
     # train_data = '../datasets/house-train.csv'

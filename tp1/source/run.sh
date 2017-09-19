@@ -1,28 +1,19 @@
 #!/bin/bash
 
 PA=$HOME'/CN/tp1'
-TEST_VERSION=1
+TEST_VERSION=2
 
 
-mkdir $PA/tests/keijzer-7/$TEST_VERSION
-mkdir $PA/tests/keijzer-10/$TEST_VERSION
-mkdir $PA/tests/house/$TEST_VERSION
+for f in keijzer-7 keijzer-10; do
 
-for p in 50 100 500;
-do
-    mkdir $PA/tests/keijzer-7/$TEST_VERSION/$p
-    mkdir $PA/tests/keijzer-10/$TEST_VERSION/$p
-    mkdir $PA/tests/house/$TEST_VERSION/$p
+    mkdir $PA/tests/$f/$TEST_VERSION
 
-    for i in {1..30}; do
-        $PA/source/main.py --seed $i --pop_size $p --train $PA/datasets/keijzer-7-train.csv --test $PA/datasets/keijzer-7-test.csv --stats $PA/tests/keijzer-7/$TEST_VERSION/$p/out_7 > $PA/tests/keijzer-7/$TEST_VERSION/$p/out_7_$i
-    done
+    for p in 50 100 500; do
 
-    for i in {1..30}; do
-        $PA/source/main.py --seed $i --pop_size $p --train $PA/datasets/keijzer-10-train.csv --test $PA/datasets/keijzer-10-test.csv --stats $PA/tests/keijzer-10/$TEST_VERSION/$p/out_10 > $PA/tests/keijzer-10/$TEST_VERSION/$p/out_10_$i
-    done
+        mkdir $PA/tests/$f/$TEST_VERSION/$p
 
-    for i in {1..30}; do
-        $PA/source/main.py --seed $i --pop_size $p --train $PA/datasets/house-train.csv --test $PA/datasets/house-test.csv --stats $PA/tests/house/$TEST_VERSION/$p/out_house >  $PA/tests/house/$TEST_VERSION/$p/out_house_$i
+        for i in {1..30}; do
+            $PA/source/main.py --crossover 0.9 --mutation 0.05 --seed $i --pop_size $p --train $PA/datasets/$f-train.csv --test $PA/datasets/$f-test.csv --stats $PA/tests/$f/$TEST_VERSION/$p/out_$f > $PA/tests/$f/$TEST_VERSION/$p/out_"${f}_${i}"
+        done
     done
 done

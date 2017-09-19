@@ -93,9 +93,10 @@ class Stats(object):
               str(self.__cross_worse))
 
     def dump_to_file(self, out_file):
-        with open(out_file + '_mean.csv', 'a') as f:
+        print out_file
+        with open(out_file + '__mean.csv', 'a') as f:
             f.write(','.join(map(str, self.mean_list)) + '\n')
-        with open(out_file + '_best.csv', 'a') as f:
+        with open(out_file + '__best.csv', 'a') as f:
             f.write(','.join(map(str, self.best_list)) + '\n')
         with open(out_file + '__worst.csv', 'a') as f:
             f.write(','.join(map(str, self.worst_list)) + '\n')

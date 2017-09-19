@@ -57,7 +57,7 @@ def read_csv(outfile):
     # plt
     # plt.errorbar(np.arange(len(a_means)), a_means, a_max_min,
     #              fmt='.k', ecolor='gray', lw=1)
-    plt.errorbar(np.arange(len(a_means)), a_means, a_stds, fmt='ok', lw=5)
+    # plt.errorbar(np.arange(len(a_means)), a_means, a_stds, fmt='ok', lw=5)
     # plt.xlim(-1, 8)
 
     # n = np.loadtxt(outfile, delimiter=',', skiprows=1)
