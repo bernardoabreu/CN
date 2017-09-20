@@ -2,6 +2,10 @@ from functions import OP_DICT
 
 
 class Node(object):
+    """[summary]
+
+    [description]
+    """
     def __init__(self, content, left=None, right=None):
         self.__left = left
         self.__right = right
@@ -45,6 +49,13 @@ class Node(object):
 
 
 class TerminalNode(Node):
+    """[summary]
+
+    [description]
+
+    Extends:
+        Node
+    """
     def __init__(self, terminal):
         super(TerminalNode, self).__init__(terminal)
 
@@ -57,7 +68,13 @@ class TerminalNode(Node):
 
 
 class FunctionNode(Node):
+    """[summary]
 
+    [description]
+
+    Extends:
+        Node
+    """
     def __init__(self, terminal, left, right):
         super(FunctionNode, self).__init__(terminal, left, right)
 
@@ -74,6 +91,10 @@ class FunctionNode(Node):
             return content(left_eval, right_child.eval(var_map))
 
     def _update_string(self):
+        """[summary]
+
+        [description]
+        """
         left_child = self.get_left_child()
         right_child = self.get_right_child()
         content = self.get_content()

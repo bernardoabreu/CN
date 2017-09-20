@@ -13,7 +13,7 @@ def loadtxt(file, delimiter=','):
                         for line in f])
 
 
-def lineplot(a, y_label):
+def lineplot(a, y_label, save=''):
     means = []
     for column in a.T:
         means.append(np.mean(column))
@@ -23,10 +23,17 @@ def lineplot(a, y_label):
     plt.ylabel(y_label)
     plt.title(y_label + ' x ' + 'generations')
     plt.grid(True)
-    plt.show()
+
+    figure = plt.gcf()
+    figure.set_size_inches(19, 12)
+    if save:
+        # when saving, specify the DPI
+        print 'saving to ' + save
+        plt.savefig(save + '_line.png', dpi=300)
+    # plt.show()
 
 
-def boxplot(a, y_label):
+def boxplot(a, y_label, save=''):
     df = DataFrame(a)
     plt.figure()
     df.boxplot()
@@ -34,16 +41,22 @@ def boxplot(a, y_label):
     plt.ylabel(y_label)
     plt.title(y_label + ' x ' + 'generations')
     plt.grid(True)
-    # plt.savefig("test.png")
-    plt.show()
+    figure = plt.gcf()
+    figure.set_size_inches(19, 12)
+    if save:
+        print 'saving to ' + save
+        plt.savefig(save + '_boxplot.png', dpi=300)
+    # plt.show()
 
 
 if __name__ == '__main__':
-
+    print 'running'
     in_file = argv[1]
-    label = argv[2]
 
+    label = in_file.split('.')[0].split('__')[-1]
     a = loadtxt(in_file)
 
-    boxplot(a, label)
-    boxplot(a, label)
+    outputfolder = argv[2] + '/' + label if len(argv) > 2 else ''
+
+    # boxplot(a, label, outputfolder)
+    lineplot(a, label, outputfolder)

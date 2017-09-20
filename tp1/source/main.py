@@ -47,6 +47,10 @@ def main(args):
     print('\nTest data: ' + test_file)
     print('Error: ' + str(best.get_error()))
 
+    if args.test_out:
+        with open(args.test_out + '__test_best.csv', 'a') as f:
+            f.write(str(best.get_error()) + '\n')
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -70,6 +74,8 @@ if __name__ == '__main__':
     parser.add_argument('--seed', type=int, default=None,
                         help='Seed for random number generator')
     parser.add_argument('--stats',
+                        help='File to sava statistics.')
+    parser.add_argument('--test_out',
                         help='File to sava statistics.')
 
     args = parser.parse_args()

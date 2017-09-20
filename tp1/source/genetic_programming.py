@@ -11,17 +11,11 @@ from node import TerminalNode
 from stats import Stats
 
 
-def mean(x):
-    size = 0
-    total_sum = 0
-    for n in x:
-        total_sum += n
-        size += 1
-
-    return total_sum / size
-
-
 class GeneticProgramming(object):
+    """[summary]
+
+    [description]
+    """
     def __init__(self, max_depth, functions, terms, p_crossover, p_mutation):
         self.max_depth = max_depth
         self.functions = functions
@@ -58,6 +52,19 @@ class GeneticProgramming(object):
             self.__full = True
 
     def __ramped_half_and_half(self, population_size, max_depth, funcs, terms):
+        """[summary]
+        
+        [description]
+        
+        Arguments:
+            population_size {[type]} -- [description]
+            max_depth {[type]} -- [description]
+            funcs {[type]} -- [description]
+            terms {[type]} -- [description]
+        
+        Returns:
+            [type] -- [description]
+        """
         pop = []
         group = (population_size / (max_depth - 1))
         full = True
@@ -100,11 +107,9 @@ class GeneticProgramming(object):
         node = None
         length = len(term_set) + len(func_set)
         rand = random.randrange(length)
-        # print('rand', rand)
+
         if max_depth == 0 or ((not full) and rand < len(term_set)):
             term = random.choice(term_set)
-            # term = term_set[rand]
-            # print('term', element)
 
             if term == 'R':
                 term = random.randint(-5, 5)
@@ -112,8 +117,6 @@ class GeneticProgramming(object):
             node = TerminalNode(term)
         else:
             func = random.choice(func_set)
-            # func = func_set[rand - len(term_set)]
-            # print 'func', func
 
             node = self.__gen_rnd_function(func, func_set, term_set, max_depth)
 
@@ -132,6 +135,17 @@ class GeneticProgramming(object):
             individual.eval(data, self.max_depth)
 
     def crossover(self, parent1, parent2):
+        """[summary]
+
+        [description]
+
+        Arguments:
+            parent1 {[type]} -- [description]
+            parent2 {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         child1 = copy.deepcopy(parent1)
         child2 = copy.deepcopy(parent2)
         list1 = child1.get_list()
@@ -146,6 +160,16 @@ class GeneticProgramming(object):
         return child1, child2
 
     def mutation(self, parent):
+        """[summary]
+
+        [description]
+
+        Arguments:
+            parent {[type]} -- [description]
+
+        Returns:
+            [type] -- [description]
+        """
         mutant = copy.deepcopy(parent)
         mutant_list = mutant.get_list()
 
@@ -179,7 +203,6 @@ class GeneticProgramming(object):
             func = functions[rand - len(terminals)]
             # print 'func', func
 
-            # depth = max(2, self.max_depth / 2)
             depth = 1
 
             if is_function:
@@ -222,8 +245,6 @@ class GeneticProgramming(object):
             self.stats.add_child(p)
 
         print('\n')
-
-        # print map(lambda x: x.error, population)
 
         current_generation = 0
 

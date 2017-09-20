@@ -3,6 +3,10 @@ import sys
 
 
 class Individual(object):
+    """[summary]
+
+    [description]
+    """
     def __init__(self, tree):
         self.root = tree
         self.error = None
@@ -25,6 +29,18 @@ class Individual(object):
         return self.error
 
     def __replace_node(self, node, old_node, new_node):
+        """[summary]
+
+        [description]
+
+        Arguments:
+            node {[type]} -- [description]
+            old_node {[type]} -- [description]
+            new_node {[type]} -- [description]
+
+        Returns:
+            bool -- [description]
+        """
         if node is None:
             return False
 
@@ -48,6 +64,17 @@ class Individual(object):
             return right_result
 
     def replace_node(self, old_node, new_node):
+        """[summary]
+
+        [description]
+
+        Arguments:
+            old_node {[type]} -- [description]
+            new_node {[type]} -- [description]
+
+        Returns:
+            bool -- [description]
+        """
         if self.root == old_node:
             self.root = new_node
             return True
