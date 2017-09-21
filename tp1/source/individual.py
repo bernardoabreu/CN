@@ -15,31 +15,36 @@ class Individual(object):
         return self.error
 
     def __eval(self, data):
-        return (self.root.eval({('X' + str(i)): x
+            return (self.root.eval({('X' + str(i)): x
                 for i, x in enumerate(data[:-1])}) - (data[-1]))**2
 
     def eval(self, data_input, max_height=None):
 
-        if max_height is not None and self.root.get_height() > max_height:
+        try:
+            if max_height is not None and self.root.get_height() > max_height:
+                self.error = sys.maxint
+            else:
+                length = len(data_input)
+                self.error = math.sqrt(sum(map(self.__eval, data_input)) / length)
+        except OverflowError:
             self.error = sys.maxint
-        else:
-            length = len(data_input)
-            self.error = math.sqrt(sum(map(self.__eval, data_input)) / length)
 
         return self.error
 
     def __replace_node(self, node, old_node, new_node):
-        """[summary]
+        """Replaces a node in the tree with a different node
 
-        [description]
+        Travels through the nodes of the tree recursively searching for the
+        node to replace on each node's children. When the node is found, the
+        children is replaced.
 
         Arguments:
-            node {[type]} -- [description]
-            old_node {[type]} -- [description]
-            new_node {[type]} -- [description]
+            node {Node} -- Current node on the recursion
+            old_node {Node} -- Node that is going to be replaced
+            new_node {Node} -- New node to replace the old_node
 
         Returns:
-            bool -- [description]
+            bool -- The node was successfully replaced
         """
         if node is None:
             return False
