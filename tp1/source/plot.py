@@ -13,7 +13,7 @@ def loadtxt(file, delimiter=','):
                         for line in f])
 
 
-def lineplot(a, y_label, save=''):
+def line_mean_plot(a, y_label, save=''):
     means = []
     for column in a.T:
         means.append(np.mean(column))
@@ -31,6 +31,22 @@ def lineplot(a, y_label, save=''):
         print 'saving to ' + save
         plt.savefig(save + '_line.png', dpi=300)
     # plt.show()
+
+
+def line_plot(a, y_label, save=''):
+    plt.plot(np.arange(len(a)), a)
+    plt.xlabel('generations')
+    plt.ylabel(y_label)
+    plt.title(y_label + ' x ' + 'generations')
+    plt.grid(True)
+
+    figure = plt.gcf()
+    figure.set_size_inches(19, 12)
+    if save:
+        # when saving, specify the DPI
+        print 'saving to ' + save
+        plt.savefig(save + '_line.png', dpi=300)
+    plt.show()
 
 
 def boxplot(a, y_label, save=''):
@@ -59,4 +75,5 @@ if __name__ == '__main__':
     outputfolder = argv[2] + '/' + label if len(argv) > 2 else ''
 
     # boxplot(a, label, outputfolder)
-    lineplot(a, label, outputfolder)
+    # line_mean_plot(a, label, outputfolder)
+    line_plot(a, label)
