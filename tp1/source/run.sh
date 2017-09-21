@@ -1,8 +1,12 @@
 #!/bin/bash
 
+HOST=$(hostname)
+
+echo $HOST
 PA=$HOME'/CN/tp1'
 TEST_VERSION=3
 
+echo $$ > "${PA}/norun_${HOST}.pid"
 
 # for f in keijzer-7 keijzer-10; do
 

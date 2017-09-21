@@ -1,5 +1,7 @@
 #!/bin/bash
 
+HOST=$(hostname)
+
 PA=$HOME'/CN/tp1'
 TEST_VERSION=3
 
@@ -11,6 +13,7 @@ END="$2"
 
 GEN="$3"
 
+echo $$ > "${PA}/norun2_${HOST}_${DATA}_${START}_${END}.pid"
 
 OUTBASE="${PA}/tests/${DATA}/${TEST_VERSION}/${GEN}/out_"
 
