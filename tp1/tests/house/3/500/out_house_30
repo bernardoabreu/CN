@@ -1,4 +1,4 @@
-/home/grad/ccomp/13/bernardoabreu/CN/tp1/tests/house/3/500/out_house_30_30
+/home/grad/ccomp/13/bernardoabreu/CN/tp1/tests/house/3/500/out_house_30
 Population size: 500
 
 Initial population:
@@ -4947,4 +4947,76 @@ Mean fitness: 1.73399394294e+18
 Worst fitness: 9223372036854775807
 Repeated individuals in population: 25
 Crossover children better than parent's mean: 381
-Crossover children worse th
+Crossover children worse than parent's mean: 93
+
+
+Generation 494:
+Best fitness: 259244.536579
+Mean fitness: 1.75595259219e+18
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 32
+Crossover children better than parent's mean: 378
+Crossover children worse than parent's mean: 94
+
+
+Generation 495:
+Best fitness: 256122.825795
+Mean fitness: 1.73399394294e+18
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 20
+Crossover children better than parent's mean: 373
+Crossover children worse than parent's mean: 93
+
+
+Generation 496:
+Best fitness: 256122.825795
+Mean fitness: 1.42039929369e+18
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 28
+Crossover children better than parent's mean: 394
+Crossover children worse than parent's mean: 76
+
+
+Generation 497:
+Best fitness: 256114.733602
+Mean fitness: 1.38627836228e+18
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 24
+Crossover children better than parent's mean: 391
+Crossover children worse than parent's mean: 75
+
+
+Generation 498:
+Best fitness: 256106.263902
+Mean fitness: 1.90382228418e+18
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 26
+Crossover children better than parent's mean: 364
+Crossover children worse than parent's mean: 102
+
+
+Generation 499:
+Best fitness: 256106.263902
+Mean fitness: 1.55263176575e+18
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 19
+Crossover children better than parent's mean: 391
+Crossover children worse than parent's mean: 83
+
+
+Generation 500:
+Best fitness: 256106.99192
+Mean fitness: 1.73746888069e+18
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 24
+Crossover children better than parent's mean: 377
+Crossover children worse than parent's mean: 91
+/home/grad/ccomp/13/bernardoabreu/CN/tp1/tests/house/3/500/out_house_30
+
+Train data: /home/grad/ccomp/13/bernardoabreu/CN/tp1/datasets/house-train.csv
+Best error: 256106.263902
+Individual:
+((((sqrt (((sqrt X2) + (X2 + X2)) + X0)) * ((X0 + (X2 + (cos X0))) + (X2 + (X2 + (X2 + X2))))) / X0) + ((((X2 + X2) + (((X2 + X2) * X5) + X2)) + (X2 + ((sqrt (X2 + X2)) + X2))) + ((sqrt (X2 + ((sqrt X4) * (X2 / X1)))) * (X2 + (X5 + X2)))))
+
+Test data: /home/grad/ccomp/13/bernardoabreu/CN/tp1/datasets/house-test.csv
+Error: 254369.593358
