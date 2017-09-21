@@ -3,7 +3,7 @@
 HOST=$(hostname)
 
 PA=$HOME'/CN/tp1'
-TEST_VERSION=3
+TEST_VERSION=4
 
 DATA=house
 
@@ -11,13 +11,13 @@ START="$1"
 
 END="$2"
 
-GEN="$3"
+# GEN="$3"
 
 echo $$ > "${PA}/norun2_${HOST}_${DATA}_${START}_${END}.pid"
 
-OUTBASE="${PA}/tests/${DATA}/${TEST_VERSION}/${GEN}/out_"
+# OUTBASE="${PA}/tests/${DATA}/${TEST_VERSION}/${GEN}/out_"
 
-OUTFILE="${OUTBASE}${DATA}_${START}_${END}"
+# OUTFILE="${OUTBASE}${DATA}_${START}_${END}"
 
 # mkdir $PA/tests/$DATA/$TEST_VERSION
 # mkdir $PA/tests/$DATA/$TEST_VERSION/$POP
@@ -27,9 +27,18 @@ OUTFILE="${OUTBASE}${DATA}_${START}_${END}"
 # done
 
 
+# mkdir $PA/tests/$DATA/$TEST_VERSION
+# mkdir $PA/tests/$DATA/$TEST_VERSION/$GEN
+# for i in $(seq $START $END); do
+#     echo $i;
+#     $PA/source/main.py --crossover 0.9 --mutation 0.05 --seed $i --gen $GEN --pop_size 500 --train $PA/datasets/$DATA-train.csv --test $PA/datasets/$DATA-test.csv --stats $OUTFILE --test_out $OUTFILE> "${OUTBASE}${DATA}_${i}"
+# done
+
+OUTBASE="${PA}/tests/${DATA}/${TEST_VERSION}/mut_high/out_"
+OUTFILE="${OUTBASE}${DATA}_${START}_${END}"
 mkdir $PA/tests/$DATA/$TEST_VERSION
-mkdir $PA/tests/$DATA/$TEST_VERSION/$GEN
+mkdir $PA/tests/$DATA/$TEST_VERSION/mut_high
 for i in $(seq $START $END); do
     echo $i;
-    $PA/source/main.py --crossover 0.9 --mutation 0.05 --seed $i --gen $GEN --pop_size 500 --train $PA/datasets/$DATA-train.csv --test $PA/datasets/$DATA-test.csv --stats $OUTFILE --test_out $OUTFILE> "${OUTBASE}${DATA}_${i}"
+    $PA/source/main.py --crossover 0.6 --mutation 0.3 --seed $i --gen 100 --pop_size 500 --train $PA/datasets/$DATA-train.csv --test $PA/datasets/$DATA-test.csv --stats $OUTFILE --test_out $OUTFILE> "${OUTBASE}${DATA}_${i}"
 done
