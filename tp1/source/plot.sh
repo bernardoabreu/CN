@@ -12,10 +12,13 @@ DATA_SETS=(keijzer-7 keijzer-10 house)
 
 
 # parse the options
-while getopts 'd:v:' opt ; do
+while getopts 'd:v:h' opt ; do
   case $opt in
     d) DATA_SETS=("$OPTARG");;
     v) TEST_VERSION=$OPTARG; USE_ALL=false ;;
+    h) echo "Options: -d data sets (default: ${DATA_SETS[*]})"
+       echo "         -v test version (default: Use all)";
+       exit 0 ;;
   esac
 done
 

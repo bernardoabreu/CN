@@ -75,5 +75,5 @@ if __name__ == '__main__':
     outputfolder = argv[2] + '/' + label if len(argv) > 2 else ''
 
     # boxplot(a, label, outputfolder)
-    # line_mean_plot(a, label, outputfolder)
-    line_plot(a, label)
+    line_mean_plot(a, label, outputfolder)
+    # line_plot(a, label)
