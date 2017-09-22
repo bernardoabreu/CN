@@ -4,7 +4,7 @@ HOST=$(hostname)
 
 echo $HOST
 PA=$HOME'/CN/tp1'
-TEST_VERSION=4
+TEST_VERSION=5
 
 echo $$ > "${PA}/norun_${HOST}.pid"
 
@@ -39,7 +39,7 @@ echo $$ > "${PA}/norun_${HOST}.pid"
 
 
 
-for f in keijzer-7 keijzer-10; do
+for f in keijzer-7; do
 
     mkdir $PA/tests/$f/$TEST_VERSION
 
@@ -51,10 +51,13 @@ for f in keijzer-7 keijzer-10; do
     #     $PA/source/main.py --crossover 0.9 --mutation 0.05 --seed $i --gen 100 --pop_size 500 --train $PA/datasets/$f-train.csv --test $PA/datasets/$f-test.csv --stats "${OUT}cross_high/out_${f}" --test_out "${OUT}cross_high/out_${f}" > "${OUT}cross_high/${f}_${i}"
     # done
 
-    mkdir $PA/tests/$f/$TEST_VERSION/mut_high
 
-    for i in {1..30}; do
-        $PA/source/main.py --crossover 0.6 --mutation 0.3 --seed $i --gen 100 --pop_size 500 --train $PA/datasets/$f-train.csv --test $PA/datasets/$f-test.csv --stats "${OUT}mut_high/out_${f}" --test_out "${OUT}mut_high/out_${f}" > "${OUT}mut_high/${f}_${i}"
+    for t in 3 7; do
+        mkdir -p $PA/tests/$f/$TEST_VERSION/$t
+
+        for i in {1..30}; do
+            $PA/source/main.py --crossover 0.9 --mutation 0.05 --tournament $t --seed $i --gen 100 --pop_size 500 --train $PA/datasets/$f-train.csv --test $PA/datasets/$f-test.csv --stats "${OUT}${t}/out_${f}" --test_out "${OUT}${t}/out_${f}" > "${OUT}${t}/${f}_${i}"
+        done
     done
 
 done
