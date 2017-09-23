@@ -6,7 +6,7 @@ PA=$HOME'/CN/tp1'
 
 DATA=(house)
 
-TEST_VERSION=4
+TEST_VERSION=5
 
 TOUR="$3"
 
