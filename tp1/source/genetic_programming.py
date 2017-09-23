@@ -53,15 +53,15 @@ class GeneticProgramming(object):
 
     def __ramped_half_and_half(self, population_size, max_depth, funcs, terms):
         """[summary]
-        
+
         [description]
-        
+
         Arguments:
             population_size {[type]} -- [description]
             max_depth {[type]} -- [description]
             funcs {[type]} -- [description]
             terms {[type]} -- [description]
-        
+
         Returns:
             [type] -- [description]
         """
