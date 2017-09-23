@@ -16,8 +16,10 @@ def loadtxt(file, delimiter=','):
 def line_mean_plot(a, y_label, save=''):
     means = []
     for column in a.T:
-        means.append(np.mean(column))
+        if np.mean(column) < 6e20:
+            means.append(np.mean(column))
     a_means = np.array(means)
+    print a_means
     plt.plot(np.arange(len(a_means)), a_means)
     plt.xlabel('generations')
     plt.ylabel(y_label)
@@ -28,9 +30,9 @@ def line_mean_plot(a, y_label, save=''):
     figure.set_size_inches(19, 12)
     if save:
         # when saving, specify the DPI
-        print 'saving to ' + save
-        plt.savefig(save + '_line.png', dpi=300)
-    # plt.show()
+        print('saving to ' + save)
+        plt.savefig(save + '_line_mean.png', dpi=300)
+    plt.show()
 
 
 def line_plot(a, y_label, save=''):
@@ -44,7 +46,7 @@ def line_plot(a, y_label, save=''):
     figure.set_size_inches(19, 12)
     if save:
         # when saving, specify the DPI
-        print 'saving to ' + save
+        print('saving to ' + save)
         plt.savefig(save + '_line.png', dpi=300)
     plt.show()
 
@@ -60,13 +62,13 @@ def boxplot(a, y_label, save=''):
     figure = plt.gcf()
     figure.set_size_inches(19, 12)
     if save:
-        print 'saving to ' + save
+        print('saving to ' + save)
         plt.savefig(save + '_boxplot.png', dpi=300)
     # plt.show()
 
 
 if __name__ == '__main__':
-    print 'running'
+    print('running')
     in_file = argv[1]
 
     label = in_file.split('.')[0].split('__')[-1]
