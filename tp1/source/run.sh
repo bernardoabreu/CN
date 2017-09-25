@@ -52,10 +52,10 @@ for f in keijzer-7; do
     # done
 
 
-    mkdir -p $PA/tests/$f/$TEST_VERSION/$t
+    mkdir -p $PA/tests/$f/$TEST_VERSION/0
 
     for i in {1..30}; do
-        $PA/source/main.py --elitism 0 --crossover 0.9 --mutation 0.05 --tournament 7 --seed $i --gen 100 --pop_size 500 --train $PA/datasets/$f-train.csv --test $PA/datasets/$f-test.csv --stats "${OUT}${t}/out_${f}" --test_out "${OUT}${t}/out_${f}" > "${OUT}${t}/${f}_${i}"
+        $PA/source/main.py --elitism 0 --crossover 0.9 --mutation 0.05 --tournament 7 --seed $i --gen 100 --pop_size 500 --train $PA/datasets/$f-train.csv --test $PA/datasets/$f-test.csv --stats "${OUT}0/out_${f}" --test_out "${OUT}0/out_${f}" > "${OUT}0/${f}_${i}"
     done
 
 done

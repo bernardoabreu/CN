@@ -55,11 +55,11 @@ echo $$ > "${PA}/norun2_${HOST}_${DATA}_${START}_${END}.pid"
 #     $PA/source/main.py --crossover 0.9 --mutation 0.05 --seed $i --gen $GEN --pop_size 500 --train $PA/datasets/$DATA-train.csv --test $PA/datasets/$DATA-test.csv --stats $OUTFILE --test_out $OUTFILE> "${OUTBASE}${DATA}_${i}"
 # done
 
-OUTBASE="${PA}/tests/${DATA}/${TEST_VERSION}/${TOUR}/out_"
+OUTBASE="${PA}/tests/${DATA}/${TEST_VERSION}/0/out_"
 OUTFILE="${OUTBASE}${DATA}_${START}_${END}"
 # mkdir $PA/tests/$DATA/$TEST_VERSION
 
-mkdir -p $PA/tests/$DATA/$TEST_VERSION/$TOUR
+mkdir -p $PA/tests/$DATA/$TEST_VERSION/0
 for i in $(seq $START $END); do
     echo $i;
     $PA/source/main.py --elitism 0 --tournament 7 --crossover 0.9 --mutation 0.05 --seed $i --gen 100 --pop_size 500 --train $PA/datasets/$DATA-train.csv --test $PA/datasets/$DATA-test.csv --stats $OUTFILE --test_out $OUTFILE> "${OUTBASE}${DATA}_${i}"
