@@ -4,7 +4,7 @@ HOST=$(hostname)
 
 echo $HOST
 PA=$HOME'/CN/tp1'
-TEST_VERSION=5
+TEST_VERSION=6
 
 echo $$ > "${PA}/norun_${HOST}.pid"
 
@@ -52,12 +52,10 @@ for f in keijzer-7; do
     # done
 
 
-    for t in 3 7; do
-        mkdir -p $PA/tests/$f/$TEST_VERSION/$t
+    mkdir -p $PA/tests/$f/$TEST_VERSION/$t
 
-        for i in {1..30}; do
-            $PA/source/main.py --crossover 0.9 --mutation 0.05 --tournament $t --seed $i --gen 100 --pop_size 500 --train $PA/datasets/$f-train.csv --test $PA/datasets/$f-test.csv --stats "${OUT}${t}/out_${f}" --test_out "${OUT}${t}/out_${f}" > "${OUT}${t}/${f}_${i}"
-        done
+    for i in {1..30}; do
+        $PA/source/main.py --elitism 0 --crossover 0.9 --mutation 0.05 --tournament 7 --seed $i --gen 100 --pop_size 500 --train $PA/datasets/$f-train.csv --test $PA/datasets/$f-test.csv --stats "${OUT}${t}/out_${f}" --test_out "${OUT}${t}/out_${f}" > "${OUT}${t}/${f}_${i}"
     done
 
 done

@@ -6,9 +6,9 @@ PA=$HOME'/CN/tp1'
 
 DATA=(house)
 
-TEST_VERSION=5
+TEST_VERSION=6
 
-TOUR="$3"
+# TOUR="$3"
 
 # parse the options
 while getopts 'd:h' opt ; do
@@ -62,5 +62,5 @@ OUTFILE="${OUTBASE}${DATA}_${START}_${END}"
 mkdir -p $PA/tests/$DATA/$TEST_VERSION/$TOUR
 for i in $(seq $START $END); do
     echo $i;
-    $PA/source/main.py --tournament $TOUR --crossover 0.9 --mutation 0.05 --seed $i --gen 100 --pop_size 500 --train $PA/datasets/$DATA-train.csv --test $PA/datasets/$DATA-test.csv --stats $OUTFILE --test_out $OUTFILE> "${OUTBASE}${DATA}_${i}"
+    $PA/source/main.py --elitism 0 --tournament 7 --crossover 0.9 --mutation 0.05 --seed $i --gen 100 --pop_size 500 --train $PA/datasets/$DATA-train.csv --test $PA/datasets/$DATA-test.csv --stats $OUTFILE --test_out $OUTFILE> "${OUTBASE}${DATA}_${i}"
 done

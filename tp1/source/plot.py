@@ -16,8 +16,8 @@ def loadtxt(file, delimiter=','):
 def line_mean_plot(a, y_label, save=''):
     means = []
     for column in a.T:
-        # if np.mean(column) < 6e20:
-        means.append(np.mean(column))
+        if np.mean(column) < 1e20:
+            means.append(np.mean(column))
     a_means = np.array(means)
     print a_means
     plt.plot(np.arange(len(a_means)), a_means)
@@ -32,7 +32,8 @@ def line_mean_plot(a, y_label, save=''):
         # when saving, specify the DPI
         print('saving to ' + save)
         plt.savefig(save + '_line_mean.png', dpi=300)
-    # plt.show()
+    else:
+        plt.show()
 
 
 def line_plot(a, y_label, save=''):
