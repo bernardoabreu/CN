@@ -1,4 +1,5 @@
 import math
+import sys
 
 
 def add(a, b):
@@ -14,7 +15,7 @@ def mul(a, b):
 
 
 def div(a, b):
-    return 1 if b == 0 else a / b
+    return 0 if b == 0 else a / b
 
 
 def log(x):
@@ -25,14 +26,22 @@ def log(x):
 
 
 def sqrt(x):
-    return 1 if x < 0 else math.sqrt(x)
+    return 0 if x < 0 else math.sqrt(x)
 
 
-def power(x):
-    return x**2
+def power(x, y):
+    try:
+        # return math.pow(x, y)
+        return x**y
+    except ValueError:
+        return 0
+    except OverflowError:
+        return 0
+    except ZeroDivisionError:
+        return 0
 
 
-UNARY = (log, math.cos, math.sin, sqrt, power)
+UNARY = (log, math.cos, math.sin, sqrt)
 
 
 OP_DICT = {

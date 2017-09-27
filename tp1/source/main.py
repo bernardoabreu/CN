@@ -25,7 +25,7 @@ def main(args):
 
     train_data = loadtxt(train_file, delimiter=',')
 
-    funcs = [add, sub, mul, div, log, math.sin, math.cos, power, sqrt]
+    funcs = [add, sub, mul, div, log, math.sin, math.cos, sqrt, power]
     terms = ['R'] + ['X' + str(i) for i in range(len(train_data[0]) - 1)]
 
     gp = GeneticProgramming(max_depth, funcs, terms, p_crossover, p_mutation)
