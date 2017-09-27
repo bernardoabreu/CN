@@ -4,58 +4,41 @@ HOST=$(hostname)
 
 echo $HOST
 PA=$HOME'/CN/tp1'
-TEST_VERSION=6
+TEST_VERSION=7
+DATA=(keijzer-7 keijzer-10)
+SUBDIRS=(keijzer-7 keijzer-10)
+OUT=tests2
+
+while getopts 'd:v:o:s:h' opt ; do
+  case $opt in
+    d) DATA=("$OPTARG");;
+    v) TEST_VERSION=$OPTARG;;
+    o) OUT=$OPTARG;;
+    s) SUBDIRS=("$OPTARG");;
+    h) echo "Options: -d datasets (def: ${DATA[*]})";
+       exit 0 ;;
+  esac
+done
+
+
+# skip over the processed options
+shift $((OPTIND-1))
+
 
 echo $$ > "${PA}/norun_${HOST}.pid"
 
-# for f in keijzer-7 keijzer-10; do
 
-#     mkdir $PA/tests/$f/$TEST_VERSION
+for f in ${DATA[*]}; do
 
-#     for p in 50 100 500; do
+    DIR=$PA/$OUT/$f/$TEST_VERSION
+    mkdir $DIR
 
-#         mkdir $PA/tests/$f/$TEST_VERSION/$p
+    for SUBDIR in ${SUBDIRS[*]}; do
+        mkdir -p $PA/$OUT/$f/$TEST_VERSION/$SUBDIR
 
-#         for i in {1..30}; do
-#             $PA/source/main.py --crossover 0.9 --mutation 0.05 --seed $i --pop_size $p --train $PA/datasets/$f-train.csv --test $PA/datasets/$f-test.csv --stats $PA/tests/$f/$TEST_VERSION/$p/out_$f > $PA/tests/$f/$TEST_VERSION/$p/out_"${f}_${i}"
-#         done
-#     done
-# done
-
-# for f in keijzer-7 keijzer-10; do
-
-#     mkdir $PA/tests/$f/$TEST_VERSION
-
-#     OUT="${PA}/tests/${f}/${TEST_VERSION}/"
-#     for g in 100 500; do
-
-#         mkdir $PA/tests/$f/$TEST_VERSION/$g
-
-#         for i in {1..30}; do
-#             $PA/source/main.py --crossover 0.9 --mutation 0.05 --seed $i --gen $g --pop_size 500 --train $PA/datasets/$f-train.csv --test $PA/datasets/$f-test.csv --stats "${OUT}${g}/out_${f}" --test_out "${OUT}${g}/out_${f}" > "${OUT}${g}/${f}_${i}"
-#         done
-#     done
-# done
-
-
-
-for f in keijzer-7; do
-
-    mkdir $PA/tests/$f/$TEST_VERSION
-
-    OUT="${PA}/tests/${f}/${TEST_VERSION}/"
-
-    # mkdir $PA/tests/$f/$TEST_VERSION/cross_high
-
-    # for i in {1..30}; do
-    #     $PA/source/main.py --crossover 0.9 --mutation 0.05 --seed $i --gen 100 --pop_size 500 --train $PA/datasets/$f-train.csv --test $PA/datasets/$f-test.csv --stats "${OUT}cross_high/out_${f}" --test_out "${OUT}cross_high/out_${f}" > "${OUT}cross_high/${f}_${i}"
-    # done
-
-
-    mkdir -p $PA/tests/$f/$TEST_VERSION/0
-
-    for i in {1..30}; do
-        $PA/source/main.py --elitism 0 --crossover 0.9 --mutation 0.05 --tournament 7 --seed $i --gen 100 --pop_size 500 --train $PA/datasets/$f-train.csv --test $PA/datasets/$f-test.csv --stats "${OUT}0/out_${f}" --test_out "${OUT}0/out_${f}" > "${OUT}0/${f}_${i}"
+        for i in {1..30}; do
+            $PA/source/main.py --elitism 0 --crossover 0.9 --mutation 0.05 --tournament 7 --seed $i --gen 100 --pop_size 500 --train $PA/datasets/$f-train.csv --test $PA/datasets/$f-test.csv --stats "${DIR}${SUBDIR}/out_${f}" --test_out "${DIR}${SUBDIR}/out_${f}" > "${DIR}${SUBDIR}/${f}_${i}"
+        done
     done
 
 done
