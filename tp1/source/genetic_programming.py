@@ -90,7 +90,7 @@ class GeneticProgramming(object):
             self.selection = self.__tournament_selection
 
     def __get_best_solution(self, population):
-        return min(population, key=(lambda individual: individual.error))
+        return min(population, key=(lambda individual: individual.get_error()))
 
     def __tournament_selection(self, population):
         sample = random.sample(population, self.tournament_size)
@@ -235,7 +235,7 @@ class GeneticProgramming(object):
                                                 self.functions, self.terminals)
         print('Population size: ' + str(len(population)) + '\n')
         self.evaluate_population(population, data)
-        population.sort(key=lambda x: x.error)
+        population.sort(key=lambda x: x.get_error())
         # s_best = self.get_best_solution(population)
         s_best = population[0]
 
@@ -286,8 +286,9 @@ class GeneticProgramming(object):
 
             # self.evaluate_population(children, data)
 
-            population = sorted(children, key=lambda x: x.error)[:pop_size]
+            population = sorted(children, key=lambda x: x.get_error())[:pop_size]
 
+            self.stats.add_median(population[len(population)//2])
             s_best = population[0]
 
             current_generation += 1
