@@ -13,7 +13,7 @@ ELITISM=1
 CROSS=0.9
 MUT=0.05
 TOUR=2
-GEN=50
+GEN=100
 POP=500
 
 while getopts 'd:v:o:s:h' opt ; do
@@ -60,7 +60,7 @@ for DATA in ${DATA_SETS[*]}; do
 
     OUTFILE="${OUTBASE}/out_${DATA}_${START}_${END}"
 
-    POP=$SUBDIR
+    GEN=$SUBDIR
 
     for i in $(seq $START $END); do
         echo $i;
