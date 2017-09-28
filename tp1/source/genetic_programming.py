@@ -286,9 +286,10 @@ class GeneticProgramming(object):
 
             # self.evaluate_population(children, data)
 
-            population = sorted(children, key=lambda x: x.get_error())[:pop_size]
+            population = sorted(children,
+                                key=lambda x: x.get_error())[:pop_size]
 
-            self.stats.add_median(population[len(population)//2])
+            self.stats.add_median(population[len(population) // 2])
             s_best = population[0]
 
             current_generation += 1

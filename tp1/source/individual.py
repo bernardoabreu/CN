@@ -16,7 +16,7 @@ class Individual(object):
 
     def __eval(self, data):
             return (self.root.eval({('X' + str(i)): x
-                for i, x in enumerate(data[:-1])}) - (data[-1]))**2
+                    for i, x in enumerate(data[:-1])}) - (data[-1]))**2
 
     def eval(self, data_input, max_height=None):
 

@@ -57,6 +57,8 @@ for $DATA in ${DATA_SETS[*]}; do
     OUTBASE="${PA}/${OUT}/${DATA}/${TEST_VERSION}/${SUBDIR}/out_"
     OUTFILE="${OUTBASE}${DATA}_${START}_${END}"
 
+    POP=$DATA
+
     for i in $(seq $START $END); do
         echo $i;
         $PA/source/main.py --elitism $ELITISM --crossover $CROSS --mutation $MUT --tournament $TOUR --seed $i --gen $GEN --pop_size $POP --train $PA/datasets/$DATA-train.csv --test $PA/datasets/$DATA-test.csv --stats $OUTFILE --test_out $OUTFILE> "${OUTBASE}${DATA}_${i}"
