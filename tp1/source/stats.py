@@ -106,7 +106,7 @@ class Stats(object):
               str(self.__cross_size))
 
     def dump_to_file(self, out_file):
-        print out_file
+        print(out_file)
         with open(out_file + '__mean.csv', 'a') as f:
             f.write(','.join(map(str, self.mean_list)) + '\n')
         with open(out_file + '__median.csv', 'a') as f:

@@ -31,13 +31,10 @@ def sqrt(x):
 
 def power(x, y):
     try:
-        # return math.pow(x, y)
-        return x**y
+        return math.pow(x, y)
     except ValueError:
         return 0
     except OverflowError:
-        return 0
-    except ZeroDivisionError:
         return 0
 
 

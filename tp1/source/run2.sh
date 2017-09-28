@@ -4,7 +4,7 @@ HOST=$(hostname)
 
 echo $HOST
 PA=$HOME'/CN/tp1'
-TEST_VERSION=7
+TEST_VERSION=1
 DATA_SETS=(house)
 SUBDIRS=(50 100 500)
 OUT=tests2
@@ -13,7 +13,7 @@ ELITISM=1
 CROSS=0.9
 MUT=0.05
 TOUR=2
-GEN=100
+GEN=50
 POP=500
 
 while getopts 'd:v:o:s:h' opt ; do
@@ -60,7 +60,7 @@ for DATA in ${DATA_SETS[*]}; do
 
     OUTFILE="${OUTBASE}/out_${DATA}_${START}_${END}"
 
-    GEN=$SUBDIR
+    POP=$SUBDIR
 
     for i in $(seq $START $END); do
         echo $i;

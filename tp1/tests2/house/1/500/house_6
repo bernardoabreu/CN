@@ -1,0 +1,1074 @@
+Namespace(crossover=0.9, elitism=1, gen=50, mutation=0.05, pop_size=500, seed=6, stats='/home/grad/ccomp/13/bernardoabreu/CN/tp1/tests2/house/1/500/out_house_6_7', test='/home/grad/ccomp/13/bernardoabreu/CN/tp1/datasets/house-test.csv', test_out='/home/grad/ccomp/13/bernardoabreu/CN/tp1/tests2/house/1/500/out_house_6_7', tournament=2, train='/home/grad/ccomp/13/bernardoabreu/CN/tp1/datasets/house-train.csv')
+Population size: 500
+
+Initial population:
+((X3 + X4) * X0)
+(X3 * X0)
+(X3 * 3)
+(X3 * X1)
+(X3 + X6)
+(X3 - (X4 * -5))
+(X3 + X5)
+(X3 + X0)
+(X4 + X3)
+X3
+X3
+X3
+X3
+X3
+X3
+X3
+X3
+X3
+X3
+(X3 - (0 pow X1))
+((cos X5) + (X0 * X6))
+(X6 * X1)
+(sqrt (X3 * X2))
+(X2 + X6)
+(((X4 + X7) * X1) * X4)
+((sqrt (log X0)) + X2)
+X2
+X2
+X2
+X2
+X2
+(X7 + X6)
+X2
+X2
+X2
+X2
+X2
+((log (log (sin -4))) + X2)
+X2
+X2
+X2
+((X5 - (sin ((X5 * X5) * X5))) + X6)
+((X6 + X1) - ((sqrt X5) - ((sqrt (sqrt X2)) + (sin (sqrt X2)))))
+((X0 - ((cos X4) / X6)) + X6)
+(X0 + X6)
+(X6 + (cos (sin X0)))
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+X6
+(X6 - (sqrt ((1 * X1) / X6)))
+((X6 - X7) - (X0 - X7))
+(X6 - X7)
+(X6 - X7)
+(X7 / (sin X4))
+(X3 / (5 + X5))
+(X2 / X0)
+((-5 + X6) / X4)
+((X6 / X0) + (log X2))
+(X7 + (sqrt (X2 pow (sin X5))))
+(X7 + X5)
+(X5 + X7)
+(X7 + (X5 - X0))
+((X7 - X1) + X4)
+(X7 - (sin ((sin (sqrt X1)) - (sqrt X2))))
+X7
+X7
+X7
+X7
+X7
+X7
+X7
+X7
+X7
+X7
+X7
+X7
+X7
+X7
+X7
+(X7 - X1)
+((X2 - X5) - X6)
+(X0 / (sin X2))
+(((((cos ((0 / X4) / X7)) + X7) * (((log (log X0)) + (X1 - X4)) pow (cos X0))) * (1 pow (X3 + X2))) - X5)
+((sqrt (sin X7)) * X7)
+(X7 * (cos -5))
+(sqrt X3)
+(sqrt ((X3 + -5) + (cos (5 / (sqrt (X2 + 1))))))
+(X6 * (sin (X4 * -2)))
+((X5 * X5) - (cos X4))
+(X5 * X5)
+(X7 / (X1 pow X1))
+(X1 + (sqrt X2))
+(sqrt ((X2 - -2) + X0))
+(sqrt X2)
+(sqrt X2)
+(sqrt X2)
+(sqrt X6)
+(sqrt X6)
+(((X1 + (sqrt (X0 * (sqrt X5)))) * X5) - (sqrt 5))
+(X4 pow X1)
+(((log (X3 pow X5)) pow (cos X5)) * X0)
+(X4 pow (log (X0 * X0)))
+(((log X6) + (sin (X2 / X1))) * X4)
+(X5 + (X1 * X4))
+(2 pow X0)
+(sqrt ((X4 / X4) + X7))
+(X1 + X5)
+(2 + X5)
+((log X3) - (log (cos X3)))
+(log X3)
+(log X3)
+(X5 + (cos (cos X1)))
+(X3 / X7)
+((X5 + X7) - X7)
+X5
+X5
+X5
+X5
+X5
+X5
+X5
+X5
+X5
+X5
+(X5 - (cos X3))
+(log ((sqrt X1) * (X2 - X1)))
+(X4 * X1)
+(log X2)
+(log X2)
+(log (X2 - 1))
+(X0 + (X0 - (cos ((log X7) + X0))))
+(log X6)
+(log X6)
+(X0 + (log X7))
+(X5 - X1)
+(((log 5) * X4) * (X3 / X3))
+(X4 + 2)
+((X6 / (sin X4)) / X7)
+5
+5
+(1 + X0)
+X0
+X0
+X0
+X0
+X0
+X0
+X0
+X0
+X0
+X0
+X0
+X0
+X0
+X0
+X0
+X0
+X0
+X0
+X0
+X0
+(((log (sin X6)) / X7) + X0)
+(X0 - (X4 / X3))
+((sqrt (sqrt (X2 + X5))) - X4)
+X4
+X4
+X4
+X4
+X4
+X4
+X4
+X4
+X4
+X4
+X4
+X4
+X4
+X4
+((cos X5) + 3)
+(log X7)
+(sqrt X5)
+(sqrt X5)
+((sin X4) + (sqrt (log X2)))
+((1 - (((cos X5) + (sin X0)) - (log X4))) / (X2 / X2))
+((cos X1) * -5)
+X1
+X1
+X1
+X1
+X1
+X1
+X1
+X1
+X1
+X1
+X1
+X1
+X1
+X1
+X1
+X1
+(X1 * (log X1))
+(log (log X3))
+2
+2
+(sqrt X0)
+(sqrt X0)
+(sqrt X4)
+(sqrt X4)
+(sqrt X4)
+(sqrt X4)
+((sqrt X7) / (X4 + 4))
+(sqrt X1)
+(sqrt X1)
+(sqrt X1)
+(X0 pow ((sin X3) pow X1))
+(log (sqrt X7))
+(X0 pow (sin X6))
+(log X0)
+(log X0)
+(log X0)
+(log X0)
+(sqrt (sqrt X1))
+(log X4)
+(log X4)
+(log X4)
+(log X4)
+(log X4)
+(log X4)
+(sqrt (-2 + X4))
+(sqrt (X4 + -2))
+(sqrt (log X0))
+(log 3)
+(sqrt (log X4))
+((((sin X7) + X5) + X2) pow ((sqrt X3) / X3))
+(2 pow ((sin X0) pow (X0 + (log X5))))
+(X1 pow (X4 / X7))
+1
+(X0 pow (log (sin (X3 - X3))))
+((log (X7 / X6)) pow (sqrt -3))
+(X7 pow 0)
+(cos (sin (log (sqrt (((5 - X4) - X2) + (log X0))))))
+(sqrt 1)
+((cos ((cos 1) / (X3 + ((sin X2) + (cos (X4 + X0)))))) pow X0)
+(cos ((log (cos (cos (sin (X3 - X2))))) pow (cos (log X0))))
+((log X4) pow (X4 / X6))
+(X5 pow (sin X4))
+(cos (log ((cos X3) pow ((X3 * (X4 pow X0)) + X0))))
+((cos X7) pow (sqrt (cos X4)))
+(sin -5)
+(cos (log X7))
+((cos (log (X7 * (X0 - X4)))) pow (log X7))
+(sin (log X5))
+(sqrt ((sin 1) pow (sqrt X4)))
+(log (log X7))
+(X1 * (sin X5))
+(cos (sin (X6 * ((cos (X1 pow X6)) pow X6))))
+(sqrt (sqrt (X0 / X5)))
+(log X1)
+(log X1)
+(cos (sin X6))
+(cos (cos (X2 / X0)))
+(cos (sin X1))
+(sin -4)
+(X1 / X4)
+(X1 / X4)
+(cos (sin ((log 5) + X0)))
+(sqrt (cos (X7 + (log ((log (cos X3)) / (X4 * 0))))))
+(sin (sin -4))
+((cos (sqrt (sqrt X7))) + (sin ((X4 - (cos X5)) - X7)))
+(sin (X1 pow ((cos X4) / (sqrt X0))))
+(cos (log X1))
+((sqrt (cos X2)) pow (((X7 - X2) pow 2) / X7))
+((sin (X7 + (log X7))) pow ((X3 - X0) * (log (sqrt X7))))
+(cos (X7 - (X7 * X3)))
+(sqrt ((X7 / (X2 + (X6 + X5))) pow (X0 * X7)))
+(((((sin X5) - X3) - (sqrt X5)) pow X7) pow X2)
+(cos (sqrt ((cos (sqrt -4)) pow (cos X0))))
+(cos (1 pow (X2 pow -4)))
+(cos -1)
+(cos X7)
+(cos X7)
+(cos X7)
+(cos X7)
+(sin ((cos ((X0 / (X1 - X3)) * X1)) - (((log X2) - (X5 + (log 4))) + (cos (sin (X7 + (cos X7)))))))
+(sin X1)
+(sin X1)
+((sin X1) + (log -4))
+(cos (X7 - (X4 pow X2)))
+(sin (cos (1 pow X6)))
+(sin (X7 - 5))
+(sin (((X2 pow X7) pow (sqrt X5)) pow ((sin (cos (log (X7 / X3)))) / X2)))
+(sin (X0 pow X7))
+(X7 / X7)
+(sin (1 - X7))
+(X4 / X5)
+(sin X5)
+(log (X1 - (log X1)))
+(cos (X0 * (((((cos X0) pow (sqrt -5)) / X5) * (sin ((X0 / X0) + X4))) + (sin X4))))
+(3 / (log X6))
+((sin (cos ((cos (X4 - X3)) - X2))) + (sqrt (cos X6)))
+(sqrt ((sin (X6 * X4)) pow X0))
+(sin (sin X5))
+(cos (log X6))
+(sqrt ((sqrt (sqrt (cos X6))) / X4))
+(sin (sqrt (log X7)))
+(((sin X6) / X7) * X3)
+((sin X0) pow X0)
+((sqrt (sin (((sin (X0 / X4)) / ((X5 / X0) / (sqrt X3))) - X0))) * (X0 pow -1))
+(X2 pow (-1 / X4))
+((cos (log X4)) / X0)
+((sqrt ((cos X6) pow (X0 + (log X6)))) pow (X3 / X2))
+((sin X7) pow (X5 + (1 - X1)))
+(sqrt (X5 / X7))
+(cos (X3 / (cos X5)))
+(cos ((-2 - X3) + (5 + -5)))
+(cos X3)
+(cos X3)
+(cos X3)
+(cos X6)
+(cos X6)
+(cos X6)
+(cos X6)
+(cos X6)
+(cos X6)
+(sin X7)
+(sin ((cos X2) - (X7 - X3)))
+(sin X6)
+(sin X6)
+(X0 / X2)
+((log X5) / X6)
+(sin (X4 pow X2))
+((cos (cos -4)) / X7)
+(X6 pow -1)
+((sin (X0 pow (sin X3))) / X2)
+((cos -5) / X2)
+((sqrt (sin ((2 - X1) - X1))) / (((4 / (sin X4)) + ((sin 1) / (cos X6))) + X2))
+(X6 pow (X1 - ((cos (cos (X1 + X1))) + X5)))
+((sqrt (sin ((X2 + X0) pow (sin -1)))) / (X6 - ((sin X0) / (X3 pow X1))))
+((sin ((X0 / (X5 * X7)) * (((-5 - (log X3)) / X2) / (cos (sqrt X7))))) * (sin ((log X1) * X1)))
+((cos X3) / (X5 * X2))
+(((X1 / X3) / X7) / X4)
+((sqrt X6) / ((X3 * (sqrt X7)) * X2))
+(((sin X7) pow ((X5 pow X5) - (X4 pow 1))) * 3)
+(log 0)
+((X3 pow X6) * X4)
+(-2 pow (4 / X6))
+(log -5)
+((sqrt (cos X3)) / (-5 pow (sqrt X6)))
+(sqrt ((X1 - X2) pow X2))
+(sin 0)
+((sin (X7 pow -2)) pow 3)
+(((sqrt X0) * X3) pow X3)
+(sin ((X1 pow X2) / (X7 pow X2)))
+(X6 pow ((sqrt X2) + (X3 * X3)))
+(log -2)
+(((X4 pow X0) pow X2) / (X0 * X7))
+(sin (X3 pow X3))
+(log (X7 pow X6))
+(sin (X4 * (sqrt -1)))
+(((X7 + X7) * (X0 / (X5 pow X2))) / (X3 * X4))
+(sqrt (((X3 + X3) + X7) pow ((sqrt X7) - X6)))
+((cos X2) / (((log (log X3)) pow X2) pow X2))
+(sin (sqrt ((X1 * (log (cos X0))) - X3)))
+(sqrt (((((sin X0) - (X6 * X3)) + X6) / (log X6)) * X4))
+((log (cos ((X1 + (cos X3)) / X1))) pow (cos (X2 / X5)))
+0
+(sqrt (sqrt ((cos (sin (X4 - 0))) / -3)))
+(sqrt -4)
+(X7 pow X3)
+(X6 pow X2)
+((X2 - X7) pow X6)
+((sin (sqrt (((X2 - X0) / X0) pow X3))) * X7)
+((X4 pow -5) / (-1 - X3))
+((sin (sqrt X7)) / ((X4 / X0) * (X6 / -5)))
+((cos X1) / ((X3 + X0) * X4))
+((log (sin (X0 / (sin (X7 - X5))))) / X3)
+(cos X5)
+(sin ((X2 + (sqrt X5)) pow (log ((X0 + ((X2 pow -3) + X2)) - X2))))
+(sin (-4 - X3))
+(sin (X1 pow X1))
+(sin (X0 * X6))
+(sin X2)
+(sin X2)
+(sin X2)
+((sin X3) * (sqrt (log X1)))
+(cos (X4 * X1))
+((X4 / ((cos X0) / (log X3))) / X2)
+(cos ((X2 / X0) * (sin X4)))
+(sin X3)
+(sin X3)
+(sin X3)
+(cos (sqrt X3))
+(sin (X3 * (sqrt X5)))
+((log (sqrt X1)) / -5)
+(((log (cos X7)) / (sqrt X7)) * (((X4 / X4) * X5) + X5))
+(cos (log ((((X3 + 2) + X0) - ((X5 * X5) / (cos 2))) pow ((sin X0) * X4))))
+(log (cos X7))
+(log (cos X7))
+(sin X4)
+(sin X4)
+(sin X0)
+(sin X0)
+(sin X0)
+(log (sin (log ((X6 / X2) * 3))))
+(log (sin (sqrt X6)))
+((log (sin X0)) / X1)
+(sin (X7 - (X2 / X2)))
+(sin (log ((log X4) / (log X7))))
+((cos X0) + (sin X6))
+(cos X0)
+(cos X0)
+(log (sin (cos (cos ((1 * X3) pow X6)))))
+(sin 4)
+((cos ((log X6) + (cos X0))) pow (-1 + (log -3)))
+(cos X4)
+(cos -3)
+-1
+-1
+(X1 - X4)
+(X1 - X4)
+(-5 / X0)
+-2
+(1 + -3)
+-2
+((log X0) - X0)
+(((X2 / X7) - X5) / (log (X0 / (sqrt (sin X2)))))
+((cos X1) - X4)
+-4
+-4
+-4
+(X1 + ((sin (sin X3)) - (X4 + X0)))
+(X0 - X5)
+(-4 - (((cos X3) * X5) + X1))
+(log (X5 / X3))
+(((sqrt ((X1 / X4) + (log 2))) pow X1) * -5)
+(log (3 / (X2 * (sqrt X6))))
+(((cos X6) pow X5) - (sqrt X7))
+((sin X5) * ((cos X4) * ((X6 / 0) + X7)))
+((sin X4) * X7)
+((X2 + X1) * (cos (X5 + X5)))
+(X7 * -1)
+((((X2 pow X7) - X6) pow (sqrt (sqrt X6))) - X7)
+((X0 + (X7 * -3)) + (cos X6))
+(X7 - X6)
+((X4 - X6) - X1)
+((X1 - X6) - (X4 + X7))
+((X1 + (X2 / X5)) - (X6 * (log X7)))
+(X0 - (X3 / X1))
+(X2 * -4)
+(X7 - ((X6 - ((sqrt X0) / (X1 + X1))) * X5))
+((sin X3) - X3)
+((X4 pow X1) * X7)
+(X3 / (cos X3))
+(X2 * X6)
+(((log X2) - (X6 * (X2 + X1))) - ((X4 - -1) - (X1 + (3 + X5))))
+(X3 * X7)
+((X5 * ((sqrt X6) / ((log X4) * (sin -3)))) * X3)
+((X1 + X2) * (X6 + X3))
+((X0 pow X5) * X4)
+(((X0 + (X6 - X5)) * X6) * X6)
+((X2 pow X4) / 4)
+((X7 + X2) pow (sqrt X3))
+(X6 - (X3 pow X4))
+(X2 pow X7)
+(((2 - X7) * (X4 pow 5)) pow X2)
+(X2 pow X0)
+((X3 * (X0 pow X0)) pow X0)
+(X4 pow X6)
+(5 pow X6)
+(X0 pow (sqrt (X7 - X1)))
+((X5 pow X5) - ((X0 * X5) pow (X3 / X7)))
+((log X5) pow (X7 + 4))
+(((X1 * (cos X6)) - (X3 - X7)) pow X4)
+(((log X4) pow X7) * (sin (sin (X4 * X7))))
+(X1 pow X3)
+(sqrt (X1 pow X7))
+(X7 pow X7)
+(((X1 pow (((X3 pow X3) + (cos X5)) pow (X4 - 4))) pow X5) - X7)
+(((((((X2 + X3) + (X3 + X2)) * X7) + -5) - X3) pow X0) + (cos (X4 - X4)))
+((((X0 / X3) * (log X4)) pow ((cos (sqrt X4)) / (sin (sin ((X3 pow X5) / 5))))) + (((log (cos (X2 + (X4 / X2)))) + (X3 pow X5)) + X3))
+
+
+Generation 0:
+Best fitness: 618207.627045
+Mean fitness: 3.5069397045e+17
+Median fitness: 0
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 164
+Crossover children better than parent's mean: 0
+Crossover children worse than parent's mean: 0
+Total of crossover children: 0
+
+
+Generation 1:
+Best fitness: 611956.994999
+Mean fitness: 1.10902269091e+17
+Median fitness: 654512.159225
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 207
+Crossover children better than parent's mean: 467
+Crossover children worse than parent's mean: 5
+Total of crossover children: 472
+
+
+Generation 2:
+Best fitness: 618207.627045
+Mean fitness: 3.69674229946e+16
+Median fitness: 654191.192752
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 284
+Crossover children better than parent's mean: 474
+Crossover children worse than parent's mean: 2
+Total of crossover children: 476
+
+
+Generation 3:
+Best fitness: 618200.566949
+Mean fitness: 3.68934892668e+16
+Median fitness: 653861.975778
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 305
+Crossover children better than parent's mean: 466
+Crossover children worse than parent's mean: 2
+Total of crossover children: 468
+
+
+Generation 4:
+Best fitness: 611956.994999
+Mean fitness: 1.84467440763e+16
+Median fitness: 652426.932716
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 317
+Crossover children better than parent's mean: 472
+Crossover children worse than parent's mean: 0
+Total of crossover children: 472
+
+
+Generation 5:
+Best fitness: 608821.872139
+Mean fitness: 313254886.283
+Median fitness: 652100.446502
+Worst fitness: 25997832930.0
+Repeated individuals in population: 328
+Crossover children better than parent's mean: 478
+Crossover children worse than parent's mean: 0
+Total of crossover children: 478
+
+
+Generation 6:
+Best fitness: 608996.504406
+Mean fitness: 3.68934886312e+16
+Median fitness: 641168.333525
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 282
+Crossover children better than parent's mean: 472
+Crossover children worse than parent's mean: 6
+Total of crossover children: 478
+
+
+Generation 7:
+Best fitness: 596075.911835
+Mean fitness: 268589227.278
+Median fitness: 641168.333525
+Worst fitness: 52004576729.0
+Repeated individuals in population: 249
+Crossover children better than parent's mean: 472
+Crossover children worse than parent's mean: 0
+Total of crossover children: 472
+
+
+Generation 8:
+Best fitness: 595553.012906
+Mean fitness: 417599781.257
+Median fitness: 640842.140213
+Worst fitness: 51750130117.2
+Repeated individuals in population: 234
+Crossover children better than parent's mean: 463
+Crossover children worse than parent's mean: 7
+Total of crossover children: 470
+
+
+Generation 9:
+Best fitness: 591109.856945
+Mean fitness: 3.75281818044e+12
+Median fitness: 639097.177355
+Worst fitness: 1.8760098061e+15
+Repeated individuals in population: 193
+Crossover children better than parent's mean: 458
+Crossover children worse than parent's mean: 10
+Total of crossover children: 468
+
+
+Generation 10:
+Best fitness: 593654.918116
+Mean fitness: 1.84837126817e+16
+Median fitness: 630769.661055
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 172
+Crossover children better than parent's mean: 470
+Crossover children worse than parent's mean: 0
+Total of crossover children: 470
+
+
+Generation 11:
+Best fitness: 593645.93788
+Mean fitness: 780630793.525
+Median fitness: 630445.465861
+Worst fitness: 1.03500631223e+11
+Repeated individuals in population: 140
+Crossover children better than parent's mean: 458
+Crossover children worse than parent's mean: 0
+Total of crossover children: 458
+
+
+Generation 12:
+Best fitness: 591109.856945
+Mean fitness: 364522176.933
+Median fitness: 626677.6615
+Worst fitness: 1.03500407595e+11
+Repeated individuals in population: 102
+Crossover children better than parent's mean: 469
+Crossover children worse than parent's mean: 3
+Total of crossover children: 472
+
+
+Generation 13:
+Best fitness: 594643.320439
+Mean fitness: 744028825.661
+Median fitness: 623466.507869
+Worst fitness: 85742491119.3
+Repeated individuals in population: 93
+Crossover children better than parent's mean: 470
+Crossover children worse than parent's mean: 8
+Total of crossover children: 478
+
+
+Generation 14:
+Best fitness: 561586.362608
+Mean fitness: 1.84837120922e+16
+Median fitness: 621776.169121
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 71
+Crossover children better than parent's mean: 467
+Crossover children worse than parent's mean: 5
+Total of crossover children: 472
+
+
+Generation 15:
+Best fitness: 561378.687153
+Mean fitness: 679863631.333
+Median fitness: 621455.579864
+Worst fitness: 77756795840.5
+Repeated individuals in population: 53
+Crossover children better than parent's mean: 466
+Crossover children worse than parent's mean: 0
+Total of crossover children: 466
+
+
+Generation 16:
+Best fitness: 498100.473919
+Mean fitness: 1059556362.76
+Median fitness: 620889.728673
+Worst fitness: 85742021391.5
+Repeated individuals in population: 53
+Crossover children better than parent's mean: 464
+Crossover children worse than parent's mean: 12
+Total of crossover children: 476
+
+
+Generation 17:
+Best fitness: 563128.301784
+Mean fitness: 1447720191.0
+Median fitness: 620098.017854
+Worst fitness: 1.72008894923e+11
+Repeated individuals in population: 42
+Crossover children better than parent's mean: 469
+Crossover children worse than parent's mean: 7
+Total of crossover children: 476
+
+
+Generation 18:
+Best fitness: 501377.596905
+Mean fitness: 1128742400.93
+Median fitness: 619060.166777
+Worst fitness: 1.97273566542e+11
+Repeated individuals in population: 38
+Crossover children better than parent's mean: 465
+Crossover children worse than parent's mean: 9
+Total of crossover children: 474
+
+
+Generation 19:
+Best fitness: 496347.21419
+Mean fitness: 6.04604604635e+14
+Median fitness: 620889.728673
+Worst fitness: 3.01697186054e+17
+Repeated individuals in population: 35
+Crossover children better than parent's mean: 458
+Crossover children worse than parent's mean: 10
+Total of crossover children: 468
+
+
+Generation 20:
+Best fitness: 498317.49612
+Mean fitness: 983000755.59
+Median fitness: 619151.504062
+Worst fitness: 1.8693082581e+11
+Repeated individuals in population: 36
+Crossover children better than parent's mean: 474
+Crossover children worse than parent's mean: 0
+Total of crossover children: 474
+
+
+Generation 21:
+Best fitness: 498036.099105
+Mean fitness: 722974804.612
+Median fitness: 621350.770178
+Worst fitness: 93570888533.5
+Repeated individuals in population: 42
+Crossover children better than parent's mean: 455
+Crossover children worse than parent's mean: 9
+Total of crossover children: 464
+
+
+Generation 22:
+Best fitness: 488958.467598
+Mean fitness: 446146714.468
+Median fitness: 621460.830983
+Worst fitness: 78117960884.3
+Repeated individuals in population: 38
+Crossover children better than parent's mean: 463
+Crossover children worse than parent's mean: 9
+Total of crossover children: 472
+
+
+Generation 23:
+Best fitness: 452585.488099
+Mean fitness: 1251952942.85
+Median fitness: 620435.152495
+Worst fitness: 1.81513514191e+11
+Repeated individuals in population: 39
+Crossover children better than parent's mean: 468
+Crossover children worse than parent's mean: 8
+Total of crossover children: 476
+
+
+Generation 24:
+Best fitness: 445269.58098
+Mean fitness: 1023244830.8
+Median fitness: 619071.086291
+Worst fitness: 3.25319225067e+11
+Repeated individuals in population: 32
+Crossover children better than parent's mean: 474
+Crossover children worse than parent's mean: 6
+Total of crossover children: 480
+
+
+Generation 25:
+Best fitness: 439972.161672
+Mean fitness: 1.84837124598e+16
+Median fitness: 618086.210935
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 26
+Crossover children better than parent's mean: 465
+Crossover children worse than parent's mean: 9
+Total of crossover children: 474
+
+
+Generation 26:
+Best fitness: 454109.96336
+Mean fitness: 920612684.093
+Median fitness: 617928.454407
+Worst fitness: 1.56816720554e+11
+Repeated individuals in population: 34
+Crossover children better than parent's mean: 470
+Crossover children worse than parent's mean: 0
+Total of crossover children: 470
+
+
+Generation 27:
+Best fitness: 453752.449548
+Mean fitness: 392169052.956
+Median fitness: 618217.285448
+Worst fitness: 52760013522.6
+Repeated individuals in population: 27
+Crossover children better than parent's mean: 466
+Crossover children worse than parent's mean: 10
+Total of crossover children: 476
+
+
+Generation 28:
+Best fitness: 426375.538832
+Mean fitness: 200757836.336
+Median fitness: 616950.760722
+Worst fitness: 78130142771.5
+Repeated individuals in population: 25
+Crossover children better than parent's mean: 473
+Crossover children worse than parent's mean: 7
+Total of crossover children: 480
+
+
+Generation 29:
+Best fitness: 326784.091366
+Mean fitness: 382916084.976
+Median fitness: 616488.730628
+Worst fitness: 96652735334.7
+Repeated individuals in population: 18
+Crossover children better than parent's mean: 469
+Crossover children worse than parent's mean: 9
+Total of crossover children: 478
+
+
+Generation 30:
+Best fitness: 326744.190705
+Mean fitness: 7192025021.77
+Median fitness: 615774.167134
+Worst fitness: 3.49021643852e+12
+Repeated individuals in population: 16
+Crossover children better than parent's mean: 468
+Crossover children worse than parent's mean: 10
+Total of crossover children: 478
+
+
+Generation 31:
+Best fitness: 404955.62508
+Mean fitness: 273862408.511
+Median fitness: 612979.635007
+Worst fitness: 52755172500.6
+Repeated individuals in population: 12
+Crossover children better than parent's mean: 475
+Crossover children worse than parent's mean: 3
+Total of crossover children: 478
+
+
+Generation 32:
+Best fitness: 362298.687144
+Mean fitness: 142566376.616
+Median fitness: 614136.745743
+Worst fitness: 30031233774.5
+Repeated individuals in population: 12
+Crossover children better than parent's mean: 454
+Crossover children worse than parent's mean: 10
+Total of crossover children: 464
+
+
+Generation 33:
+Best fitness: 365066.908831
+Mean fitness: 1.84837117345e+16
+Median fitness: 614996.174726
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 17
+Crossover children better than parent's mean: 445
+Crossover children worse than parent's mean: 21
+Total of crossover children: 466
+
+
+Generation 34:
+Best fitness: 278548.676514
+Mean fitness: 1.84837115833e+16
+Median fitness: 613569.631289
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 15
+Crossover children better than parent's mean: 468
+Crossover children worse than parent's mean: 0
+Total of crossover children: 468
+
+
+Generation 35:
+Best fitness: 298752.303231
+Mean fitness: 1565232255.97
+Median fitness: 612687.784672
+Worst fitness: 6.41595047606e+11
+Repeated individuals in population: 18
+Crossover children better than parent's mean: 476
+Crossover children worse than parent's mean: 0
+Total of crossover children: 476
+
+
+Generation 36:
+Best fitness: 326823.270307
+Mean fitness: 238103899.089
+Median fitness: 613219.731075
+Worst fitness: 51750204470.2
+Repeated individuals in population: 15
+Crossover children better than parent's mean: 462
+Crossover children worse than parent's mean: 6
+Total of crossover children: 468
+
+
+Generation 37:
+Best fitness: 287975.229357
+Mean fitness: 38219306758.8
+Median fitness: 611865.433581
+Worst fitness: 1.90881518577e+13
+Repeated individuals in population: 11
+Crossover children better than parent's mean: 458
+Crossover children worse than parent's mean: 10
+Total of crossover children: 468
+
+
+Generation 38:
+Best fitness: 291683.617489
+Mean fitness: 413494215.314
+Median fitness: 609926.217254
+Worst fitness: 54324453369.9
+Repeated individuals in population: 25
+Crossover children better than parent's mean: 462
+Crossover children worse than parent's mean: 2
+Total of crossover children: 464
+
+
+Generation 39:
+Best fitness: 263858.947124
+Mean fitness: 332376886.688
+Median fitness: 616043.516322
+Worst fitness: 82812980398.8
+Repeated individuals in population: 14
+Crossover children better than parent's mean: 463
+Crossover children worse than parent's mean: 11
+Total of crossover children: 474
+
+
+Generation 40:
+Best fitness: 295922.536082
+Mean fitness: 19769290501.9
+Median fitness: 618764.29177
+Worst fitness: 9.74315607718e+12
+Repeated individuals in population: 17
+Crossover children better than parent's mean: 459
+Crossover children worse than parent's mean: 11
+Total of crossover children: 470
+
+
+Generation 41:
+Best fitness: 279490.663395
+Mean fitness: 140796174.577
+Median fitness: 617354.192224
+Worst fitness: 31609517137.2
+Repeated individuals in population: 29
+Crossover children better than parent's mean: 461
+Crossover children worse than parent's mean: 1
+Total of crossover children: 462
+
+
+Generation 42:
+Best fitness: 274760.126543
+Mean fitness: 682225913.875
+Median fitness: 618056.498752
+Worst fitness: 2.27299969848e+11
+Repeated individuals in population: 21
+Crossover children better than parent's mean: 461
+Crossover children worse than parent's mean: 21
+Total of crossover children: 482
+
+
+Generation 43:
+Best fitness: 263858.947124
+Mean fitness: 111049123.849
+Median fitness: 614323.24906
+Worst fitness: 25875145340.1
+Repeated individuals in population: 18
+Crossover children better than parent's mean: 460
+Crossover children worse than parent's mean: 12
+Total of crossover children: 472
+
+
+Generation 44:
+Best fitness: 257538.44899
+Mean fitness: 143588748.542
+Median fitness: 614323.24906
+Worst fitness: 18497004549.4
+Repeated individuals in population: 14
+Crossover children better than parent's mean: 459
+Crossover children worse than parent's mean: 19
+Total of crossover children: 478
+
+
+Generation 45:
+Best fitness: 288055.969513
+Mean fitness: 283422836.942
+Median fitness: 619213.655835
+Worst fitness: 99791521899.7
+Repeated individuals in population: 22
+Crossover children better than parent's mean: 454
+Crossover children worse than parent's mean: 18
+Total of crossover children: 472
+
+
+Generation 46:
+Best fitness: 281974.976788
+Mean fitness: 1.75524285974e+12
+Median fitness: 626991.824752
+Worst fitness: 8.75822231546e+14
+Repeated individuals in population: 23
+Crossover children better than parent's mean: 443
+Crossover children worse than parent's mean: 17
+Total of crossover children: 460
+
+
+Generation 47:
+Best fitness: 280464.439036
+Mean fitness: 1827830069.86
+Median fitness: 617412.040067
+Worst fitness: 7.19401705531e+11
+Repeated individuals in population: 24
+Crossover children better than parent's mean: 470
+Crossover children worse than parent's mean: 0
+Total of crossover children: 470
+
+
+Generation 48:
+Best fitness: 261996.161908
+Mean fitness: 4067706072.61
+Median fitness: 620395.218335
+Worst fitness: 1.9752422005e+12
+Repeated individuals in population: 20
+Crossover children better than parent's mean: 464
+Crossover children worse than parent's mean: 8
+Total of crossover children: 472
+
+
+Generation 49:
+Best fitness: 261350.560793
+Mean fitness: 245143856.393
+Median fitness: 619253.634791
+Worst fitness: 35348661129.5
+Repeated individuals in population: 21
+Crossover children better than parent's mean: 468
+Crossover children worse than parent's mean: 6
+Total of crossover children: 474
+
+
+Generation 50:
+Best fitness: 273194.007233
+Mean fitness: 1.84838065516e+16
+Median fitness: 620106.674236
+Worst fitness: 9223372036854775807
+Repeated individuals in population: 25
+Crossover children better than parent's mean: 453
+Crossover children worse than parent's mean: 17
+Total of crossover children: 470
+/home/grad/ccomp/13/bernardoabreu/CN/tp1/tests2/house/1/500/out_house_6_7
+
+Train data: /home/grad/ccomp/13/bernardoabreu/CN/tp1/datasets/house-train.csv
+Best error: 257538.44899
+Individual:
+(((log X2) * (X5 * X2)) + (((log X2) * ((log X6) * X2)) * X4))
+
+Test data: /home/grad/ccomp/13/bernardoabreu/CN/tp1/datasets/house-test.csv
+Error: 251496.638184
