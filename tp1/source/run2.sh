@@ -57,7 +57,7 @@ for $DATA in ${DATA_SETS[*]}; do
     OUTBASE="${PA}/${OUT}/${DATA}/${TEST_VERSION}/${SUBDIR}/out_"
     OUTFILE="${OUTBASE}${DATA}_${START}_${END}"
 
-    POP=$DATA
+    POP=$SUBDIR
 
     for i in $(seq $START $END); do
         echo $i;
