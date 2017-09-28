@@ -54,14 +54,17 @@ echo $$ > "${PA}/norun2_${HOST}_${DATA_SETS[*]}_${START}_${END}.pid"
 for DATA in ${DATA_SETS[*]}; do
 
   for SUBDIR in ${SUBDIRS[*]}; do
-    OUTBASE="${PA}/${OUT}/${DATA}/${TEST_VERSION}/${SUBDIR}/out_"
-    OUTFILE="${OUTBASE}${DATA}_${START}_${END}"
+    OUTBASE="${PA}/${OUT}/${DATA}/${TEST_VERSION}/${SUBDIR}"
+
+    mkdir -p $OUTBASE
+
+    OUTFILE="${OUTBASE}/out_${DATA}_${START}_${END}"
 
     POP=$SUBDIR
 
     for i in $(seq $START $END); do
         echo $i;
-        $PA/source/main.py --elitism $ELITISM --crossover $CROSS --mutation $MUT --tournament $TOUR --seed $i --gen $GEN --pop_size $POP --train "${PA}/datasets/${DATA}-train.csv" --test "${PA}/datasets/${DATA}-test.csv" --stats $OUTFILE --test_out $OUTFILE> "${OUTBASE}${DATA}_${i}"
+        $PA/source/main.py --elitism $ELITISM --crossover $CROSS --mutation $MUT --tournament $TOUR --seed $i --gen $GEN --pop_size $POP --train "${PA}/datasets/${DATA}-train.csv" --test "${PA}/datasets/${DATA}-test.csv" --stats $OUTFILE --test_out $OUTFILE> "${OUTBASE}/${DATA}_${i}"
     done
   done
 done
