@@ -3,7 +3,11 @@
 PA=$HOME'/CN/tp1'
 TEST_VERSION="$1"
 
-BASE=$PA/tests
+
+INPUT_DIR=tests2
+OUTPUT_DIR=graphs2
+
+BASE=$PA/$INPUT_DIR
 
 USE_ALL=true
 DIRS=0
@@ -34,15 +38,15 @@ for DATA_SET in ${DATA_SETS[*]}; do
 
     for VERSION in ${TEST_VERSION[*]}; do
 
-        ls $PA/tests/$DATA_SET/$VERSION | while read -r TEST_TYPE ; do
+        ls $BASE/$DATA_SET/$VERSION | while read -r TEST_TYPE ; do
 
-            mkdir -p $PA/graphs/$DATA_SET/$VERSION/$TEST_TYPE
-            DIR=$PA/tests/$DATA_SET/$VERSION/$TEST_TYPE
+            mkdir -p $PA/$OUTPUT_DIR/$DATA_SET/$VERSION/$TEST_TYPE
+            DIR=$BASE/$DATA_SET/$VERSION/$TEST_TYPE
             
             echo $DIR
             ls $DIR | grep __ | while read -r TEST_OUTPUT ; do
                 echo "Processing $TEST_OUTPUT"
-                $PA/source/plot.py $DIR/$TEST_OUTPUT $PA/graphs/$DATA_SET/$VERSION/$TEST_TYPE
+                $PA/source/plot.py $DIR/$TEST_OUTPUT $PA/$OUTPUT_DIR/$DATA_SET/$VERSION/$TEST_TYPE
             done
         done
     done
