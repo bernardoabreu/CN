@@ -51,7 +51,7 @@ END="$2"
 echo $$ > "${PA}/norun2_${HOST}_${DATA_SETS[*]}_${START}_${END}.pid"
 
 
-for $DATA in ${DATA_SETS[*]}; do
+for DATA in ${DATA_SETS[*]}; do
 
   for SUBDIR in ${SUBDIRS[*]}; do
     OUTBASE="${PA}/${OUT}/${DATA}/${TEST_VERSION}/${SUBDIR}/out_"
