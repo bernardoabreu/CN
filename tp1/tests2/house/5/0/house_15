@@ -1,4 +1,4 @@
-Namespace(crossover=0.9, elitism=0, gen=100, mutation=0.05, pop_size=500, seed=15, stats='/home/grad/ccomp/13/bernardoabreu/CN/tp1/tests2/house/5/0/out_house_11_15', test='/home/grad/ccomp/13/bernardoabreu/CN/tp1/datasets/house-test.csv', test_out='/home/grad/ccomp/13/bernardoabreu/CN/tp1/tests2/house/5/0/out_house_11_15', tournament=7, train='/home/grad/ccomp/13/bernardoabreu/CN/tp1/datasets/house-train.csv')
+Namespace(crossover=0.9, elitism=0, gen=100, mutation=0.05, pop_size=500, seed=15, stats='/home/grad/ccomp/13/bernardoabreu/CN/tp1/tests2/house/5/0/out_house_15_15', test='/home/grad/ccomp/13/bernardoabreu/CN/tp1/datasets/house-test.csv', test_out='/home/grad/ccomp/13/bernardoabreu/CN/tp1/tests2/house/5/0/out_house_15_15', tournament=7, train='/home/grad/ccomp/13/bernardoabreu/CN/tp1/datasets/house-train.csv')
 Population size: 500
 
 Initial population:
@@ -1613,4 +1613,12 @@ Repeated individuals in population: 44
 Crossover children better than parent's mean: 451
 Crossover children worse than parent's mean: 19
 Total of crossover children: 470
-/home/grad/ccomp/13/bernardoabreu/CN/tp1/tests2/house/5/0/out_house_11_15
+/home/grad/ccomp/13/bernardoabreu/CN/tp1/tests2/house/5/0/out_house_15_15
+
+Train data: /home/grad/ccomp/13/bernardoabreu/CN/tp1/datasets/house-train.csv
+Best error: 234961.631155
+Individual:
+(((((((X5 - -3) - -3) - -3) * (((X5 - -3) - -3) - -3)) * (((-3 * -3) - -3) - -3)) * (((((-3 * -3) - -3) - X0) - ((-3 - -3) - X5)) - -3)) + (((sqrt (((-3 * -3) - -3) - X0)) + X4) * ((((-3 - X2) - (-3 - -3)) - (((-3 * -3) * -3) - (X5 - X2))) + (((sqrt (X5 - -3)) * (X5 - -3)) * X2))))
+
+Test data: /home/grad/ccomp/13/bernardoabreu/CN/tp1/datasets/house-test.csv
+Error: 229615.19767
