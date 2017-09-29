@@ -4,15 +4,15 @@ HOST=$(hostname)
 
 echo $HOST
 PA=$HOME'/CN/tp1'
-TEST_VERSION=1
+TEST_VERSION=3
 DATA_SETS=(house)
 SUBDIRS=(0)
 OUT=tests2
 
-ELITISM=0
-CROSS=0.9
-MUT=0.05
-TOUR=7
+ELITISM=1
+CROSS=0.6
+MUT=0.3
+TOUR=2
 GEN=100
 POP=500
 
@@ -60,7 +60,7 @@ for DATA in ${DATA_SETS[*]}; do
 
     OUTFILE="${OUTBASE}/out_${DATA}_${START}_${END}"
 
-    # TOUR=$SUBDIR
+    #ELITISM=$SUBDIR
 
     for i in $(seq $START $END); do
         echo $i;
