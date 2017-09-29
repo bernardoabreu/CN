@@ -6,13 +6,13 @@ echo $HOST
 PA=$HOME'/CN/tp1'
 TEST_VERSION=1
 DATA_SETS=(house)
-SUBDIRS=(50 100 500)
+SUBDIRS=(0)
 OUT=tests2
 
-ELITISM=1
+ELITISM=0
 CROSS=0.9
 MUT=0.05
-TOUR=2
+TOUR=7
 GEN=100
 POP=500
 
@@ -60,7 +60,7 @@ for DATA in ${DATA_SETS[*]}; do
 
     OUTFILE="${OUTBASE}/out_${DATA}_${START}_${END}"
 
-    TOUR=$SUBDIR
+    # TOUR=$SUBDIR
 
     for i in $(seq $START $END); do
         echo $i;

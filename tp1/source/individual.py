@@ -2,6 +2,12 @@ import math
 import sys
 
 
+if sys.version_info[0] < 3:
+    MAXINT = sys.maxint
+else:
+    MAXINT = sys.maxsize
+
+
 class Individual(object):
     """[summary]
 
@@ -27,11 +33,11 @@ class Individual(object):
             if max_height is not None and self.root.get_height() > max_height:
                 self.error = 10000000 + self.error
 
-            self.error = min(self.error, sys.maxint)
+            self.error = min(self.error, MAXINT)
         except OverflowError:
-            self.error = sys.maxint
+            self.error = MAXINT
         except Exception:
-            self.error = sys.maxint
+            self.error = MAXINT
 
         return self.error
 
