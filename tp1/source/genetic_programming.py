@@ -10,6 +10,10 @@ from node import FunctionNode
 from node import TerminalNode
 from stats import Stats
 
+_CROSSOVER = 0
+_MUTATION = 1
+_REPRODUCTION = 2
+
 
 class GeneticProgramming(object):
     """[summary]
@@ -126,9 +130,10 @@ class GeneticProgramming(object):
         p = random.random()
 
         if p > (self.p_crossover + self.p_mutation):
-            return 'reproduction'
+            return _REPRODUCTION
         else:
-            return 'mutation' if p > self.p_crossover else 'crossover'
+            return _MUTATION if p > self.p_crossover \
+                else _CROSSOVER
 
     def evaluate_population(self, population, data):
         for individual in population:
@@ -191,22 +196,20 @@ class GeneticProgramming(object):
                 term = random.choice(
                     [n for n in range(-5, 6) if n != content])
 
-            # print('term', term)
             if is_function:
-                # print 'Replace function with terminal'
+                # Replace function with terminal
                 node = TerminalNode(term)
                 mutant.replace_node(element, node)
             else:
-                # print 'Replace terminal'
+                # Replace terminal
                 element.set_content(term)
         else:
             func = functions[rand - len(terminals)]
-            # print 'func', func
 
             depth = 1
 
             if is_function:
-                # print 'Replace terminal'
+                # Replace function
                 if func in UNARY:
                     if element_right is not None:
                         element.set_right_child(None)
@@ -216,7 +219,7 @@ class GeneticProgramming(object):
                                             depth))
                 element.set_content(func)
             else:
-                # print 'Replace terminal with function'
+                # Replace terminal with function
                 node = self.__gen_rnd_function(func, self.functions,
                                                self.terminals, depth)
                 mutant.replace_node(element, node)
@@ -236,15 +239,12 @@ class GeneticProgramming(object):
         print('Population size: ' + str(len(population)) + '\n')
         self.evaluate_population(population, data)
         population.sort(key=lambda x: x.get_error())
-        # s_best = self.get_best_solution(population)
+
         s_best = population[0]
 
-        print('Initial population:')
         for p in population:
-            print(p)
+            # print(p)
             self.stats.add_child(p)
-
-        print('\n')
 
         current_generation = 0
 
@@ -256,16 +256,13 @@ class GeneticProgramming(object):
             self.stats.record_data()
             self.stats.reset()
 
-            children = []
-
-            if elitism:
-                children = population[:elitism]
+            children = population[:elitism] if elitism else []
 
             while len(children) < pop_size:
                 operator = self.__select_genetic_operator()
-                # print operator
+
                 parent1 = self.selection(population)
-                if operator == 'crossover':
+                if operator == _CROSSOVER:
                     parent2 = self.selection(population)
                     child1, child2 = self.crossover(parent1, parent2)
                     child1.eval(data, self.max_depth)
@@ -274,12 +271,12 @@ class GeneticProgramming(object):
                     self.stats.add_child(child2, crossover=True)
                     children.append(child1)
                     children.append(child2)
-                elif operator == 'mutation':
+                elif operator == _MUTATION:
                     child1 = self.mutation(parent1)
                     child1.eval(data, self.max_depth)
                     self.stats.add_child(child1)
                     children.append(child1)
-                elif operator == 'reproduction':
+                elif operator == _REPRODUCTION:
                     child1 = self.reproduction(parent1)
                     self.stats.add_child(child1)
                     children.append(child1)

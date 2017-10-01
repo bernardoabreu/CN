@@ -74,9 +74,9 @@ if __name__ == '__main__':
     parser.add_argument('--seed', type=int, default=None,
                         help='Seed for random number generator')
     parser.add_argument('--stats',
-                        help='File to sava statistics.')
+                        help='File to save statistics.')
     parser.add_argument('--test_out',
-                        help='File to sava statistics.')
+                        help='File to save the test data result.')
 
     args = parser.parse_args()
     print(args)
