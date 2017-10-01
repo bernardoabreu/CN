@@ -18,5 +18,7 @@ BASE=$PA/tests2/$DATA/$TEST_VERSION
 # 
 # 
 # $PA/source/plot.py $TYPE $DATA $BASE/3/$OUTFILE $BASE/7/$OUTFILE
+
+$PA/source/plot.py $TYPE $DATA $BASE/3/$OUTFILE $PA/tests2/$DATA/4/3/$OUTFILE
 # 
-$PA/source/plot.py $TYPE $DATA $PA/tests2/$DATA/4/7/$OUTFILE $BASE/0/$OUTFILE
+# $PA/source/plot.py $TYPE $DATA $PA/tests2/$DATA/4/7/$OUTFILE $BASE/0/$OUTFILE

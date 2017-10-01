@@ -66,10 +66,17 @@ def line_plot(a, y_label, save=''):
 
 
 def boxplot(a, y_label, save=''):
-    fig = plt.figure(figsize=(19, 11))
+    fig = plt.figure(figsize=(19, 5))
+    ax = fig.add_subplot(111)
+    n = 10
+    plt.locator_params(axis='x', nticks=10)
     df = DataFrame(a)
     plt.figure()
-    df.boxplot()
+    df.boxplot().set_xticklabels([str(i) if i%5 == 0 else '' for i in range(101)])
+    # ticks = ax.xaxis.get_ticklocs()
+    # ticklabels = [l.get_text() for l in ax.xaxis.get_ticklabels()]
+    # ax.xaxis.set_ticks(ticks[::n])
+    # ax.xaxis.set_ticklabels(ticklabels[::n])
     plt.xlabel('Generations')
     plt.ylabel(y_label.title())
     plt.title(y_label.title() + ' x Generations')
@@ -83,105 +90,111 @@ def boxplot(a, y_label, save=''):
 
 
 if __name__ == '__main__':
-    print('running')
-    in_file = argv[1]
+    # print('running')
+    # in_file = argv[1]
 
-    label = in_file.split('.')[0].split('__')[-1]
-    a = loadtxt(in_file)
+    # label = in_file.split('.')[0].split('__')[-1]
+    # a = loadtxt(in_file)
 
-    outputfolder = argv[2] + '/' + label if len(argv) > 2 else ''
-    print len(argv)
-    if len(argv) < 4:
-        print "no"
-        line_mean_plot(a, label, outputfolder)
-    else:
-        t = argv[3]
-
-        if t == 'boxplot':
-            # print 'box'
-            boxplot(a, label, outputfolder)
-        elif t == 'mean':
-            line_mean_plot(a, label, outputfolder)
-        elif t == 'line':
-            line_plot(a, label)
-
-    # print argv
-    # label = argv[1]
-    # outfile = argv[2]
-
-    # fig = plt.figure(figsize=(19, 11))
-    # plt.xlabel('Generations')
-    # plt.ylabel(label.title())
-    # plt.title(label.title() + ' x Generations')
-    # plt.grid(True)
-
-    # if label != 'test':
-    #     if 'cross' in label:
-    #         mm = []
-
-    #         for i in argv[3:]:
-    #             print i
-    #             a = loadtxt(i)
-    #             size = loadtxt(i.replace('__cross_best', '__cross_size').replace('__cross_worse', '__cross_size'))
-    #             c = np.divide(a,size)
-    #             means = []
-    #             for column in c.T:
-    #                 means.append(np.mean(column))
-    #             mm.append(np.array(means))
-
-    #         # line1, = plt.plot(mm[0][1:], label='500')
-
-    #         line1 = None
-    #         for m, d in zip(mm, ['mut low', 'mut_high']):
-    #             line1, = plt.plot(m, marker='o', label=str(d))
-
-    #         plt.legend(handler_map={line1: HandlerLine2D(numpoints=4)})
-
-    #         # figure.set_size_inches(20, 15)
-    #         plt.savefig(outfile + '_' + label + '_mean.png', dpi=fig.dpi)
-    #         plt.show()
-    #     else:
-    #         mm = []
-
-    #         for i in argv[3:]:
-    #             print i
-    #             a = loadtxt(i)
-    #             means = []
-    #             for column in a.T:
-    #                 means.append(np.mean(column))
-    #             mm.append(np.array(means))
-
-    #         # line1, = plt.plot(mm[0][1:], label='500')
-
-    #         line1 = None
-    #         for m, d in zip(mm, ['elitism', 'no elitism']):
-    #             line1, = plt.plot(m, marker='o', label=str(d))
-
-    #         plt.legend(handler_map={line1: HandlerLine2D(numpoints=4)})
-
-    #         # figure.set_size_inches(20, 15)
-    #         plt.savefig(outfile + '_' + label + '_mean.png', dpi=fig.dpi)
-    #         plt.show()
-
+    # outputfolder = argv[2] + '/' + label if len(argv) > 2 else ''
+    # print len(argv)
+    # if len(argv) < 4:
+    #     print "no"
+    #     line_mean_plot(a, label, outputfolder)
     # else:
+    #     t = argv[3]
 
-    #     mm = []
-    #     testbest = []
+    #     if t == 'boxplot':
+    #         # print 'box'
+    #         boxplot(a, label, outputfolder)
+    #     elif t == 'mean':
+    #         line_mean_plot(a, label, outputfolder)
+    #     elif t == 'line':
+    #         line_plot(a, label)
 
-    #     for i in argv[3:]:
-    #         print i
-    #         a = loadtxt(i)
-    #         test = loadtxt(i.replace('__best', '__test_best'))
-    #         mm.append(a[:, -1])
-    #         testbest.append(test)
+    print argv
+    label = argv[1]
+    outfile = argv[2]
 
-    #     print len(mm)
-    #     line1 = None
-    #     for m, t, d in zip(mm, testbest,[7]):
-    #         line1, = plt.plot(m, marker='o', label=str(d))
-    #         line4, = plt.plot(t, label='Test ' + str(d))
+    fig = plt.figure(figsize=(19, 11))
+    ax = fig.add_subplot(111)
+    plt.grid(True)
 
-    #     plt.legend(handler_map={line1: HandlerLine2D(numpoints=4)})
+    if label != 'test':
+        plt.xlabel('Generations')
+        plt.ylabel(label.title())
+        plt.title(label.title() + ' x Generations')
+        if 'cross' in label:
+            mm = []
 
-    #     plt.savefig(outfile + '_' + label + '_test.png', dpi=fig.dpi)
-    #     plt.show()
+            for i in argv[3:]:
+                print i
+                a = loadtxt(i)
+                size = loadtxt(i.replace('__cross_best', '__cross_size').replace('__cross_worse', '__cross_size'))
+                c = np.divide(a,size)
+                means = []
+                for column in c.T:
+                    means.append(np.mean(column))
+                mm.append(np.array(means))
+
+            # line1, = plt.plot(mm[0][1:], label='500')
+
+            line1 = None
+            for m, d in zip(mm, [3, 7]):
+                line1, = plt.plot(m, marker='o', label=str(d))
+
+            plt.legend(handler_map={line1: HandlerLine2D(numpoints=4)})
+
+            # figure.set_size_inches(20, 15)
+            plt.savefig(outfile + '_' + label + '_mean.png', dpi=fig.dpi)
+            plt.show()
+        else:
+            mm = []
+
+            for i in argv[3:]:
+                print i
+                a = loadtxt(i)
+                means = []
+                for column in a.T:
+                    means.append(np.mean(column))
+                mm.append(np.array(means))
+
+            # line1, = plt.plot(mm[0][1:], label='500')
+
+            line1 = None
+            for m, d in zip(mm, ['best k=3', 'mean k=3', 'worst k=3',
+                                 'best k=7', 'mean k=7', 'worst k=7']):
+                line1, = plt.plot(m, marker='o', label=str(d))
+
+            ax.set_yscale('log')
+
+            plt.legend(handler_map={line1: HandlerLine2D(numpoints=4)})
+
+            # figure.set_size_inches(20, 15)
+            plt.savefig(outfile + '_' + label + '_mean.png', dpi=fig.dpi)
+            plt.show()
+
+    else:
+        plt.xlabel('Seed')
+        plt.ylabel('Best fitness')
+        plt.title('Best fitness x Seed')
+        mm = []
+        testbest = []
+
+        for i in argv[3:]:
+            print i
+            a = loadtxt(i)
+            test = loadtxt(i.replace('__best', '__test_best'))
+            mm.append(a[:, -1])
+            testbest.append(test)
+
+        print len(mm)
+        line1 = None
+        for m, t in zip(mm, testbest):
+            line1, = plt.plot(list(range(1,31)),m, marker='o', label='Treino')
+            line4, = plt.plot(list(range(1,31)), t, marker='x', label= 'Teste')
+
+        plt.legend(handler_map={line1: HandlerLine2D(numpoints=4)})
+
+        plt.savefig(outfile + '_' + label + '_test.png', dpi=fig.dpi)
+        plt.show()
