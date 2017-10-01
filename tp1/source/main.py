@@ -80,9 +80,5 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     print(args)
-    # train_data = '../datasets/keijzer-7-train.csv'
-    # test_data = '../datasets/keijzer-7-test.csv'
-    # train_data = '../datasets/house-train.csv'
-    # test_data = '../datasets/house-test.csv'
 
     main(args)

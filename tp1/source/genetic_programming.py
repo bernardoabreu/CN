@@ -16,9 +16,10 @@ _REPRODUCTION = 2
 
 
 class GeneticProgramming(object):
-    """[summary]
+    """Main class for Genetic Programming
 
-    [description]
+    Implements GP, with methods for changing initialization type, parameters
+    and calls Stats class to save statistcs. Implements genetic operators.
     """
     def __init__(self, max_depth, functions, terms, p_crossover, p_mutation):
         self.max_depth = max_depth
@@ -56,18 +57,18 @@ class GeneticProgramming(object):
             self.__full = True
 
     def __ramped_half_and_half(self, population_size, max_depth, funcs, terms):
-        """[summary]
-
-        [description]
+        """Creates a population with Ramped half-and-half initialization
 
         Arguments:
-            population_size {[type]} -- [description]
-            max_depth {[type]} -- [description]
-            funcs {[type]} -- [description]
-            terms {[type]} -- [description]
+            population_size {int} -- Size of the population.
+            max_depth {int} -- Max depth of a tree contained in an individual
+            funcs {[object]} -- List of functions to be used in individual
+                                creation
+            terms {[string]} -- List of terminals to be used in individual
+                                creation
 
         Returns:
-            [type] -- [description]
+            [Individual] -- List of individual, i.e., the population.
         """
         pop = []
         group = (population_size / (max_depth - 1))
@@ -140,16 +141,14 @@ class GeneticProgramming(object):
             individual.eval(data, self.max_depth)
 
     def crossover(self, parent1, parent2):
-        """[summary]
-
-        [description]
+        """Crossover between two parents
 
         Arguments:
-            parent1 {[type]} -- [description]
-            parent2 {[type]} -- [description]
+            parent1 {Individual} -- First parent of the crossover
+            parent2 {Individual} -- Second parent of the crossover
 
         Returns:
-            [type] -- [description]
+            Individual, Individual -- Resulting children of the crossover
         """
         child1 = copy.deepcopy(parent1)
         child2 = copy.deepcopy(parent2)
@@ -165,15 +164,13 @@ class GeneticProgramming(object):
         return child1, child2
 
     def mutation(self, parent):
-        """[summary]
-
-        [description]
+        """Mutation of a individual
 
         Arguments:
-            parent {[type]} -- [description]
+            parent {Individual} -- Individual to be mutated
 
         Returns:
-            [type] -- [description]
+            Individual -- Child resulting of the mutation
         """
         mutant = copy.deepcopy(parent)
         mutant_list = mutant.get_list()

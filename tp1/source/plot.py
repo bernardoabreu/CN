@@ -29,7 +29,6 @@ def loadtxt(file, delimiter=','):
 def line_mean_plot(a, y_label, save=''):
     means = []
     for column in a.T:
-        # if np.mean(column) < 1e20:
         means.append(np.mean(column))
     a_means = np.array(means)
     print a_means
@@ -39,10 +38,7 @@ def line_mean_plot(a, y_label, save=''):
     plt.title(y_label.title() + ' x Generations')
     plt.grid(True)
 
-    # figure = plt.gcf()
-    # figure.set_size_inches(19, 12)
     if save:
-        # when saving, specify the DPI
         print('saving to ' + save)
         plt.savefig(save + '_line_mean.png', dpi=300)
     else:
@@ -56,10 +52,7 @@ def line_plot(a, y_label, save=''):
     plt.title(y_label.title() + ' x Generations')
     plt.grid(True)
 
-    # figure = plt.gcf()
-    # figure.set_size_inches(19, 12)
     if save:
-        # when saving, specify the DPI
         print('saving to ' + save)
         plt.savefig(save + '_line.png', dpi=300)
     plt.show()
@@ -67,26 +60,21 @@ def line_plot(a, y_label, save=''):
 
 def boxplot(a, y_label, save=''):
     fig = plt.figure(figsize=(19, 5))
-    ax = fig.add_subplot(111)
-    n = 10
     plt.locator_params(axis='x', nticks=10)
     df = DataFrame(a)
     plt.figure()
-    df.boxplot().set_xticklabels([str(i) if i%5 == 0 else '' for i in range(101)])
-    # ticks = ax.xaxis.get_ticklocs()
-    # ticklabels = [l.get_text() for l in ax.xaxis.get_ticklabels()]
-    # ax.xaxis.set_ticks(ticks[::n])
-    # ax.xaxis.set_ticklabels(ticklabels[::n])
+    df.boxplot().set_xticklabels(
+        [str(i) if i % 5 == 0 else '' for i in range(101)])
+
     plt.xlabel('Generations')
     plt.ylabel(y_label.title())
     plt.title(y_label.title() + ' x Generations')
     plt.grid(True)
-    # figure = plt.gcf()
-    # figure.set_size_inches(19, 12)
+
     if save:
         print('saving to ' + save)
         plt.savefig(save + '_boxplot.png', dpi=fig.dpi)
-    # plt.show()
+
 
 
 if __name__ == '__main__':
@@ -130,8 +118,9 @@ if __name__ == '__main__':
             for i in argv[3:]:
                 print i
                 a = loadtxt(i)
-                size = loadtxt(i.replace('__cross_best', '__cross_size').replace('__cross_worse', '__cross_size'))
-                c = np.divide(a,size)
+                size = loadtxt(i.replace('__cross_best', '__cross_size')
+                                .replace('__cross_worse', '__cross_size'))
+                c = np.divide(a, size)
                 means = []
                 for column in c.T:
                     means.append(np.mean(column))
@@ -191,8 +180,10 @@ if __name__ == '__main__':
         print len(mm)
         line1 = None
         for m, t in zip(mm, testbest):
-            line1, = plt.plot(list(range(1,31)),m, marker='o', label='Treino')
-            line4, = plt.plot(list(range(1,31)), t, marker='x', label= 'Teste')
+            line1, = plt.plot(list(range(1, 31)), m, marker='o',
+                              label='Treino')
+            line4, = plt.plot(list(range(1, 31)), t, marker='x',
+                              label='Teste')
 
         plt.legend(handler_map={line1: HandlerLine2D(numpoints=4)})
 
