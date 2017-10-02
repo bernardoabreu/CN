@@ -255,6 +255,9 @@ class GeneticProgramming(object):
 
             children = population[:elitism] if elitism else []
 
+            for c in children:
+                self.stats.add_child(c)
+
             while len(children) < pop_size:
                 operator = self.__select_genetic_operator()
 
