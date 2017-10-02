@@ -33,7 +33,7 @@ shift $((OPTIND-1))
 for DATA_SET in ${DATA_SETS[*]}; do
 
     if $USE_ALL; then
-        TEST_VERSION=(`ls $PA/tests/$DATA_SET`)
+        TEST_VERSION=(`ls ${PA}/${INPUT_DIR}/${DATA_SET}`)
     fi
 
     for VERSION in ${TEST_VERSION[*]}; do
@@ -46,7 +46,7 @@ for DATA_SET in ${DATA_SETS[*]}; do
             echo $DIR
             ls $DIR | grep __ | while read -r TEST_OUTPUT ; do
                 echo "Processing $TEST_OUTPUT"
-                $PA/source/plot.py $DIR/$TEST_OUTPUT $PA/$OUTPUT_DIR/$DATA_SET/$VERSION/$TEST_TYPE
+                $PA/source/plot.py $DIR/$TEST_OUTPUT $PA/$OUTPUT_DIR/$DATA_SET/$VERSION/$TEST_TYPE boxplot
             done
         done
     done

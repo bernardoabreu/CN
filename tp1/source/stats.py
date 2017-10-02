@@ -1,6 +1,7 @@
 
 
 class Stats(object):
+    """ Stores and calculates statistics. """
     def __init__(self):
         self.__mean = float('inf')
         self.used = set()
@@ -123,13 +124,3 @@ class Stats(object):
             f.write(','.join(map(str, self.cross_size_list)) + '\n')
         with open(out_file + '__repeated.csv', 'a') as f:
             f.write(','.join(map(str, self.repeated_list)) + '\n')
-            # f.write('Generation,Mean,Best Fitness,Worst Fitness,' +
-            #         'Crossover children worse than parent,' +
-            #         'Crossover children better than parent,' +
-            #         'Repeated elements\n')
-            # for i, line in enumerate(zip(self.mean_list, self.best_list,
-            #                          self.worst_list, self.cross_worse_list,
-            #                          self.cross_better_list,
-            #                          self.repeated_list)):
-            #     print line
-            #     f.write(str(i) + ',' + ','.join(map(str, line)) + '\n')

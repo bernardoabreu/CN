@@ -2,9 +2,11 @@ from functions import OP_DICT
 
 
 class Node(object):
-    """[summary]
+    """Tree implemenation using multiple nodes
 
-    [description]
+    Node of a tree that is itself a tree, as it contains two children.
+    Contains a string that represents the tree contents and a height value,
+    that stores the tree's height value.
     """
     def __init__(self, content, left=None, right=None):
         self.__left = left
@@ -49,9 +51,10 @@ class Node(object):
 
 
 class TerminalNode(Node):
-    """[summary]
+    """Leaf of a tree.
 
-    [description]
+    TerminalNode extends Node to implement a leaf node. Its children
+    store None.
 
     Extends:
         Node
@@ -68,9 +71,10 @@ class TerminalNode(Node):
 
 
 class FunctionNode(Node):
-    """[summary]
+    """Node that contains a function.
 
-    [description]
+    FunctionNode extends Node to implement a node that contains a function.
+    This node cannot be a leaf.
 
     Extends:
         Node
@@ -91,10 +95,8 @@ class FunctionNode(Node):
             return content(left_eval, right_child.eval(var_map))
 
     def _update_string(self):
-        """[summary]
+        """ Updates the string that represents the Node's tree """
 
-        [description]
-        """
         left_child = self.get_left_child()
         right_child = self.get_right_child()
         content = self.get_content()

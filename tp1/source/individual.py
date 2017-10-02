@@ -9,10 +9,6 @@ else:
 
 
 class Individual(object):
-    """[summary]
-
-    [description]
-    """
     def __init__(self, tree):
         self.root = tree
         self.error = None
@@ -42,7 +38,7 @@ class Individual(object):
         return self.error
 
     def __replace_node(self, node, old_node, new_node):
-        """Replaces a node in the tree with a different node
+        """Auxiliar method of replace_node.
 
         Travels through the nodes of the tree recursively searching for the
         node to replace on each node's children. When the node is found, the
@@ -79,16 +75,17 @@ class Individual(object):
             return right_result
 
     def replace_node(self, old_node, new_node):
-        """[summary]
+        """Replaces a node in the tree with a different node
 
-        [description]
+        Calls __replace_node to replace any node that is not root. Otherwise,
+        replaces whole tree.
 
         Arguments:
-            old_node {[type]} -- [description]
-            new_node {[type]} -- [description]
+            old_node {Node} -- Node that is going to be replaced
+            new_node {Node} -- New node to replace the old_node
 
         Returns:
-            bool -- [description]
+            bool -- The node was successfully replaced
         """
         if self.root == old_node:
             self.root = new_node
