@@ -151,8 +151,8 @@ if __name__ == '__main__':
             # line1, = plt.plot(mm[0][1:], label='500')
 
             line1 = None
-            for m, d in zip(mm, ['best k=3', 'mean k=3', 'worst k=3',
-                                 'best k=7', 'mean k=7', 'worst k=7']):
+            for m, d in zip(mm, ['best mut-high', 'mean mut-high', 'worst mut-high',
+                'best mut-low', 'mean mut-low', 'worst mut-low']):
                 line1, = plt.plot(m, marker='o', label=str(d))
 
             ax.set_yscale('log')
