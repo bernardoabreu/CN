@@ -112,7 +112,7 @@ if __name__ == '__main__':
         plt.xlabel('Generations')
         plt.ylabel(label.title())
         plt.title(label.title() + ' x Generations')
-        if 'cross' in label:
+        if 'crossss' in label:
             mm = []
 
             for i in argv[3:]:
@@ -151,9 +151,11 @@ if __name__ == '__main__':
             # line1, = plt.plot(mm[0][1:], label='500')
 
             line1 = None
-            for m, d in zip(mm, ['best mut-high', 'mean mut-high', 'worst mut-high',
-                'best mut-low', 'mean mut-low', 'worst mut-low']):
-                line1, = plt.plot(m, marker='o', label=str(d))
+            for m, d in zip(mm, #['k=2', 'k=3', 'k=7']):
+                                ['best k=2', 'mean k=2','worst k=2',
+                                'best k=3', 'mean k=3','worst k=3',
+                                'best k=7', 'mean k=7','worst k=7']):
+                line1, = plt.plot(m, label=str(d))
 
             ax.set_yscale('log')
 
