@@ -85,11 +85,14 @@ class AntColony(object):
 
         ants = np.empty(self.num_ants, dtype=int)
 
+        solution = np.empty(self.num_medians, dtype=object)
+
         for i in range(len(medians)):
             next_node = self.transition(init_pos, pheromone[init_pos],
                                         self.median_fn, nodes, medians, i)
             medians[i] = next_node
             ants[i] = next_node
+            # solution.add
 
         for i in range(self.num_medians, self.num_ants):
             next_node = self.transition(init_pos, pheromone[init_pos],
