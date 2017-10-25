@@ -1,6 +1,8 @@
 import math
 import numpy as np
+from group import Group
 from operator import truediv as div
+
 
 def euc_dist_2d(x1, y1, x2, y2):
     return math.sqrt((x1 - x2) ** 2.0 + (y1 - y2) ** 2.0)
@@ -20,6 +22,8 @@ class AntColony(object):
         self.pher_coef = a
         self.heur_coef = b
         self.decay_factor = decay
+
+        self.__vfunc = np.vectorize(div)
 
     def set_data(self, num_points, p_median, points):
         self.num_points = num_points
@@ -52,12 +56,26 @@ class AntColony(object):
         return point.get_capacity() / point.get_demand()
 
     def non_median_fn(self, initial_node, node):
-        return
+        init = self.points[initial_node]
+        point = self.points[node]
+
+        remaining_capacity = init.get_capacity() - point.get_demand()
+
+        if remaining_capacity == 0:
+            remaining_capacity = 1.0
+        elif remaining_capacity < 0:
+            remaining_capacity = 0.0
+
+        if init.get_capacity() >= point.get_demand():
+            self.points[initial_node].remove_capacity(point.get_demand())
+
+        # print(remaining_capacity, self.distances[initial_node][node])
+        return remaining_capacity / self.distances[initial_node][node]
 
     def transition(self, initial_node, pheromone, heur_fn, all_nodes,
-                   not_available=[], not_available_size=0):
-
-        nodes = np.setdiff1d(all_nodes, not_available[:not_available_size])
+                   not_available=[]):
+        print(not_available)
+        nodes = np.setdiff1d(all_nodes, not_available)
 
         probs = np.zeros_like(nodes, dtype=float)
 
@@ -67,12 +85,11 @@ class AntColony(object):
             probs[i] = pher_prob * heur_prob
 
         probs_sum = np.sum(probs)
-
+        print('probs_sum', probs_sum)
         if probs_sum == 0:
-            probs = None
+            return None
         else:
-            vfunc = np.vectorize(div)
-            probs = vfunc(probs, probs_sum)
+            probs = self.__vfunc(probs, probs_sum)
 
         return np.random.choice(nodes, p=probs)
 
@@ -87,29 +104,65 @@ class AntColony(object):
 
         solution = np.empty(self.num_medians, dtype=object)
 
+        for i in range(solution.shape[0]):
+            solution[i] = Group()
+
+        solution_index = {}
+
         for i in range(len(medians)):
             next_node = self.transition(init_pos, pheromone[init_pos],
-                                        self.median_fn, nodes, medians, i)
+                                        self.median_fn, nodes, medians[:i])
             medians[i] = next_node
-            ants[i] = next_node
+            ants[i] = i
+            solution_index[next_node] = i
+            solution[i].add_median(next_node)
             # solution.add
 
         for i in range(self.num_medians, self.num_ants):
             next_node = self.transition(init_pos, pheromone[init_pos],
                                         self.median_fn, medians)
-            ants[i] = next_node
+            ants[i] = solution_index[next_node]
+
+
+        for s in solution:
+            print(s.get_median())
 
         print(medians)
 
         print(ants)
 
         nodes = np.setdiff1d(nodes, medians)
+
+        print(nodes)
         # next_node = transition_non_median(initial_position)
         # Add non-median
 
+        num_non_medians = self.num_points - self.num_medians
+
+        non_medians = np.empty(num_non_medians, dtype=int)
+
+        # for i in range(num_non_medians):
+        #     init_index = ants[i]
+        #     init_node = medians[init_index]
+        #     print('init_node:', init_node)
+        #     next_node = self.transition(init_node, pheromone[init_node],
+        #                                 self.non_median_fn, nodes,
+        #                                 non_medians[:i])
+        #     if next_node is None:
+        #         next_node = self.transition(init_node, pheromone[init_node],
+        #                                     self.non_median_fn,
+        #                                     solution[init_index].get_points())
+
+        #     solution[init_index].add_point(next_node)
+
+        for s in solution:
+            print(s.get_median(), str(s.get_points())) 
+
+
+
     def run(self):
         np.random.seed(1)
-        self.distance_matrix = self.__build_distance_matrix(self.points)
+        self.distances = self.__build_distance_matrix(self.points)
         pher_matrix = self.__build_pheromone_matrix(self.num_points,
                                                     self.pher_coef)
 

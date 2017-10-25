@@ -4,20 +4,20 @@ class Group(object):
         self.points = set()
         self.total_distance = 0.0
 
+    def add_median(self, point):
+        self.median = point
+
     def add_point(self, point):
-        if self.median is None:
-            self.median = point
-        else:
-            self.points.add(point)
+        self.points.add(point)
 
     def get_median(self):
         return self.median
 
+    def get_points(self):
+        return list(self.points)
+
     def __contains__(self, key):
         return key in self.points
 
-    def add_distance(self, dist):
-        self.total_distance += dist
-
-    def get_distance(self):
-        return self.total_distance
+    def eval(self):
+        return
