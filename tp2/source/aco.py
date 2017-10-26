@@ -1,6 +1,6 @@
 import math
 import numpy as np
-from group import Group
+from cluster import Cluster
 from operator import truediv as div
 
 
@@ -15,19 +15,25 @@ def euc_dist(p1, p2):
 
 
 class AntColony(object):
-    def __init__(self, num_ants, iterations, pher, a, b, decay):
+    def __init__(self, num_ants, iterations, pher, a, b, decay, seed=None):
         self.num_ants = num_ants
         self.iterations = iterations
         self.initial_pheromone = pher
         self.pher_coef = a
         self.heur_coef = b
         self.decay_factor = decay
+        np.random.seed(seed)
 
-        self.__vfunc = np.vectorize(div)
+        self.__v_div_func = np.vectorize(div)
+        self.__v_transit_func = np.vectorize(self.__transtion_prob)
+
+    def __build_pheromone_vector(self):
+        self.pheromone = np.full(self.num_points, self.pher_coef)
 
     def set_data(self, num_points, p_median, points):
         self.num_points = num_points
         self.num_medians = p_median
+        self.num_clients = num_points - p_median
         self.points = points
 
     def update_pheromone(self):
@@ -46,140 +52,67 @@ class AntColony(object):
 
         return matrix
 
-    def __build_pheromone_matrix(self, size, initial_pheromone):
-        matrix = np.full((size, ) * 2, initial_pheromone)
+    def heur_fn(self):
+        return
 
-        return matrix
+    def __transtion_prob(self, node):
+        return (self.pheromone[node] ** self.pher_coef) * \
+            1.0  # (self.heur_fn(initial_node, node) ** self.heur_coef)
 
-    def median_fn(self, initial_node, node):
-        point = self.points[node]
-        return point.get_capacity() / point.get_demand()
-
-    def non_median_fn(self, initial_node, node):
-        init = self.points[initial_node]
-        point = self.points[node]
-
-        remaining_capacity = init.get_capacity() - point.get_demand()
-
-        if remaining_capacity == 0:
-            remaining_capacity = 1.0
-        elif remaining_capacity < 0:
-            remaining_capacity = 0.0
-
-        if init.get_capacity() >= point.get_demand():
-            self.points[initial_node].remove_capacity(point.get_demand())
-
-        # print(remaining_capacity, self.distances[initial_node][node])
-        return remaining_capacity / self.distances[initial_node][node]
-
-    def transition(self, initial_node, pheromone, heur_fn, all_nodes,
-                   not_available=[]):
-        print(not_available)
+    def transition(self, all_nodes, not_available=[]):
+        # print('not_available:', not_available)
         nodes = np.setdiff1d(all_nodes, not_available)
 
-        probs = np.zeros_like(nodes, dtype=float)
-
-        for i, node in enumerate(nodes):
-            pher_prob = ((pheromone[node])**self.pher_coef)
-            heur_prob = (heur_fn(initial_node, node))**self.heur_coef
-            probs[i] = pher_prob * heur_prob
+        probs = self.__v_transit_func(nodes)
+        # print('probs:', probs)
 
         probs_sum = np.sum(probs)
-        print('probs_sum', probs_sum)
-        if probs_sum == 0:
-            return None
-        else:
-            probs = self.__vfunc(probs, probs_sum)
+        # print('probs_sum:', probs_sum)
 
+        probs = self.__v_div_func(probs, probs_sum) if probs_sum else None
+
+        # print('probs:', probs)
         return np.random.choice(nodes, p=probs)
 
-    def __build_initial_solution(self, pheromone):
-        # Add median
-        init_pos = 1
+    def __gap(self, clients, medians):
+        ordered_clients = sort_clients(clients)
+
+        for i in range(self.num_clients):
+            ordered_medians = sort_medians(medians, ordered_clients[i])
+
+            for j in range(self.num_medians):
+                if (ordered_medians[j].get_capacity() -
+                    ordered_clients.get_demand()):
+                    x[ordered_clients[i]][ordered_medians[j]] = 1
+        return
+
+    def __build_solution(self):
 
         nodes = np.arange(self.num_points)
         medians = np.empty(self.num_medians, dtype=int)
 
-        ants = np.empty(self.num_ants, dtype=int)
-
-        solution = np.empty(self.num_medians, dtype=object)
-
-        for i in range(solution.shape[0]):
-            solution[i] = Group()
-
-        solution_index = {}
-
-        for i in range(len(medians)):
-            next_node = self.transition(init_pos, pheromone[init_pos],
-                                        self.median_fn, nodes, medians[:i])
+        for i in range(self.num_medians):
+            next_node = self.transition(nodes, medians[:i])
             medians[i] = next_node
-            ants[i] = i
-            solution_index[next_node] = i
-            solution[i].add_median(next_node)
-            # solution.add
 
-        for i in range(self.num_medians, self.num_ants):
-            next_node = self.transition(init_pos, pheromone[init_pos],
-                                        self.median_fn, medians)
-            ants[i] = solution_index[next_node]
+        print('medians:', medians)
 
+        clients = np.setdiff1d(nodes, medians)
+        print(clients)
 
-        for s in solution:
-            print(s.get_median())
-
-        print(medians)
-
-        print(ants)
-
-        nodes = np.setdiff1d(nodes, medians)
-
-        print(nodes)
-        # next_node = transition_non_median(initial_position)
-        # Add non-median
-
-        num_non_medians = self.num_points - self.num_medians
-
-        non_medians = np.empty(num_non_medians, dtype=int)
-
-        # for i in range(num_non_medians):
-        #     init_index = ants[i]
-        #     init_node = medians[init_index]
-        #     print('init_node:', init_node)
-        #     next_node = self.transition(init_node, pheromone[init_node],
-        #                                 self.non_median_fn, nodes,
-        #                                 non_medians[:i])
-        #     if next_node is None:
-        #         next_node = self.transition(init_node, pheromone[init_node],
-        #                                     self.non_median_fn,
-        #                                     solution[init_index].get_points())
-
-        #     solution[init_index].add_point(next_node)
-
-        for s in solution:
-            print(s.get_median(), str(s.get_points())) 
-
-
+        # print('ants:', ants)
 
     def run(self):
-        np.random.seed(1)
         self.distances = self.__build_distance_matrix(self.points)
-        pher_matrix = self.__build_pheromone_matrix(self.num_points,
-                                                    self.pher_coef)
 
         # Inicializa tij (igualmente para cada aresta)
+        self.__build_pheromone_vector()
+
         # Distribui cada uma das k formigas em um no selecionado aleatoriamente
-        self.__build_initial_solution(pher_matrix)
+        self.__build_solution()
 
-        for i in range(self.iterations):
-            for j in range(self.num_ants):
-                # Constroi uma solucao aplicando uma regra de transicao
-                # probabilistica (e-1) vezes // e e o numero de arestas do
-                # grafo
+        # for i in range(self.iterations):
+        #     for j in range(self.num_ants):
+        #         self.__build_solution()
 
-                # Avalia o custo de cada solucao construida
-                # solution.eval()
-
-                # update best solution
-                1
-
-            self.update_pheromone()
+        #     self.update_pheromone()

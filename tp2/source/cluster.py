@@ -1,4 +1,4 @@
-class Group(object):
+class Cluster(object):
     def __init__(self):
         self.median = None
         self.points = set()

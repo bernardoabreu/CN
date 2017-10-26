@@ -27,7 +27,7 @@ if __name__ == '__main__':
     b = 0.1
     decay = 0.1
 
-    aco = AntColony(num_ants, iterations, pher, a, b, decay)
+    aco = AntColony(num_ants, iterations, pher, a, b, decay, seed=1)
     aco.set_data(num_points, p_median, points)
 
     aco.run()
