@@ -1,6 +1,5 @@
 import math
 import numpy as np
-from cluster import Cluster
 
 
 def euc_dist_2d(x1, y1, x2, y2):
@@ -20,19 +19,20 @@ class AntColony(object):
         self.heur_coef = b
         self.decay_factor = decay
 
+        self.pher_max = 0.999
+        self.pher_min = 0.001
+
         np.random.seed(seed)
 
     def __build_pheromone_vector(self):
-        self.pheromone = np.full(self.num_points, self.pher_coef)
+        self.pheromone = np.full(self.num_points, self.initial_pheromone,
+                                 dtype=float)
 
     def set_data(self, num_points, p_median, points):
         self.num_points = num_points
         self.num_medians = p_median
         self.num_clients = num_points - p_median
         self.points = points
-
-    def update_pheromone(self):
-        return
 
     def __build_distance_matrix(self, points):
         num_points = points.shape[0]
@@ -134,7 +134,44 @@ class AntColony(object):
         return assign_matrix
 
     def eval(self, assign_matrix):
-        return np.sum(assign_matrix * self.distances)
+        distance = np.sum(assign_matrix * self.distances)
+        medians = np.nonzero(np.sum(assign_matrix, axis=0))[0]
+        return distance, medians
+
+    def __converged_pheromone(self):
+        converged_value = self.num_medians * self.pher_max + \
+            self.num_clients * self.pher_min
+        print(round(converged_value, 2), round(np.sum(self.pheromone), 2))
+        if round(np.sum(self.pheromone), 2) == round(converged_value, 2):
+            self.pheromone.fill(self.initial_pheromone)
+
+    def update_pheromone(self, local_best, local_worst, global_best):
+        update_points = np.union1d(local_best[1], global_best[1])
+
+        local_sub = local_worst - local_best[0]
+        if local_sub == 0.0:
+            local_sub = 0.001
+
+        update_delta = 1.0 - ((local_best[0] - global_best[0]) / local_sub)
+
+        update_decay = (1.0 - self.decay_factor)
+        update_value = self.decay_factor * update_delta
+
+        self.pheromone *= update_decay
+        self.pheromone[update_points] += update_value
+
+        np.clip(self.pheromone, self.pher_min, self.pher_max,
+                out=self.pheromone)
+
+        self.__converged_pheromone()
+
+    def __get_local_edges(self, sol_dist, sol_medians):
+        best_index = np.argmin(sol_dist)
+
+        local_best = (sol_dist[best_index], sol_medians[best_index])
+        local_worst = np.amax(sol_dist)
+
+        return local_best, local_worst
 
     def run(self):
         self.distances = self.__build_distance_matrix(self.points)
@@ -144,14 +181,26 @@ class AntColony(object):
         self.__build_pheromone_vector()
 
         # Distribui cada uma das k formigas em um no selecionado aleatoriamente
-        best_solution = self.eval(self.__build_solution())
+        global_best = self.eval(self.__build_solution())
+        sol_dist = np.empty(self.num_ants)
+        sol_medians = np.empty(self.num_ants, dtype=object)
 
         for i in range(self.iterations):
             for j in range(self.num_ants):
-                solution = self.__build_solution()
-                value = self.eval(solution)
-                best_solution = min(best_solution, value)
+                solution_matrix = self.__build_solution()
+                sol_dist[j], sol_medians[j] = self.eval(solution_matrix)
 
-        print(best_solution)
+            local_best, local_worst = self.__get_local_edges(sol_dist,
+                                                             sol_medians)
+            self.update_pheromone(local_best, local_worst, global_best)
 
-        #     self.update_pheromone()
+            print('Iteration: ' + str(i + 1))
+            print('Global Best: ' + str(global_best[0]))
+            print('Local Best: ' + str(local_best[0]))
+            print('Local worst: ' + str(local_worst))
+            print()
+
+            if local_best[0] < global_best[0]:
+                global_best = local_best
+
+        return global_best[0]
