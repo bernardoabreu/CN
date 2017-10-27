@@ -20,11 +20,11 @@ if __name__ == '__main__':
     filename = sys.argv[1]
     num_points, p_median, points = read_input(filename)
 
-    num_ants = 90
-    iterations = 10
-    pher = 0.1
-    a = 0.1
-    b = 0.1
+    num_ants = 10
+    iterations = 100
+    pher = 0.5
+    a = 3
+    b = 1
     decay = 0.1
 
     aco = AntColony(num_ants, iterations, pher, a, b, decay, seed=1)
