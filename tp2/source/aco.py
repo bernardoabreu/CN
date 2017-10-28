@@ -1,9 +1,4 @@
-import math
 import numpy as np
-
-
-def euc_dist_2d(x1, y1, x2, y2):
-    return math.sqrt((x1 - x2) ** 2.0 + (y1 - y2) ** 2.0)
 
 
 def euc_dist(p1, p2):
@@ -24,15 +19,15 @@ class AntColony(object):
 
         np.random.seed(seed)
 
-    def __build_pheromone_vector(self):
-        self.pheromone = np.full(self.num_points, self.initial_pheromone,
-                                 dtype=float)
-
     def set_data(self, num_points, p_median, points):
         self.num_points = num_points
         self.num_medians = p_median
         self.num_clients = num_points - p_median
         self.points = points
+
+    def __build_pheromone_vector(self):
+        self.pheromone = np.full(self.num_points, self.initial_pheromone,
+                                 dtype=float)
 
     def __build_distance_matrix(self, points):
         num_points = points.shape[0]
@@ -46,7 +41,7 @@ class AntColony(object):
 
         return matrix
 
-    def gap(self, clients, medians):
+    def __gap(self, clients, medians):
 
         x = np.zeros((self.num_points,) * 2, dtype=int)
 
@@ -118,7 +113,7 @@ class AntColony(object):
 
         return np.random.choice(nodes, p=probs)
 
-    def __build_solution(self):
+    def build_solution(self):
 
         nodes = np.arange(self.num_points)
         medians = np.empty(self.num_medians, dtype=int)
@@ -129,7 +124,7 @@ class AntColony(object):
 
         clients = np.setdiff1d(nodes, medians)
 
-        assign_matrix = self.gap(clients, medians)
+        assign_matrix = self.__gap(clients, medians)
 
         return assign_matrix
 
@@ -141,7 +136,7 @@ class AntColony(object):
     def __converged_pheromone(self):
         converged_value = self.num_medians * self.pher_max + \
             self.num_clients * self.pher_min
-        print(round(converged_value, 2), round(np.sum(self.pheromone), 2))
+
         if round(np.sum(self.pheromone), 2) == round(converged_value, 2):
             self.pheromone.fill(self.initial_pheromone)
 
@@ -165,7 +160,7 @@ class AntColony(object):
 
         self.__converged_pheromone()
 
-    def __get_local_edges(self, sol_dist, sol_medians):
+    def __local_edges(self, sol_dist, sol_medians):
         best_index = np.argmin(sol_dist)
 
         local_best = (sol_dist[best_index], sol_medians[best_index])
@@ -177,24 +172,21 @@ class AntColony(object):
         self.distances = self.__build_distance_matrix(self.points)
         self.heur_values = self.__density()
 
-        # Inicializa tij (igualmente para cada aresta)
         self.__build_pheromone_vector()
 
-        # Distribui cada uma das k formigas em um no selecionado aleatoriamente
-        global_best = self.eval(self.__build_solution())
+        global_best = self.eval(self.build_solution())
         sol_dist = np.empty(self.num_ants)
         sol_medians = np.empty(self.num_ants, dtype=object)
 
         for i in range(self.iterations):
             for j in range(self.num_ants):
-                solution_matrix = self.__build_solution()
+                solution_matrix = self.build_solution()
                 sol_dist[j], sol_medians[j] = self.eval(solution_matrix)
 
-            local_best, local_worst = self.__get_local_edges(sol_dist,
-                                                             sol_medians)
+            local_best, local_worst = self.__local_edges(sol_dist, sol_medians)
             self.update_pheromone(local_best, local_worst, global_best)
 
-            print('Iteration: ' + str(i + 1))
+            print('Iteration ' + str(i + 1) + ':')
             print('Global Best: ' + str(global_best[0]))
             print('Local Best: ' + str(local_best[0]))
             print('Local worst: ' + str(local_worst))
