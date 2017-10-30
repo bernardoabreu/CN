@@ -1,8 +1,12 @@
 import numpy as np
 
 
+CAP = 2
+DEM = 3
+
+
 def euc_dist(p1, p2):
-    return np.linalg.norm(np.array(p1) - np.array(p2))
+    return np.linalg.norm(p1 - p2)
 
 
 class AntColony(object):
@@ -35,7 +39,7 @@ class AntColony(object):
 
         for i in range(num_points):
             for j in range(i + 1, num_points):
-                dist = euc_dist(points[i].get_coord(), points[j].get_coord())
+                dist = euc_dist(points[i][:2], points[j][:2])
                 matrix[i][j] = dist
                 matrix[j][i] = dist
 
@@ -45,7 +49,7 @@ class AntColony(object):
 
         x = np.zeros((self.num_points,) * 2, dtype=int)
 
-        capacities = np.array([self.points[m].get_capacity() for m in medians])
+        capacities = self.points[medians, CAP]
 
         indices = np.argsort(np.amin(self.distances[np.ix_(clients, medians)],
                                      axis=1))
@@ -60,7 +64,7 @@ class AntColony(object):
 
             for j in range(self.num_medians):
                 cur_median = ordered_medians[j]
-                demand = self.points[cur_client].get_demand()
+                demand = self.points[cur_client][DEM]
 
                 if (ordered_capacities[j] - demand) >= 0:
                     ordered_capacities[j] -= demand
@@ -74,7 +78,7 @@ class AntColony(object):
         sum_distance = 0.0
 
         for dist in self.distances[cur_node][ordered_nodes]:
-            if sum_distance + dist > self.points[cur_node].get_capacity():
+            if sum_distance + dist > self.points[cur_node][CAP]:
                 break
             sum_distance += dist
             all_nodes += 1
@@ -100,10 +104,7 @@ class AntColony(object):
 
         return density
 
-    def transition(self, all_nodes, not_available=[]):
-        # print('not_available:', not_available)
-        nodes = np.setdiff1d(all_nodes, not_available, assume_unique=True)
-
+    def transition(self, nodes):
         probs = (self.pheromone[nodes] ** self.pher_coef) * \
             (self.heur_values[nodes] ** self.heur_coef)
 
@@ -115,46 +116,23 @@ class AntColony(object):
 
     def build_solution(self):
 
-        nodes = np.arange(self.num_points)
+        all_nodes = np.arange(self.num_points)
+        clients = all_nodes
         medians = np.empty(self.num_medians, dtype=int)
 
         for i in range(self.num_medians):
-            next_node = self.transition(nodes, medians[:i])
+            next_node = self.transition(clients)
             medians[i] = next_node
-
-        clients = np.setdiff1d(nodes, medians, assume_unique=True)
+            clients = np.setdiff1d(all_nodes, medians[:i + 1],
+                                   assume_unique=True)
 
         assign_matrix = self.__gap(clients, medians)
 
-        return assign_matrix, medians, clients
+        return assign_matrix, medians
 
     def eval(self, assign_matrix):
         distance = np.sum(assign_matrix * self.distances)
         return distance
-
-    def local_search_median(self, assign_matrix, clients, medians):
-        dist = self.distances[:, medians]
-        d12 = (medians[np.argsort(dist, axis=1)[:, :2]]).T
-        rang = np.arange(self.num_points)
-        d1 = self.distances[rang, d12[0]]
-        d2 = self.distances[rang, d12[1]]
-        median_clients = np.nonzero(np.sum(assign_matrix, axis=0))[0]
-
-        for i in range(self.num_clients):
-            for j in range(self.num_medians):
-                median_clients = np.nonzero(assign_matrix[:, j])[0]
-                cur_clients = np.setdiff1d(clients, median_clients,
-                                           assume_unique=True)
-                diff = d1[cur_clients] - self.distances[cur_clients, i]
-                first = np.sum(np.maximum(diff, 0))
-
-                diff = self.distances[median_clients, i] - d1[median_clients]
-                second = np.sum(np.minimun(diff, d2[median_clients]))
-                profit = first + second
-                # if profit:
-
-
-        return
 
     def __converged_pheromone(self):
         converged_value = self.num_medians * self.pher_max + \
@@ -196,14 +174,14 @@ class AntColony(object):
         self.heur_values = self.__density()
 
         self.__build_pheromone_vector()
-        solution_matrix, medians, clients = self.build_solution()
+        solution_matrix, medians = self.build_solution()
         global_best = (self.eval(solution_matrix), medians)
         sol_dist = np.empty(self.num_ants)
-        sol_medians = np.empty(self.num_ants, dtype=object)
+        sol_medians = np.empty((self.num_ants, self.num_medians), dtype=int)
 
         for i in range(self.iterations):
             for j in range(self.num_ants):
-                solution_matrix, medians, clients = self.build_solution()
+                solution_matrix, medians = self.build_solution()
                 sol_dist[j] = self.eval(solution_matrix)
                 sol_medians[j] = medians
 

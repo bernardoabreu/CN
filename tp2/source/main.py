@@ -1,32 +1,59 @@
 #!/usr/bin/env python3
 
-from point import Point
 import numpy as np
 from aco import AntColony
-import sys
+import argparse
 
 
 def read_input(filename):
     with open(filename, 'r') as f:
         num_points, p_median = map(int, f.readline().split())
-        points = np.array([Point(*(line.split())) for line in f])
-        return num_points, p_median, points
+    points = np.loadtxt(filename, skiprows=1)
+    return num_points, p_median, points
 
 
-if __name__ == '__main__':
-    filename = sys.argv[1]
+def main(args):
+    filename = args.file
+    num_ants = args.ants
+    iterations = args.iterations
+    pher = 0.5
+    a = args.a
+    b = args.b
+    decay = args.decay
+    seed = args.seed
+
     num_points, p_median, points = read_input(filename)
 
-    num_ants = 10
-    iterations = 100
-    pher = 0.5
-    a = 3
-    b = 1
-    decay = 0.05
-
-    aco = AntColony(num_ants, iterations, pher, a, b, decay)
+    aco = AntColony(num_ants, iterations, pher, a, b, decay, seed)
     aco.set_data(num_points, p_median, points)
 
     solution = aco.run()
 
     print('Best distance: ' + str(solution))
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--file', required=True,
+                        help='Input file.')
+    parser.add_argument('--ants', type=int, default=10,
+                        help='Number of ants.')
+    parser.add_argument('--iterations', type=int, default=100,
+                        help='Number of iterations.')
+    parser.add_argument('-a', type=int, default=3,
+                        help='Alpha. Influence of the pheromone.')
+    parser.add_argument('-b', type=int, default=1,
+                        help='Beta. Influence of the heuristic function.')
+    parser.add_argument('--decay', type=float, default=0.1,
+                        help='Seed for random number generator')
+    parser.add_argument('--seed', type=int, default=None,
+                        help='Seed for random number generator')
+    parser.add_argument('--stats',
+                        help='File to save statistics.')
+    parser.add_argument('--test_out',
+                        help='File to save the test data result.')
+
+    args = parser.parse_args()
+    # print(args)
+
+    main(args)
