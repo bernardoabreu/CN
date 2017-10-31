@@ -53,6 +53,7 @@ class AntColony(object):
 
         indices = np.argsort(np.amin(self.distances[np.ix_(clients, medians)],
                                      axis=1))
+
         ordered_clients = clients[indices]
 
         for i in range(self.num_clients):
@@ -94,13 +95,13 @@ class AntColony(object):
         for i in range(nodes_size):
             ordered_nodes = nodes[np.argsort(self.distances[i][nodes])]
             all_nodes, sum_distance = self.__alocate(i, ordered_nodes)
-            density[i] = all_nodes / sum_distance
+            density[i] = all_nodes / sum_distance if sum_distance else 0.0
 
             nodes[i] = i
 
         ordered_nodes = nodes[np.argsort(self.distances[nodes_size][nodes])]
         all_nodes, sum_distance = self.__alocate(nodes_size, ordered_nodes)
-        density[nodes_size] = all_nodes / sum_distance
+        density[nodes_size] = all_nodes / sum_distance if sum_distance else 0.0
 
         return density
 
@@ -131,8 +132,7 @@ class AntColony(object):
         return assign_matrix, medians
 
     def eval(self, assign_matrix):
-        distance = np.sum(assign_matrix * self.distances)
-        return distance
+        return np.sum(assign_matrix * self.distances)
 
     def __converged_pheromone(self):
         converged_value = self.num_medians * self.pher_max + \
