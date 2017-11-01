@@ -1,5 +1,5 @@
 import numpy as np
-
+from stats import Stats
 
 CAP = 2
 DEM = 3
@@ -10,7 +10,8 @@ def euc_dist(p1, p2):
 
 
 class AntColony(object):
-    def __init__(self, num_ants, iterations, pher, a, b, decay, seed=None):
+    def __init__(self, num_ants, iterations, pher, a, b, decay, seed=None,
+                 stat_file=''):
         self.num_ants = num_ants
         self.iterations = iterations
         self.initial_pheromone = pher
@@ -20,6 +21,8 @@ class AntColony(object):
 
         self.pher_max = 0.999
         self.pher_min = 0.001
+
+        self.outfile = stat_file
 
         np.random.seed(seed)
 
@@ -161,21 +164,13 @@ class AntColony(object):
 
         self.__converged_pheromone()
 
-    def __local_edges(self, sol_dist, sol_medians):
-        best_index = np.argmin(sol_dist)
-
-        local_best = (sol_dist[best_index], sol_medians[best_index])
-        local_worst = np.amax(sol_dist)
-
-        return local_best, local_worst
-
     def run(self):
         self.distances = self.__build_distance_matrix(self.points)
         self.heur_values = self.__density()
+        self.stats = Stats(np.sum(self.distances))
 
         self.__build_pheromone_vector()
-        solution_matrix, medians = self.build_solution()
-        global_best = (self.eval(solution_matrix), medians)
+
         sol_dist = np.empty(self.num_ants)
         sol_medians = np.empty((self.num_ants, self.num_medians), dtype=int)
 
@@ -185,16 +180,18 @@ class AntColony(object):
                 sol_dist[j] = self.eval(solution_matrix)
                 sol_medians[j] = medians
 
-            local_best, local_worst = self.__local_edges(sol_dist, sol_medians)
+            self.stats.add_solution(sol_dist, sol_medians)
+
+            local_best = self.stats.get_local_best()
+            local_worst = self.stats.get_local_worst()
+            global_best = self.stats.get_global_best()
             self.update_pheromone(local_best, local_worst, global_best)
 
-            print('Iteration ' + str(i + 1) + ':')
-            print('Global Best: ' + str(global_best[0]))
-            print('Local Best: ' + str(local_best[0]))
-            print('Local worst: ' + str(local_worst))
-            print()
+            print('Iteration ' + str(i + 1))
+            self.stats.print_stats()
+            self.stats.record_data()
 
-            if local_best[0] < global_best[0]:
-                global_best = local_best
+        if self.outfile:
+            self.stats.dump_to_file(self.outfile)
 
         return global_best[0]

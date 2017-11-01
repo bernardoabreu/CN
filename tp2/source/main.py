@@ -21,10 +21,12 @@ def main(args):
     b = args.b
     decay = args.decay
     seed = args.seed
+    stats = args.stats
 
     num_points, p_median, points = read_input(filename)
 
-    aco = AntColony(num_ants, iterations, pher, a, b, decay, seed)
+    aco = AntColony(num_ants, iterations, pher, a, b, decay, seed=seed,
+                    stat_file=stats)
     aco.set_data(num_points, p_median, points)
 
     solution = aco.run()
@@ -48,10 +50,8 @@ if __name__ == '__main__':
                         help='Seed for random number generator')
     parser.add_argument('--seed', type=int, default=None,
                         help='Seed for random number generator')
-    parser.add_argument('--stats',
+    parser.add_argument('--stats', default='',
                         help='File to save statistics.')
-    parser.add_argument('--test_out',
-                        help='File to save the test data result.')
 
     args = parser.parse_args()
     # print(args)
