@@ -54,5 +54,5 @@ if __name__ == '__main__':
                         help='File to save statistics.')
 
     args = parser.parse_args()
-
+    print(args)
     main(args)

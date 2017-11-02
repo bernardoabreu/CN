@@ -69,7 +69,7 @@ class Stats(object):
             f.write(','.join(map(str, self.best_list)) + '\n')
         with open(out_file + '__worst.csv', 'a') as f:
             f.write(','.join(map(str, self.worst_list)) + '\n')
-        with open(out_file + '__global_best_list.csv', 'a') as f:
+        with open(out_file + '__global_best.csv', 'a') as f:
             f.write(','.join(map(str, self.global_best_list)) + '\n')
         with open(out_file + '__repeated.csv', 'a') as f:
             f.write(','.join(map(str, self.repeated_list)) + '\n')

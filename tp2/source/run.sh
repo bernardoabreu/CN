@@ -10,9 +10,9 @@ SUBDIRS=(30 60 90)
 OUT=tests
 
 ITER=500
-ANTS=10
-ALPHA=3
-BETA=1
+ANTS=90
+ALPHA=1
+BETA=0
 DECAY=0.1
 
 
@@ -45,7 +45,7 @@ for FILE in ${DATA[*]}; do
     for SUBDIR in ${SUBDIRS[*]}; do
         mkdir -p "${DIR}${SUBDIR}"
 
-        ANTS=$SUBDIR
+        # ANTS=$SUBDIR
 
         for i in {1..30}; do
           echo "${FILE} - ${SUBDIR} ${i}"
