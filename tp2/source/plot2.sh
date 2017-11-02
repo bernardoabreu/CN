@@ -13,7 +13,7 @@ USE_ALL=true
 DIRS=0
 
 DATA_SETS=(SJC1 SJC2 SJC3b)
-LABEL=best
+LABEL=global_best
 
 # parse the options
 while getopts 'd:v:l:h' opt ; do

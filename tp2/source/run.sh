@@ -6,13 +6,13 @@ echo $HOST
 BASE=$HOME'/CN/tp2'
 TEST_VERSION=2
 DATA=(SJC1 SJC2 SJC3b)
-SUBDIRS=(a1b3)
+SUBDIRS=(0.2)
 OUT=tests
 
 ITER=500
 ANTS=90
 ALPHA=1
-BETA=3
+BETA=0
 DECAY=0.1
 
 
@@ -45,11 +45,11 @@ for FILE in ${DATA[*]}; do
     for SUBDIR in ${SUBDIRS[*]}; do
         mkdir -p "${DIR}${SUBDIR}"
 
-        # ANTS=$SUBDIR
+        DECAY=$SUBDIR
 
         for i in {1..30}; do
           echo "${FILE} - ${SUBDIR} ${i}"
-            $BASE/source/main.py -n $ANTS -i $ITER -a $ALPHA -b $BETA --seed $i -f $BASE/dataset/"${FILE}.dat" --stats "${DIR}${SUBDIR}/out_${FILE}" > "${DIR}${SUBDIR}/${FILE}_${i}"
+            $BASE/source/main.py -n $ANTS -i $ITER -a $ALPHA -b $BETA -d $DECAY --seed $i -f $BASE/dataset/"${FILE}.dat" --stats "${DIR}${SUBDIR}/out_${FILE}" > "${DIR}${SUBDIR}/${FILE}_${i}"
         done
     done
 
