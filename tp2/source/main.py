@@ -42,9 +42,9 @@ if __name__ == '__main__':
                         help='Number of ants.')
     parser.add_argument('-i', '--iterations', type=int, default=100,
                         help='Number of iterations.')
-    parser.add_argument('-a', '--alpha', type=int, default=3,
+    parser.add_argument('-a', '--alpha', type=float, default=3,
                         help='Alpha. Influence of the pheromone.')
-    parser.add_argument('-b', '--beta', type=int, default=1,
+    parser.add_argument('-b', '--beta', type=float, default=1,
                         help='Beta. Influence of the heuristic function.')
     parser.add_argument('-d', '--decay', type=float, default=0.1,
                         help='Decay rate of pheromones.')
