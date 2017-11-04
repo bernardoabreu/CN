@@ -39,7 +39,7 @@ for DATA_SET in ${DATA_SETS[*]}; do
 
     for VERSION in ${TEST_VERSION[*]}; do
 
-        ARGS="${LABEL} ${PA}/${OUTPUT_DIR}/${DATA_SET}/${VERSION}/out"
+        ARGS="${PA}/${OUTPUT_DIR}/${DATA_SET}/${VERSION}/out"
         TYPES=""
         while read -r TEST_TYPE ; do
 
@@ -54,8 +54,8 @@ for DATA_SET in ${DATA_SETS[*]}; do
         
         # echo $DIR
         # ls $DIR | grep __ | while read -r TEST_OUTPUT ; do
-        echo "Processing ${DATA_SET} ${VERSION} ${ARGS}"
-        $PA/source/plot.py $ARGS $TYPES
+        echo "Processing ${DATA_SET} ${VERSION}"
+        $PA/source/plot.py ${LABEL} $ARGS $TYPES
         # done
     done
 done

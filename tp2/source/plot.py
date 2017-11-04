@@ -1,4 +1,4 @@
-#!/usr/bin/env  python
+#!/usr/bin/env python
 
 
 import numpy as np
@@ -27,30 +27,49 @@ def loadtxt(file, delimiter=','):
                         for line in f])
 
 
-def line_mean_plot(a, y_label, save=''):
-    means = []
-    for column in a.T:
-        means.append(np.mean(column))
-    a_means = np.array(means)
+def line_mean_plot(files, labels, y_label, save='', log=False):
+    mm = []
 
-    plt.plot(np.arange(len(a_means) - 1), a_means[1:])
-    plt.xlabel('Iterations')
-    plt.ylabel(y_label.title())
-    plt.title(y_label.title() + ' x Iterations')
+    for file in files:
+        # print(i)
+        a = loadtxt(file)
+        means = []
+        for column in a.T:
+            means.append(np.mean(column))
+        mm.append(np.array(means))
+
+    fig = plt.figure(figsize=(19, 11))
+    ax = fig.add_subplot(111)
     plt.grid(True)
+
+    title = y_label.replace('_', ' ').title()
+    plt.xlabel('Iterations')
+    plt.ylabel(title)
+    plt.title(title + ' x Iterations')
+
+    line1 = None
+    for m, d in zip(mm, labels):
+        line1, = plt.plot(m, label=str(d))
+
+    if log:
+        ax.set_yscale('log')
+
+    if len(labels) > 0:
+        plt.legend(handler_map={line1: HandlerLine2D(numpoints=4)})
 
     if save:
         print('saving to ' + save)
-        plt.savefig(save + '_line_mean.png', dpi=300)
-    else:
-        plt.show()
+        plt.savefig(save + '_' + y_label + '_mean.png', dpi=fig.dpi)
+
+    plt.show()
 
 
 def line_plot(a, y_label, save=''):
+    title = y_label.replace('_', ' ').title()
     plt.plot(np.arange(len(a)), a)
     plt.xlabel('Iterations')
-    plt.ylabel(y_label.title())
-    plt.title(y_label.title() + ' x Iterations')
+    plt.ylabel(title)
+    plt.title(title + ' x Iterations')
     plt.grid(True)
 
     if save:
@@ -100,40 +119,11 @@ if __name__ == '__main__':
     #     elif t == 'line':
     #         line_plot(a, label)
 
-    label = argv[1]
+    y_label = argv[1]
     outfile = argv[2]
 
-    fig = plt.figure(figsize=(19, 11))
-    ax = fig.add_subplot(111)
-    plt.grid(True)
-
-    plt.xlabel('Iterations')
-    plt.ylabel(label.title())
-    plt.title(label.title() + ' x Iterations')
-
-    mm = []
-    print(argv)
     size = (len(argv) - 3) / 2
-    for i in argv[3: 3 + size]:
-        print(i)
-        a = loadtxt(i)
-        means = []
-        for column in a.T:
-            means.append(np.mean(column))
-        mm.append(np.array(means))
-
+    files = argv[3: 3 + size]
     labels = argv[3 + size:]
 
-    # line1, = plt.plot(mm[0][1:], label='500')
-
-    line1 = None
-    for m, d in zip(mm, labels):
-        line1, = plt.plot(m, label=str(d))
-
-    # ax.set_yscale('log')
-
-    plt.legend(handler_map={line1: HandlerLine2D(numpoints=4)})
-
-    # figure.set_size_inches(20, 15)
-    plt.savefig(outfile + '_' + label + '_mean.png', dpi=fig.dpi)
-    plt.show()
+    line_mean_plot(files, labels, y_label, save='', log=False)
