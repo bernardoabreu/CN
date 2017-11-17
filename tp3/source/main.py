@@ -20,14 +20,14 @@ def main(args):
     batch_size = args.batch_size
     hidden_layers = args.hidden_layers
     learning_rate = args.learning_rate
-    training = args.training
     lr_decay = args.lr_decay
     seed = args.seed
+    stats = args.stats
 
     X, Y = load_dataset(filename, delimiter=';')
 
     net = NeuralNetwork(neurons, epochs, batch_size, hidden_layers,
-                        learning_rate, training, lr_decay, seed)
+                        learning_rate, lr_decay, seed, stats)
     net.run(X, Y)
 
 
@@ -44,9 +44,7 @@ if __name__ == '__main__':
                         help='Number of epochs.')
     parser.add_argument('-lr', '--learning_rate', type=float, default=3,
                         help='Learning rate.')
-    parser.add_argument('-t', '--training', type=str, default='mini-batch',
-                        help="Type of training. May be 'mini-batch' or 'sgd'")
-    parser.add_argument('-b', '--batch_size', type=int, default=10,
+    parser.add_argument('-b', '--batch_size', type=int, default=32,
                         help='Size of mini-batch.')
     parser.add_argument('-d', '--lr_decay', type=float, default=None,
                         help='Decay rate of the learning rate.')

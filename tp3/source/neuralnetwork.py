@@ -2,19 +2,40 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.utils import np_utils
+from keras import optimizers
 
 
 class NeuralNetwork(object):
     def __init__(self, neurons, epochs, batch_size, hidden_layers,
-                 learning_rate, training, lr_decay=False, seed=None):
+                 learning_rate, lr_decay=False, seed=None, stats=None):
         self.neurons = neurons
         self.epochs = epochs
         self.batch_size = batch_size
         self.hidden_layers = hidden_layers
         self.learning_rate = learning_rate
-        self.training = training
         self.lr_decay = lr_decay
+        self.stats = stats
         np.random.seed(seed)
+
+    def __dump_to_file(self, scores_keys, scores, histories):
+        base = self.stats + '__'
+
+        d_scores = {k: [] for k in scores_keys}
+        for k, s in zip(scores_keys, scores):
+            d_scores[k].append(s)
+
+        for k, v in d_scores.items():
+            outfile = base + 'test' + '_' + k + '.csv'
+            np.savetxt(outfile, v, delimiter=',')
+
+        d_hist = {k: [] for k in histories[0].keys()}
+        for history in histories:
+            for k, v in history.items():
+                d_hist[k].append(v)
+
+        for k, v in d_hist.items():
+            outfile = base + 'history' + '_' + k + '.csv'
+            np.savetxt(outfile, v, delimiter=',')
 
     def create_model(self):
         model = Sequential()
@@ -25,11 +46,16 @@ class NeuralNetwork(object):
         for i in range(self.hidden_layers - 1):
             model.add(Dense(self.neurons, activation='sigmoid'))
 
-        model.add(Dense(self.final, activation='softmax'))
+        model.add(Dense(self.final, activation='sigmoid'))
+
+        if self.lr_decay is None:
+            opt = optimizers.SGD(self.learning_rate)
+        else:
+            opt = optimizers.SGD(lr=self.learning_rate, decay=self.lr_decay)
 
         # Compile model
         model.compile(loss='categorical_crossentropy',
-                      optimizer='adam',
+                      optimizer=opt,
                       metrics=['accuracy'])
         return model
 
@@ -58,24 +84,29 @@ class NeuralNetwork(object):
     def k_fold_cross_validation(self, X, Y, k):
         indices = np.arange(len(X))
         kfold = self.k_fold(indices, k=k, shuffle=True)
+
         results = []
+        histories = []
 
         for i, (train, test) in enumerate(kfold):
             print("Running Fold", i + 1, "/", k)
             model = None    # Clearing the NN.
             model = self.create_model()
 
-            model.fit(X[train], Y[train],
-                      epochs=self.epochs,
-                      batch_size=self.batch_size)
+            history = model.fit(X[train], Y[train],
+                                epochs=self.epochs,
+                                batch_size=self.batch_size)
 
             # evaluate the model
             scores = model.evaluate(X[test], Y[test])
-
             print("%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
+
+            histories.append(history.history)
             results.append(scores[1] * 100)
 
-        print("%.2f%% (+/- %.2f%%)" % (np.mean(results), np.std(results)))
+        self.__dump_to_file(model.metrics_names, results, histories)
+
+        return results
 
     def run(self, X, Y):
         self.initial = X.shape[1]
@@ -84,9 +115,7 @@ class NeuralNetwork(object):
         # convert integers to dummy variables (i.e. one hot encoded)
         dummy_y = np_utils.to_categorical(encoded_Y)
 
-        try:
-            self.k_fold_cross_validation(X, dummy_y, 3)
-        except Exception as e:
-            print(str(e))
+        results = self.k_fold_cross_validation(X, dummy_y, 3)
+        print("%.2f%% (+/- %.2f%%)" % (np.mean(results), np.std(results)))
 
         return
