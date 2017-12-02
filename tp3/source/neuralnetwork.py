@@ -17,25 +17,12 @@ class NeuralNetwork(object):
         self.stats = stats
         np.random.seed(seed)
 
-    def __dump_to_file(self, scores_keys, scores, histories):
-        base = self.stats + '__'
+    def __dump_to_file(self, filename, data):
+        base = self.stats + '__' + filename + '_'
 
-        d_scores = {k: [] for k in scores_keys}
-        for k, s in zip(scores_keys, scores):
-            d_scores[k].append(s)
-
-        for k, v in d_scores.items():
-            outfile = base + 'test' + '_' + k + '.csv'
-            np.savetxt(outfile, v, delimiter=',')
-
-        d_hist = {k: [] for k in histories[0].keys()}
-        for history in histories:
-            for k, v in history.items():
-                d_hist[k].append(v)
-
-        for k, v in d_hist.items():
-            outfile = base + 'history' + '_' + k + '.csv'
-            np.savetxt(outfile, v, delimiter=',')
+        for k, v in data.items():
+            outfile = base + k + '.csv'
+            np.savetxt(outfile, [v], delimiter=',')
 
     def create_model(self):
         model = Sequential()
@@ -44,14 +31,11 @@ class NeuralNetwork(object):
                         activation='sigmoid'))
 
         for i in range(self.hidden_layers - 1):
-            model.add(Dense(self.neurons, activation='sigmoid'))
+            model.add(Dense(self.neurons, activation='relu'))
 
-        model.add(Dense(self.final, activation='sigmoid'))
+        model.add(Dense(self.final, activation='softmax'))
 
-        if self.lr_decay is None:
-            opt = optimizers.SGD(self.learning_rate)
-        else:
-            opt = optimizers.SGD(lr=self.learning_rate, decay=self.lr_decay)
+        opt = optimizers.SGD(lr=self.learning_rate, decay=self.lr_decay)
 
         # Compile model
         model.compile(loss='categorical_crossentropy',
@@ -86,7 +70,6 @@ class NeuralNetwork(object):
         kfold = self.k_fold(indices, k=k, shuffle=True)
 
         results = []
-        histories = []
 
         for i, (train, test) in enumerate(kfold):
             print("Running Fold", i + 1, "/", k)
@@ -98,13 +81,16 @@ class NeuralNetwork(object):
                                 batch_size=self.batch_size)
 
             # evaluate the model
-            scores = model.evaluate(X[test], Y[test])
-            print("%s: %.2f%%" % (model.metrics_names[1], scores[1] * 100))
+            score = model.evaluate(X[test], Y[test])
+            print("%s: %.2f%%" % (model.metrics_names[1], score[1] * 100))
+            print("%s: %.2f" % (model.metrics_names[0], score[0]))
 
-            histories.append(history.history)
-            results.append(scores[1] * 100)
+            if self.stats:
+                d_score = {k: v for k, v in zip(model.metrics_names, score)}
+                self.__dump_to_file('score_' + str(i), d_score)
+                self.__dump_to_file('history_' + str(i), history.history)
 
-        self.__dump_to_file(model.metrics_names, results, histories)
+            results.append(score[1])
 
         return results
 

@@ -46,7 +46,7 @@ if __name__ == '__main__':
                         help='Learning rate.')
     parser.add_argument('-b', '--batch_size', type=int, default=32,
                         help='Size of mini-batch.')
-    parser.add_argument('-d', '--lr_decay', type=float, default=None,
+    parser.add_argument('-d', '--lr_decay', type=float, default=0.0,
                         help='Decay rate of the learning rate.')
     parser.add_argument('-s', '--seed', type=int, default=None,
                         help='Seed for random number generator.')

@@ -1,0 +1,10 @@
+
+BASE="${HOME}/CN/tp3/source/"
+
+$BASE/mean.py out_yeast_modified__history_0_acc.csv out_yeast_modified__history_1_acc.csv out_yeast_modified__history_2_acc.csv out_history_acc
+$BASE/mean.py out_yeast_modified__history_0_loss.csv out_yeast_modified__history_1_loss.csv out_yeast_modified__history_2_loss.csv out_history_loss
+$BASE/mean.py out_yeast_modified__score_0_acc.csv out_yeast_modified__score_1_acc.csv out_yeast_modified__score_2_acc.csv out_score_acc
+$BASE/mean.py out_yeast_modified__score_0_loss.csv out_yeast_modified__score_1_loss.csv out_yeast_modified__score_2_loss.csv out_score_loss
+
+$BASE/finals.py out_history_acc out_final_history_acc
+$BASE/finals.py out_history_loss out_final_history_loss
