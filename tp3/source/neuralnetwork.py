@@ -2,7 +2,9 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.utils import np_utils
+from keras.initializers import lecun_uniform
 from keras import optimizers
+from time import time
 
 
 class NeuralNetwork(object):
@@ -15,6 +17,7 @@ class NeuralNetwork(object):
         self.learning_rate = learning_rate
         self.lr_decay = lr_decay
         self.stats = stats
+        self.seed = seed
         np.random.seed(seed)
 
     def __dump_to_file(self, filename, data):
@@ -28,12 +31,16 @@ class NeuralNetwork(object):
         model = Sequential()
         model.add(Dense(self.neurons,
                         input_dim=self.initial,
-                        activation='sigmoid'))
+                        activation='relu',
+                        kernel_initializer=lecun_uniform(seed=self.seed)))
 
         for i in range(self.hidden_layers - 1):
-            model.add(Dense(self.neurons, activation='relu'))
+            model.add(Dense(self.neurons,
+                            activation='relu',
+                            kernel_initializer=lecun_uniform(seed=self.seed)))
 
-        model.add(Dense(self.final, activation='softmax'))
+        model.add(Dense(self.final, activation='softmax',
+                        kernel_initializer=lecun_uniform(seed=self.seed)))
 
         opt = optimizers.SGD(lr=self.learning_rate, decay=self.lr_decay)
 
@@ -76,9 +83,18 @@ class NeuralNetwork(object):
             model = None    # Clearing the NN.
             model = self.create_model()
 
+            start_time = time()
             history = model.fit(X[train], Y[train],
                                 epochs=self.epochs,
                                 batch_size=self.batch_size)
+            end_time = time()
+            total_time = end_time - start_time
+
+            train_score = model.evaluate(X[train], Y[train])
+            print("Train - %s: %.2f%%" % (model.metrics_names[1],
+                  train_score[1] * 100))
+            print("Train - %s: %.2f" % (model.metrics_names[0],
+                  train_score[0]))
 
             # evaluate the model
             score = model.evaluate(X[test], Y[test])
@@ -88,7 +104,12 @@ class NeuralNetwork(object):
             if self.stats:
                 d_score = {k: v for k, v in zip(model.metrics_names, score)}
                 self.__dump_to_file('score_' + str(i), d_score)
+                d_train_score = {k: v for k, v in zip(model.metrics_names,
+                                 train_score)}
+                self.__dump_to_file('train_score_' + str(i), d_train_score)
                 self.__dump_to_file('history_' + str(i), history.history)
+                d_time = {'time': total_time}
+                self.__dump_to_file('time_' + str(i), d_time)
 
             results.append(score[1])
 

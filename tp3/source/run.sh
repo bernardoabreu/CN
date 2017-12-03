@@ -1,18 +1,18 @@
 #!/bin/bash
 
 BASE=$HOME'/CN/tp3'
-TEST_VERSION=1
+TEST_VERSION=6
 DATA=('yeast_modified')
-SUBDIRS=(500)
-OUT=tests2
+SUBDIRS=(16)
+OUT=tests
 
 
-NEURONS=16
+NEURONS=32
 HIDDEN_LAYERS=1
 EPOCHS=500
 LEARNING_RATE=0.1
 BATCH_SIZE=32
-LR_DECAY=0.0
+LR_DECAY=0.0001
 
 
 
@@ -39,7 +39,7 @@ shift $((OPTIND-1))
 START="$1"
 END="$2"
 
-echo $$ > "${BASE}/norun_${HOST}.pid"
+# echo $$ > "${BASE}/norun_${HOST}.pid"
 
 
 for FILE in ${DATA[*]}; do
@@ -49,7 +49,7 @@ for FILE in ${DATA[*]}; do
     for SUBDIR in ${SUBDIRS[*]}; do
         mkdir -p "${DIR}${SUBDIR}"
 
-        LR_DECAY=$SUBDIR
+        BATCH_SIZE=$SUBDIR
 
         for i in $(seq $START $END); do
           echo "${FILE} - ${SUBDIR} ${i}"
