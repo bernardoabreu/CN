@@ -4,8 +4,8 @@ PA=$HOME'/CN/tp3'
 TEST_VERSION="$1"
 LABEL="$2"
 
-INPUT_DIR=tests
-OUTPUT_DIR=graphs
+INPUT_DIR=tests2
+OUTPUT_DIR=graphs2
 
 BASE=$PA/$INPUT_DIR
 

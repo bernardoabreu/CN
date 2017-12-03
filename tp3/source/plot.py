@@ -50,6 +50,7 @@ def line_mean_plot(files, labels, y_label, save='', log=False):
     line1 = None
     for m, d in zip(mm, labels):
         line1, = plt.plot(m, label=str(d))
+        print(str(d) + ': ' + str(np.mean(m)))
 
     if log:
         ax.set_yscale('log')

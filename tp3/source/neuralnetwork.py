@@ -2,12 +2,15 @@ import numpy as np
 from keras.models import Sequential
 from keras.layers import Dense
 from keras.utils import np_utils
+from keras.initializers import lecun_uniform
 from keras import optimizers
+from time import time
 
 
 class NeuralNetwork(object):
     def __init__(self, neurons, epochs, batch_size, hidden_layers,
-                 learning_rate, lr_decay=False, seed=None, stats=None):
+                 learning_rate, lr_decay=False, seed=None, oversample=False,
+                 stats=None):
         self.neurons = neurons
         self.epochs = epochs
         self.batch_size = batch_size
@@ -15,26 +18,24 @@ class NeuralNetwork(object):
         self.learning_rate = learning_rate
         self.lr_decay = lr_decay
         self.stats = stats
+        self.seed = seed
+        self.__oversample = oversample
+        print(self.__oversample)
         np.random.seed(seed)
 
     def oversample(self, Y):
         indices = [[] for i in range(self.final)]
         amount = np.zeros(self.final, dtype=int)
-        # print(indices)
-        # print(amount)
+
         for i, c in enumerate(Y):
             amount[c] += 1
             indices[c].append(i)
         max_amount = np.max(amount)
-        print(amount)
-        # print(max_amount)
         repeats = np.around(max_amount / amount).astype(int)
-        # print(repeats)
         index = []
         for i, ii in enumerate(indices):
             index.append(np.repeat(ii, repeats[i]))
         indices = np.concatenate(index)
-
         return indices
 
     def __dump_to_file(self, filename, data):
@@ -48,12 +49,16 @@ class NeuralNetwork(object):
         model = Sequential()
         model.add(Dense(self.neurons,
                         input_dim=self.initial,
-                        activation='sigmoid'))
+                        activation='relu',
+                        kernel_initializer=lecun_uniform(seed=self.seed)))
 
         for i in range(self.hidden_layers - 1):
-            model.add(Dense(self.neurons, activation='relu'))
+            model.add(Dense(self.neurons,
+                            activation='relu',
+                            kernel_initializer=lecun_uniform(seed=self.seed)))
 
-        model.add(Dense(self.final, activation='softmax'))
+        model.add(Dense(self.final, activation='softmax',
+                        kernel_initializer=lecun_uniform(seed=self.seed)))
 
         opt = optimizers.SGD(lr=self.learning_rate, decay=self.lr_decay)
 
@@ -68,7 +73,7 @@ class NeuralNetwork(object):
         y_set = sorted(set(Y))
 
         labels = {y: i for i, y in enumerate(y_set)}
-        print(labels)
+
         encoded_Y = np.array([labels[y] for y in Y])
 
         return len(y_set), encoded_Y if nclasses else encoded_Y
@@ -99,12 +104,26 @@ class NeuralNetwork(object):
             model = None    # Clearing the NN.
             model = self.create_model()
 
-            indices = self.oversample(encoded_Y[train])
+            X_train = X[train]
+            Y_train = Y[train]
 
-            history = model.fit(X[train][indices], Y[train][indices],
+            if self.__oversample:
+                indices = self.oversample(encoded_Y[train])
+                X_train = X_train[indices]
+                Y_train = Y_train[indices]
+
+            start_time = time()
+            history = model.fit(X_train, Y_train,
                                 epochs=self.epochs,
-                                batch_size=self.batch_size, verbose=0)
-            print('acc: ' + str(history.history['acc'][-1]))
+                                batch_size=self.batch_size)
+            end_time = time()
+            total_time = end_time - start_time
+
+            train_score = model.evaluate(X[train], Y[train])
+            print("Train - %s: %.2f%%" % (model.metrics_names[1],
+                  train_score[1] * 100))
+            print("Train - %s: %.2f" % (model.metrics_names[0],
+                  train_score[0]))
 
             # evaluate the model
             score = model.evaluate(X[test], Y[test])
@@ -114,7 +133,12 @@ class NeuralNetwork(object):
             if self.stats:
                 d_score = {k: v for k, v in zip(model.metrics_names, score)}
                 self.__dump_to_file('score_' + str(i), d_score)
+                d_train_score = {k: v for k, v in zip(model.metrics_names,
+                                 train_score)}
+                self.__dump_to_file('train_score_' + str(i), d_train_score)
                 self.__dump_to_file('history_' + str(i), history.history)
+                d_time = {'time': total_time}
+                self.__dump_to_file('time_' + str(i), d_time)
 
             results.append(score[1])
 
@@ -123,8 +147,8 @@ class NeuralNetwork(object):
     def run(self, X, Y):
         self.initial = X.shape[1]
         self.final, encoded_Y = self.encode(Y, nclasses=True)
-        self.oversample(encoded_Y)
-        # results = self.k_fold_cross_validation(X, encoded_Y, 3)
-        # print("%.2f%% (+/- %.2f%%)" % (np.mean(results), np.std(results)))
+
+        results = self.k_fold_cross_validation(X, encoded_Y, 3)
+        print("%.2f%% (+/- %.2f%%)" % (np.mean(results), np.std(results)))
 
         return

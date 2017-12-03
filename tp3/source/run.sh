@@ -1,18 +1,19 @@
 #!/bin/bash
 
 BASE=$HOME'/CN/tp3'
-TEST_VERSION=1
+TEST_VERSION=6
 DATA=('yeast_modified')
-SUBDIRS=(500)
-OUT=tests2
+SUBDIRS=(false true)
+OUT=tests
 
 
-NEURONS=16
+NEURONS=32
 HIDDEN_LAYERS=1
-EPOCHS=500
+EPOCHS=100
 LEARNING_RATE=0.1
-BATCH_SIZE=32
-LR_DECAY=0.0
+BATCH_SIZE=132
+LR_DECAY=0.0001
+OVERSAMPLE=false
 
 
 
@@ -39,7 +40,7 @@ shift $((OPTIND-1))
 START="$1"
 END="$2"
 
-echo $$ > "${BASE}/norun_${HOST}.pid"
+# echo $$ > "${BASE}/norun_${HOST}.pid"
 
 
 for FILE in ${DATA[*]}; do
@@ -49,11 +50,16 @@ for FILE in ${DATA[*]}; do
     for SUBDIR in ${SUBDIRS[*]}; do
         mkdir -p "${DIR}${SUBDIR}"
 
-        LR_DECAY=$SUBDIR
+        OVERSAMPLE=$SUBDIR
+
+        ARGS="-n ${NEURONS} -hl ${HIDDEN_LAYERS} -e ${EPOCHS} -lr ${LEARNING_RATE} -b ${BATCH_SIZE} -d ${LR_DECAY} -f ${BASE}/dataset/${FILE}.csv --stats ${DIR}${SUBDIR}/out_${FILE}_${i}"
+        if $OVERSAMPLE; then
+            ARGS=$ARGS" -o"
+        fi
 
         for i in $(seq $START $END); do
           echo "${FILE} - ${SUBDIR} ${i}"
-          $BASE/source/main.py -n $NEURONS -hl $HIDDEN_LAYERS -e $EPOCHS -lr $LEARNING_RATE -b $BATCH_SIZE -d $LR_DECAY -s $i -f $BASE/dataset/"${FILE}.csv" --stats "${DIR}${SUBDIR}/out_${FILE}_${i}" > "${DIR}${SUBDIR}/${FILE}_${i}"
+          $BASE/source/main.py $ARGS -s $i  > "${DIR}${SUBDIR}/${FILE}_${i}"
         done
     done
 done
