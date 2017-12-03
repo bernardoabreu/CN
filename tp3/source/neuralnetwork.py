@@ -17,6 +17,26 @@ class NeuralNetwork(object):
         self.stats = stats
         np.random.seed(seed)
 
+    def oversample(self, Y):
+        indices = [[] for i in range(self.final)]
+        amount = np.zeros(self.final, dtype=int)
+        # print(indices)
+        # print(amount)
+        for i, c in enumerate(Y):
+            amount[c] += 1
+            indices[c].append(i)
+        max_amount = np.max(amount)
+        print(amount)
+        # print(max_amount)
+        repeats = np.around(max_amount / amount).astype(int)
+        # print(repeats)
+        index = []
+        for i, ii in enumerate(indices):
+            index.append(np.repeat(ii, repeats[i]))
+        indices = np.concatenate(index)
+
+        return indices
+
     def __dump_to_file(self, filename, data):
         base = self.stats + '__' + filename + '_'
 
@@ -48,7 +68,7 @@ class NeuralNetwork(object):
         y_set = sorted(set(Y))
 
         labels = {y: i for i, y in enumerate(y_set)}
-
+        print(labels)
         encoded_Y = np.array([labels[y] for y in Y])
 
         return len(y_set), encoded_Y if nclasses else encoded_Y
@@ -65,9 +85,12 @@ class NeuralNetwork(object):
             validation = chunks[cur_k]
             yield training, validation
 
-    def k_fold_cross_validation(self, X, Y, k):
+    def k_fold_cross_validation(self, X, encoded_Y, k):
         indices = np.arange(len(X))
         kfold = self.k_fold(indices, k=k, shuffle=True)
+
+        # convert integers to dummy variables (i.e. one hot encoded)
+        Y = np_utils.to_categorical(encoded_Y)
 
         results = []
 
@@ -76,9 +99,12 @@ class NeuralNetwork(object):
             model = None    # Clearing the NN.
             model = self.create_model()
 
-            history = model.fit(X[train], Y[train],
+            indices = self.oversample(encoded_Y[train])
+
+            history = model.fit(X[train][indices], Y[train][indices],
                                 epochs=self.epochs,
-                                batch_size=self.batch_size)
+                                batch_size=self.batch_size, verbose=0)
+            print('acc: ' + str(history.history['acc'][-1]))
 
             # evaluate the model
             score = model.evaluate(X[test], Y[test])
@@ -97,11 +123,8 @@ class NeuralNetwork(object):
     def run(self, X, Y):
         self.initial = X.shape[1]
         self.final, encoded_Y = self.encode(Y, nclasses=True)
-
-        # convert integers to dummy variables (i.e. one hot encoded)
-        dummy_y = np_utils.to_categorical(encoded_Y)
-
-        results = self.k_fold_cross_validation(X, dummy_y, 3)
-        print("%.2f%% (+/- %.2f%%)" % (np.mean(results), np.std(results)))
+        self.oversample(encoded_Y)
+        # results = self.k_fold_cross_validation(X, encoded_Y, 3)
+        # print("%.2f%% (+/- %.2f%%)" % (np.mean(results), np.std(results)))
 
         return
