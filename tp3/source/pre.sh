@@ -6,7 +6,6 @@ mkdir t
 
 ls | grep history | xargs -i{} mv {} h/
 ls | grep score | xargs -i{} mv {} s/
-ls | grep history | xargs -i{} mv {} h/
 ls | grep time | xargs -i{} mv {} t/
 
 mv s/ score

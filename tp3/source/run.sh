@@ -1,17 +1,17 @@
 #!/bin/bash
 
 BASE=$HOME'/CN/tp3'
-TEST_VERSION=6
+TEST_VERSION=7
 DATA=('yeast_modified')
-SUBDIRS=(false true)
+SUBDIRS=(true)
 OUT=tests
 
 
 NEURONS=32
 HIDDEN_LAYERS=1
-EPOCHS=100
+EPOCHS=500
 LEARNING_RATE=0.1
-BATCH_SIZE=132
+BATCH_SIZE=16
 LR_DECAY=0.0001
 OVERSAMPLE=false
 
@@ -52,14 +52,14 @@ for FILE in ${DATA[*]}; do
 
         OVERSAMPLE=$SUBDIR
 
-        ARGS="-n ${NEURONS} -hl ${HIDDEN_LAYERS} -e ${EPOCHS} -lr ${LEARNING_RATE} -b ${BATCH_SIZE} -d ${LR_DECAY} -f ${BASE}/dataset/${FILE}.csv --stats ${DIR}${SUBDIR}/out_${FILE}_${i}"
+        ARGS="-n ${NEURONS} -hl ${HIDDEN_LAYERS} -e ${EPOCHS} -lr ${LEARNING_RATE} -b ${BATCH_SIZE} -d ${LR_DECAY} -f ${BASE}/dataset/${FILE}.csv"
         if $OVERSAMPLE; then
             ARGS=$ARGS" -o"
         fi
 
         for i in $(seq $START $END); do
           echo "${FILE} - ${SUBDIR} ${i}"
-          $BASE/source/main.py $ARGS -s $i  > "${DIR}${SUBDIR}/${FILE}_${i}"
+          $BASE/source/main.py $ARGS -s $i --stats "${DIR}${SUBDIR}/out_${FILE}_${i}" > "${DIR}${SUBDIR}/${FILE}_${i}"
         done
     done
 done
